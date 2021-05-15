@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-background;
+    @apply text-foreground;
+  }
+
+  .image-container {
+    @apply w-screen fixed -z-1;
+    height: 100vh;
+    max-height: fill-available;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  main {
+    @apply bg-background;
+  }
+
+  .fill-viewport {
+    height: 100vh;
+    max-height: fill-available;
+  }
+  .content {
+    padding: 1px 0;
+    max-width: 45rem;
+    @apply px-8;
+    @apply mx-auto;
+  }
+  h1 {
+    @apply text-2xl;
+  }
+  h1::before {
+    content: '# ';
+  }
+  h2 {
+    @apply text-xl;
+  }
+  h2::before {
+    content: '## ';
+  }
+  h3 {
+    @apply text-lg;
+  }
+  h3::before {
+    content: '### ';
+  }
+  h1,
+  h2,
+  h3 {
+    @apply italic;
+    @apply font-bold;
+    @apply my-10;
+    @apply text-red;
+  }
+
+  p,
+  ul {
+    @apply my-10;
+    @apply leading-relaxed;
+  }
+
+  ul {
+  }
+
+  li::before {
+    content: '*'; /* Insert content that looks like bullets */
+    padding-right: 0.625em;
+    @apply text-comment;
+    @apply italic;
+  }
+
+  h1::before,
+  h2::before,
+  h3::before {
+    @apply text-comment;
+    @apply italic;
+  }
+  em {
+    @apply text-yellow;
+  }
+}
