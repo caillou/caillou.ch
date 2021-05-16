@@ -28,7 +28,7 @@
   .image-container {
     @apply w-screen fixed -z-1;
     height: 100vh;
-    max-height: fill-available;
+    max-height: stretch;
     top: 0;
     left: 0;
     right: 0;
@@ -40,7 +40,7 @@
 
   .fill-viewport {
     height: 100vh;
-    max-height: fill-available;
+    max-height: stretch;
   }
   .content {
     padding: 1px 0;
