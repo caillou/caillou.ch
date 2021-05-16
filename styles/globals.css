@@ -104,6 +104,20 @@
   }
 
   em {
-    @apply text-purple;
+    @apply text-green;
+  }
+
+  a {
+    @apply underline;
+    @apply focus:text-aqua;
+    @apply hover:text-aqua;
+    @apply transition-all duration-300;
+    text-decoration-color: #70c0b1;
+    text-decoration-thickness: 0.0625em;
+    text-underline-offset: 0.125em;
+  }
+  a:hover,
+  a:focus {
+    text-decoration-color: transparent;
   }
 }
