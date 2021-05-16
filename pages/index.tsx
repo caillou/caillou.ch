@@ -22,7 +22,6 @@ export default function Home() {
           <h1>Pierre Spring</h1>
           Full Stack Node.js and Frontend Developer
           <h2>About Me</h2>
-          <p>Image here</p>
           <p>
             Hi, my name’s Pierre. I am a full stack web developer with 15 years
             of experience, based in Zürich, Switzerland. I have worked with a
