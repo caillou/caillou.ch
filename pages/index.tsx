@@ -127,9 +127,8 @@ export default function Home() {
           <p>
             <em>Credit Suisse</em> I joined the team that worked on a redesign
             of the website. I brought in my knowledge of{' '}
-            <em>maintainable CSS</em> and
-            <em>modern frontend development</em> and learned a lot about working
-            in a <em>big corporation</em>.{' '}
+            <em>maintainable CSS</em> and <em>modern frontend development</em>{' '}
+            and learned a lot about working in a <em>big corporation</em>.{' '}
             <a href="https://www.credit-suisse.ch/">credit-suisse.ch</a>
           </p>
 
@@ -180,7 +179,7 @@ export default function Home() {
           </p>
           <p>
             While the company quickly grew both in size and recognition, my role
-            shifted mostly to administrative tasks. In order to focus more on
+            shifted mostly to administrative tasks. In order to focus more on{' '}
             <em>development and system architecture</em>, I gradually
             transitioned to freelance development, completely leaving my
             administrative tasks at the end of 2013.
@@ -300,8 +299,7 @@ export default function Home() {
             <em>Vintage Computers</em> I recently aquired an{' '}
             <a href="http://oldcomputers.net/ibm5155.html">IBM 5155</a> with the
             aim to learn about operating systems. The plan is to install{' '}
-            <em>Minix</em>
-            on this machine and write a driver for the{' '}
+            <em>Minix</em> on this machine and write a driver for the{' '}
             <a href="https://www.bluelavasystems.com/xt-ide/">XT IDE</a> card.
           </p>
           <p>
