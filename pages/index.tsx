@@ -20,7 +20,19 @@ export default function Home() {
       <main>
         <div className="content">
           <h1>Pierre Spring</h1>
-          Full Stack Node.js and Frontend Developer
+          <p>Full Stack Node.js and Frontend Developer</p>
+
+          <dl>
+            <dt>December 2013 - Present</dt>
+            <dd>Freelance Node.js and Frontend&nbsp;Developer</dd>
+            <dt>May 2011 - December 2013</dt>
+            <dd>Partner and Lead Frontend Developer at&nbsp;Nelmio</dd>
+            <dt>January 2005 - April 2011</dt>
+            <dd>Full Stack Web Developer at&nbsp;Liip</dd>
+            <dt>2000 - 2006</dt>{' '}
+            <dd>BSc Computer Science University&nbsp;of&nbsp;Fribourg</dd>
+          </dl>
+
           <h2>About Me</h2>
           <p>
             Hi, my name’s Pierre. I am a full stack web developer with 15 years
@@ -58,7 +70,9 @@ export default function Home() {
             <em>automated testing</em> are often easy to implement and have a
             tremendous effect on <em>long-term productivity</em> of a team.
           </p>
+
           <h2>Experience</h2>
+
           <h3>Freelance</h3>
           <p>Node.js and Frontend Developer</p>
           <p>December 2013 - Present</p>
@@ -102,7 +116,7 @@ export default function Home() {
             <a href="https://www.credit-suisse.ch/">credit-suisse.ch</a>
           </p>
           <h3>Nelmio AG</h3>
-          <p>Partner, Lead Frontend Developer</p>
+          <p>Partner and Lead Frontend Developer</p>
           <p>May 2011 - December 2013</p>
           <p>
             Bootstrapped a fully-remote web agency specialized on single page

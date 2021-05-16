@@ -72,6 +72,7 @@
     @apply italic;
     @apply font-bold;
     @apply text-yellow;
+    @apply leading-relaxed;
 
     margin-top: 2em;
     margin-bottom: 2em;
@@ -119,5 +120,18 @@
   a:hover,
   a:focus {
     text-decoration-color: transparent;
+  }
+  dl {
+    @apply leading-relaxed;
+  }
+  dt {
+    @apply mt-10;
+    @apply text-orange;
+  }
+  dd {
+    @apply mb-10 ml-10 mt-5;
+  }
+  .date {
+    @apply text-orange;
   }
 }
