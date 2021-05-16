@@ -8,6 +8,23 @@
     @apply text-foreground;
   }
 
+  @screen sm {
+    html {
+      font-size: 1.25em;
+    }
+  }
+  @screen md {
+    html {
+      font-size: 1.5em;
+    }
+  }
+
+  @screen lg {
+    html {
+      font-size: 2em;
+    }
+  }
+
   .image-container {
     @apply w-screen fixed -z-1;
     height: 100vh;
