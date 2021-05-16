@@ -305,8 +305,8 @@ export default function Home() {
           <p>
             <em>Homelab</em> I maintain a self-hosted homelab. It gives me the
             opportunity to learn about <em>containers</em> and linux.{' '}
-            <em>ZFS</em> is my FS of choice, all of this is running on an Ubuntu
-            Server.
+            <em>ZFS</em> is my Filesystem of choice, all of this is running on
+            an Ubuntu Server.
           </p>
           <p>
             <em>Family</em> I am the father of 4 kids and spend most of my free
