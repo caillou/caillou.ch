@@ -52,10 +52,11 @@ export default function Home() {
           <p>
             Most of all, I believe that clean and maintainable code is a
             side-effect of continuously evolving and adapting the{' '}
-            <em>development process</em>. Simple tools like code reviews, pair
-            programming, git flow, continuous integration, continuous
-            deployment, and automated testing are often easy to implement and
-            have a tremendous effect on long-term productivity of a team.
+            <em>development process</em>. Simple tools like{' '}
+            <em>code reviews</em>, <em>pair programming</em>, <em>git flow</em>,{' '}
+            <em>continuous integration</em>, <em>continuous deployment</em>, and{' '}
+            <em>automated testing</em> are often easy to implement and have a
+            tremendous effect on <em>long-term productivity</em> of a team.
           </p>
           <h2>Experience</h2>
           <h3>Freelance</h3>
