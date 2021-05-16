@@ -78,10 +78,7 @@
     margin-top: 2em;
     margin-bottom: 2em;
   }
-  h2,
-  h3 {
-    @apply text-foreground;
-  }
+
   h3 span {
     @apply font-normal;
   }
@@ -108,7 +105,7 @@
     content: '*'; /* Insert content that looks like bullets */
     padding-right: 0.625em;
 
-    @apply text-blue;
+    @apply text-comment;
     @apply italic;
   }
 
@@ -125,10 +122,10 @@
 
   a {
     @apply underline;
-    @apply focus:text-aqua;
-    @apply hover:text-aqua;
+    @apply focus:text-red;
+    @apply hover:text-red;
     @apply transition-all duration-300;
-    text-decoration-color: #70c0b1;
+    text-decoration-color: #d54e53;
     text-decoration-thickness: 0.0625em;
     text-underline-offset: 0.125em;
   }
