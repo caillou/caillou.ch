@@ -20,7 +20,7 @@ export default function Home() {
       <main>
         <div className="content">
           <h1>Pierre Spring</h1>
-          <p>Full Stack Node.js and Frontend Developer</p>
+          <p>Full Stack Node.js and Frontend&nbsp;Developer</p>
 
           <dl>
             <dt>December 2013 - Present</dt>
