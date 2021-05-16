@@ -65,6 +65,9 @@ module.exports = {
       zIndex: {
         '-1': '-1',
       },
+      screens: {
+        print: { raw: 'print' },
+      },
     },
   },
   variants: {
