@@ -68,7 +68,8 @@
   }
   h1,
   h2,
-  h3 {
+  h3,
+  [role='doc-subtitle'] {
     @apply italic;
     @apply font-bold;
     @apply text-yellow;
@@ -76,6 +77,20 @@
 
     margin-top: 2em;
     margin-bottom: 2em;
+  }
+  h2,
+  h3 {
+    @apply text-foreground;
+  }
+  h3 span {
+    @apply font-normal;
+  }
+
+  [role='doc-subtitle'] {
+    @apply font-normal;
+    @apply text-foreground;
+    @apply ml-5;
+    @apply text-lg;
   }
 
   p,
@@ -123,13 +138,14 @@
   }
   dl {
     @apply leading-relaxed;
+    @apply mb-10;
   }
   dt {
     @apply mt-10;
     @apply text-orange;
   }
   dd {
-    @apply mb-10 ml-10 mt-5;
+    @apply ml-10 mt-5;
   }
   .date {
     @apply text-orange;

@@ -25,10 +25,19 @@ export default function Home() {
           <dl>
             <dt>December 2013 - Present</dt>
             <dd>Freelance Node.js and Frontend&nbsp;Developer</dd>
+            <dd>
+              Incorporate teams and help with the transition to modern web
+              application development.
+            </dd>
             <dt>May 2011 - December 2013</dt>
             <dd>Partner and Lead Frontend Developer at&nbsp;Nelmio</dd>
+            <dd>
+              Bootstrapped a fully-remote web agency specialized on single page
+              applications.
+            </dd>
             <dt>January 2005 - April 2011</dt>
             <dd>Full Stack Web Developer at&nbsp;Liip</dd>
+            <dd>Early years - from full stack to frontend.</dd>
             <dt>2000 - 2006</dt>{' '}
             <dd>BSc Computer Science University&nbsp;of&nbsp;Fribourg</dd>
           </dl>
@@ -74,103 +83,114 @@ export default function Home() {
           <h2>Experience</h2>
 
           <h3>Freelance</h3>
-          <p>Node.js and Frontend Developer</p>
-          <p>December 2013 - Present</p>
+
+          <div role="doc-subtitle">
+            <span>2013 - Present</span>
+            <br />
+            Node.js and Frontend Developer
+          </div>
+
           <p>
-            Incorporate teams and help with the transition to modern web
-            application development.
+            As a freelancer, I incorporate teams and help with the transition to
+            modern web application development.
           </p>
           <p>
-            <em>Zeix</em> Setup of a frontend build system leveraging the
-            performance of{' '}
-            <a href="https://github.com/evanw/esbuild">esbuild</a>.
+            <em>BKW</em> Development of a <em>web components</em> style guide
+            which caters both static pages, and web applications.{' '}
+            <a href="https://bkw.ch">bkw.ch</a>
+            <br />
           </p>
           <p>
-            <em>Republik</em> Maintain the Node.js backend of the publication
-            tool for an independent Swiss online newspaper and helped kick-start
-            the transition to TypeScript. I learned a lot about the tradeoffs
-            necessary to deploy a functioning tool in a short amount of time
-            with a small team, which aims for 100% uptime.{' '}
-            <a href="https://republik.ch">republik.ch</a>
+            <em>Republik</em> Maintain the <em>Node.js</em> backend of the
+            publication tool for an independent Swiss online newspaper and
+            helped kick-start the transition to <em>TypeScript</em>. I learned a
+            lot about the tradeoffs necessary to deploy a functioning tool in a
+            short amount of time with a small team, which aims for{' '}
+            <em>100% uptime</em>. <a href="https://republik.ch">republik.ch</a>
           </p>
           <p>
             <em>SBB</em> Worked with a team of frontend developers on the
-            relaunch of <a href="http://sbb.ch">sbb.ch</a> over the period of 3
-            years. While bringing in my experience in writing maintainable JS
-            and CSS, I learned a lot about Accessibility and Analytics on this
-            job. <a href="https://sbb.ch">sbb.ch</a>
+            relaunch of the SBB Website over a period of 3 years. While bringing
+            in my experience in writing maintainable JS and CSS, I learned a lot
+            about <em>Accessibility</em> and <em>Analytics</em> on this job.{' '}
+            <a href="https://sbb.ch">sbb.ch</a>
           </p>
           <p>
             <em>Neue Zürcher Zeitung &amp; Livingdocs</em> I joined the team
-            that worked on a full-stack publication tool, written in Node.js and
-            Angular. While bringing in my experience with writing single page
-            application, I learned a lot about unit tests, continuous
-            integration and deployment, authoring NPM libraries on this job.{' '}
+            that worked on a <em>full-stack</em> publication tool, written in{' '}
+            <em>Node.js</em> and Angular. While bringing in my experience with
+            writing single page application, I learned a lot about unit testing,{' '}
+            <em>continuous integration and deployment</em>,{' '}
+            <em>authoring NPM libraries</em> on this job.{' '}
             <a href="https://nzz.ch">nzz.ch</a>
           </p>
           <p>
             <em>Credit Suisse</em> I joined the team that worked on a redesign
-            of the website. I brought in my knowledge of maintainable CSS and
-            modern frontend development and learned a lot about working in a big
-            corporation.{' '}
+            of the website. I brought in my knowledge of{' '}
+            <em>maintainable CSS</em> and
+            <em>modern frontend development</em> and learned a lot about working
+            in a <em>big corporation</em>.{' '}
             <a href="https://www.credit-suisse.ch/">credit-suisse.ch</a>
           </p>
+
           <h3>Nelmio AG</h3>
-          <p>Partner and Lead Frontend Developer</p>
-          <p>May 2011 - December 2013</p>
-          <p>
-            Bootstrapped a fully-remote web agency specialized on single page
-            applications.
-          </p>
+
+          <div role="doc-subtitle">
+            May 2011 - December 2013
+            <br />
+            Partner and Lead Frontend Developer
+          </div>
+
           <p>
             Together with{' '}
             <a href="https://github.com/Seldaek">Jordi Boggiano</a> I
-            bootstrapped a fully remote web agency. We specialized in single
-            page applications, with Jordi taking the lead in backend and open
-            source development, while I took the lead in frontend development.
+            bootstrapped a fully remote web agency. We specialized in{' '}
+            <em>single page applications</em>, with Jordi taking the lead in
+            backend and open source development, while I took the lead in
+            frontend development.
           </p>
           <p>
-            Additionally I helped our clients with product development and took
-            care of our sales, hiring, and administration. Some of the clients
-            we worked with were:
+            Additionally I helped our clients with <em>product development</em>{' '}
+            and took care of our sales, hiring, and administration. Some of the
+            clients we worked with were:
           </p>
           <ul>
             <li>
-              <em>local.ch</em>
+              <a href="https://local.ch">local.ch</a>
             </li>
             <li>
-              <em>Zürcher Kantonalbank</em>
+              <a href="https://www.zkb.ch/">Zürcher Kantonalbank</a>
             </li>
             <li>
-              <em>colibird.ch</em>
+              <a href="https://colibird.ch/">colibird.ch</a>
             </li>
             <li>
-              <em>Unic</em>
+              <a href="https://www.unic.com/">Unic</a>
             </li>
             <li>
-              <em>Ginetta</em>
+              <a href="https://ginetta.net/">Ginetta</a>
             </li>
             <li>
-              <em>Swiss</em>
+              <a href="https://www.swiss.com/">Swiss</a>
             </li>
           </ul>
           <p>
-            Both Jordi and I spoke at many conferences during these years, which
-            is how we met most of the talented developers we hired.
+            Both Jordi and I <em>spoke at many conferences</em> during these
+            years, which is how we met most of the talented developers we hired.
           </p>
           <p>
             While the company quickly grew both in size and recognition, my role
             shifted mostly to administrative tasks. In order to focus more on
-            development and system architecture, I gradually transitioned to
-            freelance development, completely leaving my administrative tasks at
-            the end of 2013.
+            <em>development and system architecture</em>, I gradually
+            transitioned to freelance development, completely leaving my
+            administrative tasks at the end of 2013.
           </p>
           <h3>Liip AG</h3>
-          <a href="https://liip.ch" target="_blank">
-            https://liip.ch
-          </a>
-          <p>Full Stack Web Developer</p>
-          <p>January 2005 - April 2011</p>
+          <div role="doc-subtitle">
+            January 2005 - April 2011
+            <br />
+            Full Stack Web Developer
+          </div>
           <p>Early years - from full stack to frontend.</p>
           <p>
             I joined Mediagonal AG in its very early years. This company in
@@ -205,9 +225,13 @@ export default function Home() {
             to create my own agency.
           </p>
           <h2>Education</h2>
-          <h3>University of Fribourg</h3>
-          <p>BSc Computer Science</p>
-          <p>2000 - 2006</p>
+          <div role="doc-subtitle">
+            2000 - 2006
+            <br />
+            BSc Computer Science
+            <br />
+            University of Fribourg
+          </div>
           <p>
             My time at the University of Fribourg provided me with a good
             theoretical foundation in computer science and gave me a toolset I
@@ -223,8 +247,10 @@ export default function Home() {
           </p>
           <h2>When I'm Not Programming</h2>
           <h3>JSZurich</h3>
-          <p>2011 - 2015</p>
-          <p>A monthly JavaScript meetup.</p>
+          <div role="doc-subtitle">
+            2011 - 2015
+            <br />A monthly JavaScript meetup.
+          </div>
           <p>
             Together with <a href="https://github.com/Seldaek">Jordi</a> we
             organized a monthly meetup for JavaScript developers. Being very
@@ -232,8 +258,10 @@ export default function Home() {
             its evolution.
           </p>
           <h3>SwissJS Conference</h3>
-          <p>2012 - 2015</p>
-          <p>A JavaScript community event for and by locals.</p>
+          <div role="doc-subtitle">
+            2012 - 2015
+            <br />A JavaScript community event for and by locals.
+          </div>
           <p>
             The next obvious step after organizing a local meetup was a national
             community event. We organized the{' '}
@@ -248,25 +276,39 @@ export default function Home() {
           </p>
           <p>
             Organizing these conferences, I learned about the lack of diversity
-            in our community, realized that I was pobably part of this problem
+            in our community, realized that I was probably part of this problem
             and how we, as a community, could mitigate these problems. To this
             day, this is something I personally work on.
           </p>
+
           <h3>Public Speaking</h3>
-          <p>Sharing my passion for the open web.</p>
+          <div role="doc-subtitle">
+            2011 - 2015
+            <br />
+            Sharing my passion for the open web.
+          </div>
+
           <p>
-            In the years 2011 - 2015 I spoke at various conferences in Europe,
-            mostly with a focus on performance, maintainable CSS and best
-            practives in JavaScript development.
+            In the years 2011 - 2015 I spoke at various{' '}
+            <em>conferences in Europe</em>, mostly with a focus on performance,
+            maintainable CSS and best practices in JavaScript development.
           </p>
+
           <h3>Hobbies</h3>
           <p>The web is not everything.</p>
           <p>
             <em>Vintage Computers</em> I recently aquired an{' '}
             <a href="http://oldcomputers.net/ibm5155.html">IBM 5155</a> with the
-            aim to learn about operating systems. The plan is to install Minix
+            aim to learn about operating systems. The plan is to install{' '}
+            <em>Minix</em>
             on this machine and write a driver for the{' '}
             <a href="https://www.bluelavasystems.com/xt-ide/">XT IDE</a> card.
+          </p>
+          <p>
+            <em>Homelab</em> I maintain a self-hosted homelab. It gives me the
+            opportunity to learn about <em>containers</em> and linux.{' '}
+            <em>ZFS</em> is my FS of choice, all of this is running on an Ubuntu
+            Server.
           </p>
           <p>
             <em>Family</em> I am the father of 4 kids and spend most of my free
