@@ -73,7 +73,8 @@
   h3,
   [role='doc-subtitle'] {
     @apply italic;
-    @apply font-bold;
+    @apply font-extrabold;
+    @apply hdpi:font-bold;
     @apply text-yellow;
     @apply leading-relaxed;
 
@@ -82,11 +83,13 @@
   }
 
   h3 span {
-    @apply font-normal;
+    @apply font-bold;
+    @apply hdpi:font-normal;
   }
 
   [role='doc-subtitle'] {
-    @apply font-normal;
+    @apply font-bold;
+    @apply hdpi:font-normal;
     @apply text-foreground;
     @apply ml-5;
     @apply text-lg;

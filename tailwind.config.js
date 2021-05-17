@@ -7,6 +7,7 @@ module.exports = {
     fontWeight: {
       normal: 200,
       bold: 400,
+      extrabold: 700,
     },
     fontFamily: {
       mono: '"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
@@ -67,6 +68,9 @@ module.exports = {
       },
       screens: {
         print: { raw: 'print' },
+        hdpi: {
+          raw: '(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)',
+        },
       },
     },
   },

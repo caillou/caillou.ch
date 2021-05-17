@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           rel="stylesheet"
         />
       </Head>
-      <div className="font-mono font-normal">
+      <div className="font-mono font-bold hdpi:font-normal">
         <Component {...pageProps} />
       </div>
     </>
