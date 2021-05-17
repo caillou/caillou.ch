@@ -14,6 +14,7 @@ export default function Home() {
           src="/pierre-hq.jpg"
           layout="fill"
           objectFit="cover"
+          priority={true}
         />
       </div>
       <div className="fill-viewport"></div>
