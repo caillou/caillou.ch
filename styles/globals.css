@@ -29,7 +29,7 @@
     @apply w-screen fixed -z-1;
     @apply print:hidden;
     height: 100vh;
-    max-height: stretch;
+    max-height: fill-available;
     top: 0;
     left: 0;
     right: 0;
@@ -42,7 +42,7 @@
   .fill-viewport {
     @apply print:hidden;
     height: 100vh;
-    max-height: stretch;
+    max-height: fill-available;
   }
   .content {
     padding: 1px 0;
