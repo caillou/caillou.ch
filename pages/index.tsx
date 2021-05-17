@@ -11,7 +11,7 @@ export default function Home() {
       <div className="image-container">
         <Image
           alt="Pierre's crazy eyes…"
-          src="/pierre.jpg"
+          src="/pierre-hq.jpg"
           layout="fill"
           objectFit="cover"
         />
