@@ -1,7 +1,20 @@
 import Head from 'next/head';
-import Image from 'next/image';
+
+import { renditions } from '../public/renditions/renditions';
 
 export default function Home() {
+  const sources = renditions['pierre-hq.jpg']
+    .sort((a, b) => b.aspectRatio - a.aspectRatio)
+    .map((config) => {
+      const query = `(min-aspect-ratio: ${config.aspectRatio * 1000}/1000)`;
+      const sources = config.sizes
+        .map(
+          (size) =>
+            `/renditions/pierre-hq.jpg-${size}@${config.aspectRatio}.jpeg ${size}w`
+        )
+        .join(', ');
+      return <source media={query} srcSet={sources} />;
+    });
   return (
     <>
       <Head>
@@ -9,13 +22,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="image-container">
-        <Image
-          alt="Pierre's crazy eyes…"
-          src="/pierre-hq.jpg"
-          layout="fill"
-          objectFit="cover"
-          priority={true}
-        />
+        <picture>
+          {sources}
+          <img src="" alt="Pierre's crazy eyes…" className="full-image" />
+        </picture>
       </div>
       <main>
         <div className="bg">
