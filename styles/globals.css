@@ -35,14 +35,13 @@
     right: 0;
   }
 
-  main {
-    @apply bg-background;
-  }
-
   .fill-viewport {
     @apply print:hidden;
     height: 100vh;
     max-height: fill-available;
+  }
+  .bg {
+    @apply bg-background;
   }
   .content {
     padding: 1px 0;
