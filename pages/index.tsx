@@ -28,6 +28,7 @@ export default function Home() {
         </picture>
       </div>
       <main>
+        <div className="fill-viewport"></div>
         <div className="bg">
           <div className="content">
             <h1>Pierre Spring</h1>
@@ -52,11 +53,6 @@ export default function Home() {
               <dt>2000 - 2006</dt>{' '}
               <dd>BSc Computer Science University&nbsp;of&nbsp;Fribourg</dd>
             </dl>
-          </div>
-        </div>
-        <div className="fill-viewport"></div>
-        <div className="bg">
-          <div className="content">
             <h2>About Me</h2>
             <p>
               Hi, my name’s Pierre. I am a full stack web developer with 15
