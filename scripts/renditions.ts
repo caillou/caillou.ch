@@ -14,7 +14,9 @@ const imagesDirectory = join(__dirname, '../public');
             config.sizes.map(async (size) => {
               console.log(size, config.aspectRatio);
               const buffer = await sharp(join(imagesDirectory, fileName))
-                .resize(size, Math.round(size / config.aspectRatio))
+                .resize(size, Math.round(size / config.aspectRatio), {
+                  withoutEnlargement: true,
+                })
                 .toFormat('jpeg')
                 .toBuffer();
               await writeFile(
