@@ -1,8 +1,16 @@
 import Head from 'next/head';
 
 import { renditions } from '../public/renditions/renditions';
+import { dataUrls } from '../public/renditions/pierre-hq.jpg-data-urls';
 
 export default function Home() {
+  const dataUrlSources = dataUrls
+    .sort((a, b) => b.aspectRatio - a.aspectRatio)
+    .map(({ aspectRatio, dataUrl }) => {
+      const query = `(min-aspect-ratio: ${aspectRatio * 1000}/1000)`;
+      return <source media={query} srcSet={dataUrl} />;
+    });
+
   const sources = renditions['pierre-hq.jpg']
     .sort((a, b) => b.aspectRatio - a.aspectRatio)
     .map((config) => {
@@ -23,6 +31,12 @@ export default function Home() {
         <title>CV - Pierre Spring</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div className="image-container">
+        <picture>
+          {dataUrlSources}
+          <img src="" alt="Pierre's crazy eyes…" className="full-image" />
+        </picture>
+      </div>
       <div className="image-container">
         <picture>
           {sources}

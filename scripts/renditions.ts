@@ -33,4 +33,34 @@ const imagesDirectory = join(__dirname, '../public');
       );
     })
   );
+  // create a ts file that gives us base64 encoded images
+  await Promise.all(
+    Object.entries(renditions).map(async ([fileName, configs]) => {
+      const dataUrls = await Promise.all(
+        configs.map(async (config) => {
+          const size = 10;
+          return sharp(join(imagesDirectory, fileName))
+            .resize(size, Math.round(size / config.aspectRatio), {
+              withoutEnlargement: true,
+            })
+            .toFormat('jpeg')
+            .toBuffer()
+            .then((buffer) => ({
+              aspectRatio: config.aspectRatio,
+              dataUrl: `data:image/jpeg;base64,${buffer.toString('base64')}`,
+            }));
+        })
+      );
+
+      const fileContent = `export const dataUrls = ${JSON.stringify(
+        dataUrls,
+        null,
+        2
+      )};`;
+      await writeFile(
+        join(imagesDirectory, 'renditions', `${fileName}-data-urls.ts`),
+        fileContent
+      );
+    })
+  );
 })();
