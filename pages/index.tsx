@@ -15,6 +15,8 @@ export default function Home() {
         .join(', ');
       return <source media={query} srcSet={sources} />;
     });
+  const source = sources.pop();
+  const lastSrcSet = source?.props.srcSet;
   return (
     <>
       <Head>
@@ -24,7 +26,12 @@ export default function Home() {
       <div className="image-container">
         <picture>
           {sources}
-          <img src="" alt="Pierre's crazy eyes…" className="full-image" />
+          <img
+            src=""
+            srcSet={lastSrcSet}
+            alt="Pierre's crazy eyes…"
+            className="full-image"
+          />
         </picture>
       </div>
       <main>
