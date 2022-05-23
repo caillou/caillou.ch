@@ -219,7 +219,7 @@ export default function Home() {
             </p>
             <p>
               At that time the web was booming. At Liip, we believed in the
-              Sematic Web, embraced XHTML, were happy to see it replaced by
+              Semantic Web, embraced XHTML, were happy to see it replaced by
               HTML5, went from administrating servers to automated dev ops. As
               browsers and computers become powerful enough for serious frontend
               development, I started concentrating more and more on frontend.
