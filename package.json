@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run renditions && next build",
+    "build": "npm run renditions && npm run favicon && next build",
     "start": "next start",
-    "renditions": "ts-node ./scripts/renditions.ts"
+    "renditions": "ts-node ./scripts/renditions.ts",
+    "favicon": "ts-node ./scripts/favicon.ts"
   },
   "dependencies": {
     "@types/fs-extra": "^9.0.13",
