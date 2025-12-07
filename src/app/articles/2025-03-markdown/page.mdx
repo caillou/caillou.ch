@@ -1,0 +1,93 @@
+import { ArticleLayout } from '@/components/ArticleLayout'
+import avatar from '@/images/avatar.jpg'
+
+export const article = {
+  author: 'Frank Spring',
+  date: '2025-05-20',
+  title: 'Markdown',
+  description: 'A first post using mdx with example code.',
+}
+
+export const metadata = {
+  title: article.title,
+  description: article.description,
+}
+
+export default (props) => <ArticleLayout article={article} {...props} />
+
+The blog is using [MDX](https://mdxjs.com/) to allow us to write articles in Markdown with React components.
+This is a first post using MDX with example code.
+
+## Syntax highlighting code
+
+You can use the code block syntax to add code snippets to your articles. The blog uses [Prism](https://prismjs.com/) for syntax highlighting.
+
+{/* prettier-ignore-start */}
+<pre>\`\`\`tsx
+  `<h1>`Hello World`</h1>`
+  \`\`\`</pre>
+{/* prettier-ignore-end */}
+
+Will render a code block as follows:
+
+```tsx
+<h1>Hello World</h1>
+```
+
+## Using images in MDX
+
+You can use the `<Image>` component to add images to your articles. The image will be responsive and will use the same styles as the other images in the blog.
+
+```tsx
+<Image src={avatar} alt="" />
+```
+
+Will render an image as follows:
+
+<Image src={avatar} alt="" />
+
+## Markdown
+
+```md
+## This is a heading 2
+
+### This is a heading 3
+
+This is a paragraph with some **bold** text and some _italic_ text.
+
+And this is a link to [another blogger](https://caillou.ch).
+
+These are ordered lists:
+
+1. First item
+2. Second item
+3. Third item
+
+And unordered lists:
+
+- item
+- item
+- item
+```
+
+## This is a heading 2
+
+### This is a heading 3
+
+This is a paragraph with some **bold** text and some _italic_ text.
+
+And this is a link to [another blogger](https://caillou.ch).
+
+These are ordered lists:
+
+1. First item
+2. Second item
+3. Third item
+
+And unordered lists:
+
+- item
+- item
+- item
+
+I knew that to get it right I was going to have to replicate the viewing conditions of someone from the future, so I grabbed my space helmet from the closet, created a new Figma document, and got to work.
