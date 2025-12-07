@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { writeFile } from 'fs-extra';
 import sharp from 'sharp';
-import { renditions } from '../public/renditions/renditions';
+import { renditions } from '../images/renditions/renditions';
 
 const imagesDirectory = join(__dirname, '../public');
 
@@ -23,14 +23,14 @@ const imagesDirectory = join(__dirname, '../public');
                 join(
                   imagesDirectory,
                   'renditions',
-                  `${fileName}-${size}@${config.aspectRatio}.jpeg`
+                  `${fileName}-${size}@${config.aspectRatio}.jpeg`,
                 ),
-                buffer
+                buffer,
               );
-            })
+            }),
           );
-        })
+        }),
       );
-    })
+    }),
   );
 })();
