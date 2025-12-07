@@ -1,19 +1,19 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
-import { GitHubIcon } from '@/components/SocialIcons'
-import { AriaRole } from 'react'
-import { Card } from '@/components/Card'
-import { type ArticleWithSlug, getAllArticles } from '@/lib/articles'
-import { formatDate } from '@/lib/formatDate'
-import clsx from 'clsx'
+import { GitHubIcon } from '@/components/SocialIcons';
+import { AriaRole } from 'react';
+import { Card } from '@/components/Card';
+import { type ArticleWithSlug, getAllArticles } from '@/lib/articles';
+import { formatDate } from '@/lib/formatDate';
+import clsx from 'clsx';
 
 function SocialLink({
   icon: Icon,
   text,
   ...props
 }: React.ComponentPropsWithoutRef<typeof Link> & {
-  icon: React.ComponentType<{ className?: string; role?: AriaRole }>
-  text: string
+  icon: React.ComponentType<{ className?: string; role?: AriaRole }>;
+  text: string;
 }) {
   return (
     <Link {...props}>
@@ -26,21 +26,21 @@ function SocialLink({
         <span className="self-baseline">{text}</span>
       </span>
     </Link>
-  )
+  );
 }
 
 function Paragraph({
   className,
   children,
 }: {
-  className?: string
-  children: React.ReactNode
+  className?: string;
+  children: React.ReactNode;
 }) {
   return (
     <p className={clsx('prose mt-6 text-base text-zinc-600', className)}>
       {children}
     </p>
-  )
+  );
 }
 
 function Article({ article }: { article: ArticleWithSlug }) {
@@ -69,11 +69,11 @@ function Article({ article }: { article: ArticleWithSlug }) {
         {formatDate(article.date)}
       </Card.Eyebrow>
     </article>
-  )
+  );
 }
 
 export default async function Home() {
-  let articles = await getAllArticles()
+  let articles = await getAllArticles();
 
   return (
     <>
@@ -113,5 +113,5 @@ export default async function Home() {
         </div>
       </div>
     </>
-  )
+  );
 }

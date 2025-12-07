@@ -1,19 +1,19 @@
-import { ArticleLayout } from '@/components/ArticleLayout'
-import avatar from '@/images/avatar.jpg'
+import { ArticleLayout } from '@/components/ArticleLayout';
+import avatar from '@/images/avatar.jpg';
 
 export const article = {
   author: 'Frank Spring',
   date: '2025-09-07',
   title: 'DevEnv for Node.js',
   description: 'Running my website locally for development.',
-}
+};
 
 export const metadata = {
   title: article.title,
   description: article.description,
-}
+};
 
-export default (props) => <ArticleLayout article={article} {...props} />
+export default (props) => <ArticleLayout article={article} {...props} />;
 
 ## Installing Node.js
 
@@ -31,7 +31,7 @@ This results in the following error output:
 
 ```
 npm : File C:\Program Files\nodejs\npm.ps1 cannot be loaded
-because running scripts is disabled on this system. For more 
+because running scripts is disabled on this system. For more
 information, see about_Execution_Policies at
 https:/go.microsoft.com/fwlink/?LinkID=135170.
 ```

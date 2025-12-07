@@ -1,4 +1,4 @@
-import nextMDX from '@next/mdx'
+import nextMDX from '@next/mdx';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -9,7 +9,7 @@ const nextConfig = {
   turbopack: {
     root: '/',
   },
-}
+};
 
 const withMDX = nextMDX({
   extension: /\.mdx?$/,
@@ -17,6 +17,6 @@ const withMDX = nextMDX({
     remarkPlugins: ['remark-gfm'],
     rehypePlugins: ['@mapbox/rehype-prism'],
   },
-})
+});
 
-export default withMDX(nextConfig)
+export default withMDX(nextConfig);

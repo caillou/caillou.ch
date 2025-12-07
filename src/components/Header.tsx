@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import clsx from 'clsx'
-import avatarImage from '@/images/avatar.jpg'
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
+import avatarImage from '@/images/avatar.jpg';
 
 function NavItem({
   href,
   children,
 }: {
-  href: string
-  children: React.ReactNode
+  href: string;
+  children: React.ReactNode;
 }) {
   return (
     <li>
@@ -25,7 +25,7 @@ function NavItem({
         {children}
       </Link>
     </li>
-  )
+  );
 }
 
 function DesktopNavigation() {
@@ -35,14 +35,14 @@ function DesktopNavigation() {
         <NavItem href="/">Home</NavItem>
       </ul>
     </nav>
-  )
+  );
 }
 
 function Avatar({
   large = false,
   ...props
 }: Omit<React.ComponentPropsWithoutRef<typeof Link>, 'href'> & {
-  large?: boolean
+  large?: boolean;
 }) {
   return (
     <Link href="/" aria-label="Home" {...props}>
@@ -57,11 +57,11 @@ function Avatar({
         priority
       />
     </Link>
-  )
+  );
 }
 
 export function Header() {
-  let isHomePage = usePathname() === '/'
+  let isHomePage = usePathname() === '/';
 
   return (
     <>
@@ -84,5 +84,5 @@ export function Header() {
         )}
       </header>
     </>
-  )
+  );
 }

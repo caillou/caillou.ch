@@ -1,19 +1,19 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
-import { PaddedContent } from '@/components/Layout'
+import { PaddedContent } from '@/components/Layout';
 
 function NavLink({
   href,
   children,
 }: {
-  href: string
-  children: React.ReactNode
+  href: string;
+  children: React.ReactNode;
 }) {
   return (
     <Link href={href} className="transition hover:text-teal-500">
       {children}
     </Link>
-  )
+  );
 }
 
 export function Footer() {
@@ -33,5 +33,5 @@ export function Footer() {
         </PaddedContent>
       </div>
     </footer>
-  )
+  );
 }

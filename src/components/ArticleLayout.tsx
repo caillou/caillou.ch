@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import { Prose } from '@/components/Prose'
-import { type ArticleWithSlug } from '@/lib/articles'
-import { formatDate } from '@/lib/formatDate'
-import clsx from 'clsx'
+import { useRouter } from 'next/navigation';
+import { Prose } from '@/components/Prose';
+import { type ArticleWithSlug } from '@/lib/articles';
+import { formatDate } from '@/lib/formatDate';
+import clsx from 'clsx';
 
 function ArrowLeftIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -16,7 +16,7 @@ function ArrowLeftIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
         strokeLinejoin="round"
       />
     </svg>
-  )
+  );
 }
 
 function BackButton() {
@@ -30,17 +30,17 @@ function BackButton() {
     >
       <ArrowLeftIcon className="h-4 w-4 stroke-zinc-500 transition group-hover:stroke-zinc-700" />
     </a>
-  )
+  );
 }
 
 export function ArticleLayout({
   article,
   children,
 }: {
-  article: ArticleWithSlug
-  children: React.ReactNode
+  article: ArticleWithSlug;
+  children: React.ReactNode;
 }) {
-  let router = useRouter()
+  let router = useRouter();
 
   return (
     <div className="mt-16 lg:mt-32">
@@ -65,5 +65,5 @@ export function ArticleLayout({
         </article>
       </div>
     </div>
-  )
+  );
 }

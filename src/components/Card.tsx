@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import clsx from 'clsx'
+import Link from 'next/link';
+import clsx from 'clsx';
 
 function ChevronRightIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -11,7 +11,7 @@ function ChevronRightIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
         strokeLinejoin="round"
       />
     </svg>
-  )
+  );
 }
 
 export function Card<T extends React.ElementType = 'div'>({
@@ -19,10 +19,10 @@ export function Card<T extends React.ElementType = 'div'>({
   className,
   children,
 }: Omit<React.ComponentPropsWithoutRef<T>, 'as' | 'className'> & {
-  as?: T
-  className?: string
+  as?: T;
+  className?: string;
 }) {
-  let Component = as ?? 'div'
+  let Component = as ?? 'div';
 
   return (
     <Component
@@ -30,7 +30,7 @@ export function Card<T extends React.ElementType = 'div'>({
     >
       {children}
     </Component>
-  )
+  );
 }
 
 Card.Link = function CardLink({
@@ -45,33 +45,33 @@ Card.Link = function CardLink({
         <span className="relative">{children}</span>
       </Link>
     </>
-  )
-}
+  );
+};
 
 Card.Title = function CardTitle<T extends React.ElementType = 'h2'>({
   as,
   href,
   children,
 }: Omit<React.ComponentPropsWithoutRef<T>, 'as' | 'href'> & {
-  as?: T
-  href?: string
+  as?: T;
+  href?: string;
 }) {
-  let Component = as ?? 'h2'
+  let Component = as ?? 'h2';
 
   return (
     <Component className="text-base font-semibold tracking-tight text-zinc-800">
       {href ? <Card.Link href={href}>{children}</Card.Link> : children}
     </Component>
-  )
-}
+  );
+};
 
 Card.Description = function CardDescription({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  return <p className="relative mt-2 text-sm text-zinc-600">{children}</p>
-}
+  return <p className="relative mt-2 text-sm text-zinc-600">{children}</p>;
+};
 
 Card.Cta = function CardCta({ children }: { children: React.ReactNode }) {
   return (
@@ -82,8 +82,8 @@ Card.Cta = function CardCta({ children }: { children: React.ReactNode }) {
       {children}
       <ChevronRightIcon className="ml-1 h-4 w-4 stroke-current" />
     </div>
-  )
-}
+  );
+};
 
 Card.Eyebrow = function CardEyebrow<T extends React.ElementType = 'p'>({
   as,
@@ -92,10 +92,10 @@ Card.Eyebrow = function CardEyebrow<T extends React.ElementType = 'p'>({
   children,
   ...props
 }: Omit<React.ComponentPropsWithoutRef<T>, 'as' | 'decorate'> & {
-  as?: T
-  decorate?: boolean
+  as?: T;
+  decorate?: boolean;
 }) {
-  let Component = as ?? 'p'
+  let Component = as ?? 'p';
 
   return (
     <Component
@@ -116,5 +116,5 @@ Card.Eyebrow = function CardEyebrow<T extends React.ElementType = 'p'>({
       )}
       {children}
     </Component>
-  )
-}
+  );
+};

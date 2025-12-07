@@ -1,19 +1,19 @@
-import { ArticleLayout } from '@/components/ArticleLayout'
-import avatar from '@/images/avatar.jpg'
+import { ArticleLayout } from '@/components/ArticleLayout';
+import avatar from '@/images/avatar.jpg';
 
 export const article = {
   author: 'Frank Spring',
   date: '2025-05-20',
   title: 'Markdown',
   description: 'A first post using mdx with example code.',
-}
+};
 
 export const metadata = {
   title: article.title,
   description: article.description,
-}
+};
 
-export default (props) => <ArticleLayout article={article} {...props} />
+export default (props) => <ArticleLayout article={article} {...props} />;
 
 The blog is using [MDX](https://mdxjs.com/) to allow us to write articles in Markdown with React components.
 This is a first post using MDX with example code.
