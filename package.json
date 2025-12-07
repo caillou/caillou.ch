@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "favicon": "ts-node src/scripts/favicon.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
