@@ -1,4 +1,4 @@
-# Personal Website of Frank Spring
+# Personal Website of Pierre Spring
 
 ## Getting started
 

@@ -33,11 +33,13 @@ function BackButton() {
   );
 }
 
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
 export function ArticleLayout({
   article,
   children,
 }: {
-  article: ArticleWithSlug;
+  article: Optional<ArticleWithSlug, 'date'>;
   children: React.ReactNode;
 }) {
   let router = useRouter();
@@ -51,13 +53,15 @@ export function ArticleLayout({
             <h1 className="mt-6 text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl">
               {article.title}
             </h1>
-            <time
-              dateTime={article.date}
-              className="order-first flex items-center text-base text-zinc-400"
-            >
-              <span className="h-4 w-0.5 rounded-full bg-zinc-200" />
-              <span className="ml-3">{formatDate(article.date)}</span>
-            </time>
+            {article.date && (
+              <time
+                dateTime={article.date}
+                className="order-first flex items-center text-base text-zinc-400"
+              >
+                <span className="h-4 w-0.5 rounded-full bg-zinc-200" />
+                <span className="ml-3">{formatDate(article.date)}</span>
+              </time>
+            )}
           </header>
           <Prose className="mt-8" data-mdx-content>
             {children}

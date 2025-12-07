@@ -78,25 +78,17 @@ export default async function Home() {
   return (
     <>
       <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl">
-        Frank Spring
+        Pierre Spring
       </h1>
       <Paragraph className="mt-14">
-        I’m an aspiring software engineer based in Switzerland. I love to build
-        things, explore the universe, and learn new stuff.
+        I am a full stack web developer with 15 years of experience, based in
+        Zürich, Switzerland.
       </Paragraph>
       <Paragraph>
-        This is my personal website where I share my learning journey. Feel free
-        to follow along and reach out if you have any questions or just want to
-        say hi.
-      </Paragraph>
-      <Paragraph>
-        You can find the source code for this website and other projects on my{' '}
-        <SocialLink
-          href="http://github.com/Spring-Frank-EMF/frankspring.ch"
-          icon={GitHubIcon}
-          text="GitHub account"
-        />
-        .
+        I have worked with a range of different languages and frameworks and
+        ultimately fell in love with TypeScript. In my career I have acquired
+        experience in leading teams, product development, agile methodologies,
+        building companies, working with clients and customers.
       </Paragraph>
 
       <h2 className="mt-16 text-2xl font-bold tracking-tight text-zinc-800 sm:mt-20 sm:text-3xl">

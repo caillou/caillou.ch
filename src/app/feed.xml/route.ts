@@ -10,8 +10,8 @@ export async function GET(req: Request) {
   }
 
   let author = {
-    name: 'Frank Spring',
-    email: 'frank@caillou.ch',
+    name: 'Pierre Spring',
+    email: 'pierre.spring@caillou.ch',
   };
 
   let feed = new Feed({
