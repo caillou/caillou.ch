@@ -6,12 +6,11 @@ import '@/styles/tailwind.css';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - Frank Spring',
-    default:
-      'Frank Spring - Loves to build things, explore the universe, and learn new stuff',
+    template: '%s - Pierre Spring',
+    default: 'Pierre Spring - Full Stack Typescript Developer',
   },
   description:
-    "I'm Frank Spring, an aspiring software engineer based in the Switzerland. I love to build things, explore the universe, and learn new stuff.",
+    "I'm Pierre Spring, a full stack typescript developer with 15 years of experience, based in Zürich, Switzerland.",
   alternates: {
     types: {
       'application/rss+xml': `${process.env.NEXT_PUBLIC_SITE_URL}/feed.xml`,
