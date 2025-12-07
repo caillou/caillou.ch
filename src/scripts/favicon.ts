@@ -2,6 +2,7 @@ import sharp from 'sharp';
 import { join } from 'path';
 
 const imagesDirectory = join(__dirname, '../images');
+const destinationDirectory = join(__dirname, '../app');
 
 (async function () {
   const image = await sharp(join(imagesDirectory, 'avatar.jpg'));
@@ -17,7 +18,17 @@ const imagesDirectory = join(__dirname, '../images');
     .composite([{ input: circle, blend: 'dest-in' }])
     .toFormat('png')
     .toBuffer();
-  await sharp(roundImage)
-    .resize(48, 48)
-    .toFile(join(imagesDirectory, 'favicon.ico'));
+
+  await Promise.all(
+    Object.entries({
+      'apple-icon.png': 180,
+      'favicon.ico': 48,
+      'icon1.png': 16,
+      'icon2.png': 32,
+    }).map(async ([fileName, size]) => {
+      await sharp(roundImage)
+        .resize(size, size)
+        .toFile(join(destinationDirectory, fileName));
+    }),
+  );
 })();
