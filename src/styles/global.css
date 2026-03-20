@@ -143,13 +143,6 @@
 
   img {
     width: 100%;
-    filter: grayscale(100%);
-    transition: filter 0.7s;
-    cursor: crosshair;
-
-    &:hover {
-      filter: grayscale(0%);
-    }
   }
 
   figure {
