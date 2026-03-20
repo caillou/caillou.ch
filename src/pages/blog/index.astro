@@ -13,7 +13,8 @@ const posts = (await getCollection("blog")).sort(
 <BaseLayout title="Blog — caillou.ch">
   <Header />
 
-  <main class="mx-auto max-w-3xl px-6 pt-32 pb-24">
+  <main class="grow px-6 pt-32 pb-24">
+    <div class="mx-auto max-w-3xl">
     <h1
       class="text-4xl font-bold italic leading-tight text-primary md:text-5xl"
     >
@@ -49,6 +50,7 @@ const posts = (await getCollection("blog")).sort(
           </a>
         ))
       }
+    </div>
     </div>
   </main>
 
