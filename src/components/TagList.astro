@@ -1,0 +1,25 @@
+---
+interface Props {
+  tags: string[];
+}
+
+const { tags } = Astro.props;
+const colors = ["text-tertiary", "text-secondary", "text-primary"];
+---
+
+{
+  tags.length > 0 && (
+    <div class="flex flex-wrap gap-3">
+      {tags.map((tag, i) => (
+        <span
+          class:list={[
+            "bg-surface-4 px-3 py-1 text-[0.625rem] font-bold uppercase tracking-wider",
+            colors[i % colors.length],
+          ]}
+        >
+          #{tag}
+        </span>
+      ))}
+    </div>
+  )
+}

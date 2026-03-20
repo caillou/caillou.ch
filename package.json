@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.17",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
     "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.0.8",
     "tailwindcss": "^4.2.2"

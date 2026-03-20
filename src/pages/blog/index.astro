@@ -1,34 +1,56 @@
 ---
 import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import TagList from "../../components/TagList.astro";
 
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Blog</title>
-  </head>
-  <body>
-    <h1>Blog</h1>
-    <ul>
+<BaseLayout title="Blog — caillou.ch">
+  <Header />
+
+  <main class="mx-auto max-w-3xl px-6 pt-32 pb-24">
+    <h1
+      class="text-4xl font-bold italic leading-tight text-primary md:text-5xl"
+    >
+      <span class="text-outline"># </span>Blog
+    </h1>
+
+    <div class="mt-12 space-y-8">
       {
         posts.map((post) => (
-          <li>
-            <a href={`/blog/${post.id}/`}>{post.data.title}</a>
-            <time datetime={post.data.date.toISOString()}>
-              {post.data.date.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </time>
-          </li>
+          <a
+            href={`/blog/${post.id}/`}
+            class="group block border-b border-white/5 pb-8"
+          >
+            <div class="text-[0.6875rem] uppercase tracking-widest text-outline">
+              {post.data.date
+                .toISOString()
+                .slice(0, 10)
+                .replace(/-/g, ".")}
+            </div>
+            <h2 class="mt-2 text-xl font-bold text-on-surface transition-colors group-hover:text-primary">
+              {post.data.title}
+            </h2>
+            {post.data.description && (
+              <p class="mt-2 text-sm leading-relaxed text-on-surface-variant">
+                {post.data.description}
+              </p>
+            )}
+            {post.data.tags.length > 0 && (
+              <div class="mt-4">
+                <TagList tags={post.data.tags} />
+              </div>
+            )}
+          </a>
         ))
       }
-    </ul>
-  </body>
-</html>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

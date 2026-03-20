@@ -1,0 +1,66 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import TagList from "../components/TagList.astro";
+
+interface Props {
+  title: string;
+  date: Date;
+  description?: string;
+  tags?: string[];
+}
+
+const { title, date, description, tags = [] } = Astro.props;
+
+const formattedDate = date
+  .toISOString()
+  .slice(0, 10)
+  .replace(/-/g, ".");
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+
+  <main class="mx-auto max-w-3xl px-6 pt-32 pb-24">
+    <article class="space-y-12">
+      <header class="space-y-6">
+        <div
+          class="text-[0.6875rem] uppercase tracking-widest text-outline"
+        >
+          Published on {formattedDate}
+        </div>
+
+        <h1 class="text-4xl font-bold italic leading-tight text-primary md:text-5xl">
+          <span class="text-outline"># </span>{title}
+        </h1>
+
+        <div class="flex items-center space-x-4 py-4">
+          <div
+            class="flex h-10 w-10 items-center justify-center bg-surface-3 text-secondary"
+          >
+            &gt;_
+          </div>
+          <div class="text-[0.6875rem] uppercase tracking-wider">
+            <span class="block font-bold">caillou</span>
+            <span class="text-outline">Author</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="prose-manuscript">
+        <slot />
+      </section>
+
+      {
+        tags.length > 0 && (
+          <footer class="border-t border-white/5 pt-12">
+            <TagList tags={tags} />
+          </footer>
+        )
+      }
+    </article>
+  </main>
+
+  <Footer />
+</BaseLayout>

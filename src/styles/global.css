@@ -1,1 +1,217 @@
 @import "tailwindcss";
+
+@theme {
+  --color-surface-0: #0e0e0e;
+  --color-surface-1: #131313;
+  --color-surface-2: #191919;
+  --color-surface-3: #1f1f1f;
+  --color-surface-4: #262626;
+  --color-primary: #ffd866;
+  --color-secondary: #bef289;
+  --color-tertiary: #ff61ef;
+  --color-on-surface: #ffffff;
+  --color-on-surface-variant: #ababab;
+  --color-outline: #757575;
+  --color-error: #ff6e84;
+
+  --font-sans: "IBM Plex Mono", ui-monospace, monospace;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  body {
+    background-color: #000000;
+    color: var(--color-on-surface);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: #000000;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #000000;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-surface-4);
+  }
+}
+
+/* Prose styles for markdown-rendered content */
+.prose-manuscript {
+  color: #fcfcfa;
+  font-size: 0.9375rem;
+  line-height: 1.8;
+
+  > * + * {
+    margin-top: 1.5rem;
+  }
+
+  h2 {
+    color: var(--color-tertiary);
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.5rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+
+    &::before {
+      content: "## ";
+      color: var(--color-outline);
+    }
+  }
+
+  h3 {
+    color: var(--color-secondary);
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+
+    &::before {
+      content: "### ";
+      color: var(--color-outline);
+    }
+  }
+
+  p {
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  strong {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  em {
+    color: var(--color-secondary);
+    font-style: italic;
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--color-tertiary);
+    }
+  }
+
+  blockquote {
+    border-left: 4px solid var(--color-secondary);
+    background: color-mix(in srgb, var(--color-surface-1) 50%, transparent);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+    font-style: italic;
+    color: var(--color-secondary);
+    font-size: 0.875rem;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  pre {
+    background: #111111;
+    border-left: 4px solid var(--color-primary);
+    padding: 2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.7;
+  }
+
+  :not(pre) > code {
+    background: var(--color-surface-4);
+    color: var(--color-primary);
+    padding: 0.125rem 0.375rem;
+    font-size: 0.875em;
+  }
+
+  img {
+    width: 100%;
+    filter: grayscale(100%);
+    transition: filter 0.7s;
+    cursor: crosshair;
+
+    &:hover {
+      filter: grayscale(0%);
+    }
+  }
+
+  figure {
+    margin-top: 2rem;
+    margin-bottom: 0;
+  }
+
+  figcaption {
+    text-align: center;
+    color: var(--color-outline);
+    font-size: 0.625rem;
+    margin-top: 1rem;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  li {
+    margin-top: 0.5rem;
+
+    &::marker {
+      color: var(--color-outline);
+    }
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--color-surface-4);
+    margin: 3rem 0;
+  }
+}
+
+/* Shiki code block overrides */
+.prose-manuscript pre.astro-code {
+  background: #111111 !important;
+}
+
+.astro-code {
+  --shiki-default: #fcfcfa;
+  --shiki-default-bg: #111111;
+  --shiki-token-constant: #a084ff;
+  --shiki-token-string: #ff61ef;
+  --shiki-token-comment: #757575;
+  --shiki-token-keyword: #ffd866;
+  --shiki-token-parameter: #fcfcfa;
+  --shiki-token-function: #bef289;
+  --shiki-token-string-expression: #ff61ef;
+  --shiki-token-punctuation: #fcfcfa;
+  --shiki-token-link: #66d9ef;
+}

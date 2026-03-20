@@ -1,0 +1,37 @@
+---
+const pathname = Astro.url.pathname;
+---
+
+<header
+  class="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-md"
+>
+  <div
+    class="mx-auto flex max-w-4xl items-center justify-between px-6 py-6"
+  >
+    <a href="/" class="text-lg italic text-primary">caillou.ch</a>
+    <nav class="flex space-x-8 text-[0.8125rem] font-bold">
+      <a
+        href="/blog/"
+        class:list={[
+          "transition-colors hover:text-tertiary",
+          pathname.startsWith("/blog")
+            ? "text-secondary"
+            : "text-on-surface",
+        ]}
+      >
+        # Blog
+      </a>
+      <a
+        href="/about/"
+        class:list={[
+          "transition-colors hover:text-tertiary",
+          pathname.startsWith("/about")
+            ? "text-secondary"
+            : "text-on-surface",
+        ]}
+      >
+        # About
+      </a>
+    </nav>
+  </div>
+</header>
