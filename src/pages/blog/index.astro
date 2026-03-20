@@ -15,42 +15,39 @@ const posts = (await getCollection("blog")).sort(
 
   <main class="grow px-6 pt-32 pb-24">
     <div class="mx-auto max-w-3xl">
-    <h1
-      class="text-4xl font-bold italic leading-tight text-primary before:text-outline before:content-['#_'] md:text-5xl"
-    >
-      Blog
-    </h1>
+      <h1
+        class="text-4xl leading-tight font-bold text-primary italic pl-[2ch] before:ml-[-2ch] before:text-outline before:content-['#_']"
+      >
+        Blog
+      </h1>
 
-    <div class="mt-12 space-y-8">
-      {
-        posts.map((post) => (
-          <a
-            href={`/blog/${post.id}/`}
-            class="group block border-b border-white/5 pb-8"
-          >
-            <div class="text-[0.6875rem] uppercase tracking-widest text-outline">
-              {post.data.date
-                .toISOString()
-                .slice(0, 10)
-                .replace(/-/g, ".")}
-            </div>
-            <h2 class="mt-2 text-xl font-bold text-on-surface transition-colors group-hover:text-primary">
-              {post.data.title}
-            </h2>
-            {post.data.description && (
-              <p class="mt-2 text-sm leading-relaxed text-on-surface-variant">
-                {post.data.description}
-              </p>
-            )}
-            {post.data.tags.length > 0 && (
-              <div class="mt-4">
-                <TagList tags={post.data.tags} />
+      <div class="mt-12 space-y-8">
+        {
+          posts.map((post) => (
+            <a
+              href={`/blog/${post.id}/`}
+              class="group block border-b border-white/5 pb-8"
+            >
+              <div class="text-[0.6875rem] tracking-widest text-outline uppercase">
+                {post.data.date.toISOString().slice(0, 10).replace(/-/g, ".")}
               </div>
-            )}
-          </a>
-        ))
-      }
-    </div>
+              <h2 class="mt-2 text-xl font-bold text-on-surface transition-colors group-hover:text-primary">
+                {post.data.title}
+              </h2>
+              {post.data.description && (
+                <p class="mt-2 text-sm leading-relaxed text-on-surface-variant">
+                  {post.data.description}
+                </p>
+              )}
+              {post.data.tags.length > 0 && (
+                <div class="mt-4">
+                  <TagList tags={post.data.tags} />
+                </div>
+              )}
+            </a>
+          ))
+        }
+      </div>
     </div>
   </main>
 
