@@ -216,26 +216,25 @@
   --astro-code-token-link: #66d9ef;
 
   code {
-    counter-reset: line;
-    display: flex;
-    flex-direction: column;
+    display: grid;
   }
 
   .line {
-    display: block;
     min-height: 1lh;
-    padding-left: 3.5rem;
-    position: relative;
+  }
 
-    &::before {
-      counter-increment: line;
-      content: counter(line);
-      position: absolute;
-      left: 0;
-      width: 2rem;
-      text-align: right;
-      color: #484848;
-      user-select: none;
-    }
+  .line-number {
+    position: sticky;
+    left: 0;
+    display: inline-block;
+    width: 3.5rem;
+    padding-right: 1rem;
+    text-align: right;
+    color: #484848;
+    user-select: none;
+    background-color: #111111;
+    box-shadow: -2rem 0 0 #111111;
+    box-sizing: border-box;
+    z-index: 1;
   }
 }

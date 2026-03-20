@@ -3,6 +3,7 @@ import BaseLayout from "./BaseLayout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import TagList from "../components/TagList.astro";
+import CodeLineNumbers from "../components/CodeLineNumbers.astro";
 
 interface Props {
   title: string;
@@ -63,4 +64,5 @@ const formattedDate = date
   </main>
 
   <Footer />
+  <CodeLineNumbers />
 </BaseLayout>
