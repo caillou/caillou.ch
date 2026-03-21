@@ -7,7 +7,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="caillou.ch">
-  <Header />
+  <Header transparent />
 
   <Picture
     src={portrait}
@@ -20,5 +20,5 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   <main class="grow"></main>
 
-  <Footer />
+  <Footer compact fixed />
 </BaseLayout>
