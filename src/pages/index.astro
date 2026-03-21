@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import portrait from "../assets/portrait.jpg";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
@@ -9,7 +9,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 <BaseLayout title="caillou.ch">
   <Header />
 
-  <Image
+  <Picture
     src={portrait}
     alt="Pierre Spring"
     class="fixed inset-0 -z-10 h-full w-full object-cover"
