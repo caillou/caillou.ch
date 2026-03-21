@@ -7,11 +7,12 @@ tags: ["meta", "about", "cv"]
 
 import { Picture } from "astro:assets";
 import portrait from "../../assets/portrait.jpg";
+import portraitStanding from "../../assets/portrait-standing.jpg";
 
 <figure class="full-bleed">
   <Picture
     src={portrait}
-    alt="Portrait"
+    alt="Portrait of Pierre Spring"
     widths={[800, 1600, 2400, 3200]}
     formats={["avif", "webp"]}
     quality={80}
@@ -68,10 +69,27 @@ _2000 – 2006_ BSc Computer Science **University of Fribourg**
 
 ## Community
 
-- **JSZurich** (2011–2015) — organized a monthly JavaScript meetup
-- **SwissJS Conference** (2012–2015) — organized a national JavaScript community event
-- **Public Speaking** (2011–2015) — conference presentations on performance and maintainable code
+- **JSZurich** 2011–2015 \
+  Organized a monthly JavaScript meetup.
+- **SwissJS Conference** 2012–2015 \
+  Organized a national JavaScript community event.
+- **Public Speaking** 2011–2015 \
+  Conference talks on performance and maintainable code.
 
 ## Interests
 
-Vintage computers (I have an IBM 5155 running Minix), self-hosted homelab with ZFS and containers, and father of four.
+Vintage computers (_IBM 5155_ running Minix), self-hosted _homelab_ with _ZFS_ and containers, playing the _accordion_, and father of four ❤️.
+
+<figure class="full-bleed">
+  <Picture
+    src={portraitStanding}
+    alt="Portrait Pierre Spring standing"
+    widths={[800, 1600, 2400, 3200]}
+    formats={["avif", "webp"]}
+    quality={80}
+  />
+  <figcaption>
+    FIG 1.1: Portrait of Pierre Spring by [Anders
+    Stoos](https://www.andersstoos.com/).
+  </figcaption>
+</figure>
