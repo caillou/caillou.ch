@@ -1,17 +1,24 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import portrait from "../assets/portrait.jpg";
 ---
 
 <BaseLayout title="caillou.ch">
   <Header />
 
-  <main class="grow px-6 pt-32 pb-24">
-    <div class="mx-auto max-w-3xl">
-      <h1 class="text-4xl font-bold italic text-primary">caillou.ch</h1>
-    </div>
-  </main>
+  <Image
+    src={portrait}
+    alt="Pierre Spring"
+    class="fixed inset-0 -z-10 h-full w-full object-cover"
+    widths={[800, 1600, 2400, 3200]}
+    formats={["avif", "webp"]}
+    quality={80}
+  />
+
+  <main class="grow"></main>
 
   <Footer />
 </BaseLayout>
