@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
+    "deploy": "pnpm build && wrangler deploy",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "biome check .",
@@ -30,6 +31,7 @@
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "wrangler": "^4.76.0"
   }
 }

@@ -1,0 +1,7 @@
+{
+  "name": "caillou-ch",
+  "compatibility_date": "2026-03-21", // Update to the day you deploy
+  "assets": {
+    "directory": "./dist",
+  },
+}
