@@ -46,7 +46,13 @@
     background-color: var(--color-primary);
     color: #000000;
   }
+}
 
+@utility full-bleed {
+  @apply relative left-1/2 -ml-[50vw] w-screen;
+}
+
+@utility scrollbar-thin {
   ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
@@ -138,6 +144,10 @@
     color: var(--color-secondary);
     font-size: 0.875rem;
 
+    @media (max-width: 1150px) {
+      @apply full-bleed;
+    }
+
     p {
       margin: 0;
     }
@@ -152,6 +162,23 @@
     overflow-x: auto;
     font-size: 0.8125rem;
     line-height: 1.7;
+
+    @media (max-width: 1150px) {
+      @apply full-bleed;
+    }
+
+    &::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #111111;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-surface-4);
+    }
   }
 
   :not(pre) > code {
