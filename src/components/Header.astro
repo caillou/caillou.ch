@@ -14,7 +14,7 @@ const pathname = Astro.url.pathname;
         href="/blog/"
         class:list={[
           "transition-colors hover:text-tertiary",
-          pathname.startsWith("/blog")
+          pathname.startsWith("/blog") && !pathname.startsWith("/blog/about")
             ? "text-secondary"
             : "text-on-surface",
         ]}
@@ -22,10 +22,10 @@ const pathname = Astro.url.pathname;
         # Blog
       </a>
       <a
-        href="/about/"
+        href="/blog/about"
         class:list={[
           "transition-colors hover:text-tertiary",
-          pathname.startsWith("/about")
+          pathname.startsWith("/blog/about")
             ? "text-secondary"
             : "text-on-surface",
         ]}

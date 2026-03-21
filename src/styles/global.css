@@ -8,7 +8,10 @@
   --color-surface-4: #262626;
   --color-primary: #ffd866;
   --color-secondary: #bef289;
-  --color-tertiary: #ff61ef;
+
+  /* Pink --color-tertiary: #ff61ef; */
+  --color-tertiary: #aa5d71;
+
   --color-on-surface: #ffffff;
   --color-on-surface-variant: #ababab;
   --color-outline: #757575;
