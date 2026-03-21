@@ -10,18 +10,29 @@
       }
     }
   },
+  "files": {
+    "includes": ["**", "!.astro", "!dist"]
+  },
   "formatter": {
     "enabled": false
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
   },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "complexity": {
+        "noImportantStyles": "off"
+      }
     }
   },
   "overrides": [
     {
-      "includes": ["*.astro"],
+      "includes": ["**/*.astro"],
       "linter": {
         "rules": {
           "correctness": {
