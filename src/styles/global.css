@@ -7,11 +7,9 @@
   --color-surface-3: #1f1f1f;
   --color-surface-4: #262626;
   --color-primary: #ffd866;
+  --color-primary-dark: #ec9760;
   --color-secondary: #bef289;
-
-  /* Pink --color-tertiary: #ff61ef; */
-  --color-tertiary: #aa5d71;
-
+  --color-tertiary: #ff61ef;
   --color-on-surface: #ffffff;
   --color-on-surface-variant: #ababab;
   --color-outline: #757575;
@@ -66,7 +64,7 @@
   }
 
   h2 {
-    color: var(--color-tertiary);
+    color: var(--color-primary-dark);
     font-weight: 700;
     font-style: italic;
     font-size: 1.5rem;

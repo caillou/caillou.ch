@@ -1,0 +1,66 @@
+---
+title: "cli tool: worktrunk"
+date: 2026-03-20
+description: "Git worktree management for humans."
+tags: ["til", "cli", "git"]
+---
+
+Git _worktrees_ are amazing in concept. But maintaining them is a chore.
+
+The _worktrunk_ cli tool makes it easy to manage multiple worktrees. It create worktrees from the `main` branch, and automatically copies ignored files from the main repository to the new worktree, think `.env` file, `node_modules`, or `dist` folders.
+
+## Install
+
+```bash
+brew install worktrunk && wt config shell install
+```
+
+This will install the `wt` cli tool and set up shell completions for your shell.
+
+## Prepare your repository
+
+Ideally, we clone a bare repository and create a `main` worktree from it:
+
+```bash
+git clone --bare <repo-url> <repo-name>
+cd <repo-name>
+wt switch -c main # creates a new worktree from the main branch, cds into it.
+```
+
+## Configure ignored files
+
+Add the following config file:
+
+```toml
+# .config/wt.toml
+[post-start]
+copy = "wt step copy-ignored"
+```
+
+This will copy the ignored files in the background after creating a new worktree.
+
+If you want to control which files are copied, you can create a `.worktreeinclude` file:
+
+```dotenv
+# .worktreeinclude
+
+# List of files and folders to copy to new worktrees
+.env
+node_modules
+.vscode
+```
+
+## Important commands
+
+```bash
+# create a new worktree from the main branch and cd into it
+wt switch
+# interactively select a worktree to switch to.-c branch-name
+wt switc
+# list all worktreesh
+wt list
+# remove a worktree
+wt remove branch-name
+```
+
+If you want to know more about the features and configuration options, check out the [documentation](https://worktrunk.dev/).

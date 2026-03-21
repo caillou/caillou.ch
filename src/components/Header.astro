@@ -3,18 +3,16 @@ const pathname = Astro.url.pathname;
 ---
 
 <header
-  class="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-md"
+  class="fixed top-0 right-0 left-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-md"
 >
-  <div
-    class="mx-auto flex max-w-4xl items-center justify-between px-6 py-6"
-  >
-    <a href="/" class="text-lg italic text-primary">caillou.ch</a>
+  <div class="mx-auto flex max-w-4xl items-center justify-end px-6 py-6">
     <nav class="flex space-x-8 text-[0.8125rem] font-bold">
       <a
         href="/blog/"
         class:list={[
           "transition-colors hover:text-tertiary",
-          pathname.startsWith("/blog") && !pathname.startsWith("/blog/about")
+          pathname.startsWith("/blog") &&
+          !pathname.startsWith("/blog/2026-02-12-about")
             ? "text-secondary"
             : "text-on-surface",
         ]}
@@ -22,10 +20,10 @@ const pathname = Astro.url.pathname;
         # Blog
       </a>
       <a
-        href="/blog/about"
+        href="/blog/2026-02-12-about"
         class:list={[
           "transition-colors hover:text-tertiary",
-          pathname.startsWith("/blog/about")
+          pathname.startsWith("/blog/2026-02-12-about")
             ? "text-secondary"
             : "text-on-surface",
         ]}
