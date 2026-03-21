@@ -55,102 +55,54 @@
 
 /* Prose styles for markdown-rendered content */
 .prose-manuscript {
-  color: #fcfcfa;
-  font-size: 0.9375rem;
-  line-height: 1.8;
+  @apply text-[0.9375rem] leading-[1.8] text-[#fcfcfa];
 
   > * + * {
-    margin-top: 1.5rem;
+    @apply mt-6;
   }
 
   h2 {
-    color: var(--color-primary-dark);
-    font-weight: 700;
-    font-style: italic;
-    font-size: 1.5rem;
-    margin-top: 3rem;
-    margin-bottom: 1rem;
-    padding-left: 3ch;
-
-    &::before {
-      content: "## ";
-      margin-left: -3ch;
-      color: var(--color-outline);
-    }
+    @apply mt-12 mb-4 pl-[3ch] text-[1.5rem] font-bold text-primary-dark italic;
+    @apply before:-ml-[3ch] before:text-outline before:content-['##_'];
   }
 
   h3 {
-    color: var(--color-secondary);
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin-top: 2.5rem;
-    margin-bottom: 0.75rem;
-    padding-left: 4ch;
-
-    &::before {
-      content: "### ";
-      margin-left: -4ch;
-      color: var(--color-outline);
-    }
+    @apply mt-10 mb-3 pl-[4ch] text-[1.25rem] font-bold text-secondary;
+    @apply before:-ml-[4ch] before:text-outline before:content-['###_'];
   }
 
   p {
-    margin-top: 1.5rem;
-    margin-bottom: 0;
+    @apply mt-6 mb-0;
   }
 
   strong {
-    color: var(--color-primary);
-    font-weight: 700;
+    @apply font-bold text-primary;
   }
 
   em {
-    color: var(--color-secondary);
-    font-style: italic;
+    @apply text-secondary italic;
   }
 
   a {
-    color: var(--color-primary);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: color 0.2s;
-
-    &:hover {
-      color: var(--color-tertiary);
-    }
+    @apply text-primary underline underline-offset-[3px] transition-colors duration-200;
+    @apply hover:text-tertiary;
   }
 
   blockquote {
-    border-left: 4px solid var(--color-secondary);
-
     /* maybe this is a better background: color-mix(in srgb, var(--color-surface-1) 50%, transparent); */
-    background: #111111;
-
-    padding: 1.5rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0;
-    font-style: italic;
-    color: var(--color-secondary);
-    font-size: 0.875rem;
+    @apply mt-6 mb-0 border-l-4 border-l-secondary bg-[#111111] p-6 text-[0.875rem] text-secondary italic;
 
     @media (max-width: 1150px) {
       @apply full-bleed;
     }
 
     p {
-      margin: 0;
+      @apply m-0;
     }
   }
 
   pre {
-    background: #111111;
-    border-left: 4px solid var(--color-primary);
-    padding: 2rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0;
-    overflow-x: auto;
-    font-size: 0.8125rem;
-    line-height: 1.7;
+    @apply mt-6 mb-0 overflow-x-auto border-l-4 border-l-primary bg-[#111111] p-8 text-[0.8125rem] leading-[1.7];
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -170,65 +122,52 @@
     }
   }
 
+  pre.astro-code {
+    /* Shiki code block overrides */
+    background: #111111 !important;
+  }
+
   :not(pre) > code {
-    background: var(--color-surface-4);
-    color: var(--color-primary);
-    padding: 0.125rem 0.375rem;
-    font-size: 0.875em;
+    @apply bg-surface-4 px-1.5 py-0.5 text-[0.875em] text-primary;
   }
 
   img {
-    width: 100%;
+    @apply w-full;
   }
 
   figure {
-    margin-top: 2rem;
-    margin-bottom: 0;
+    @apply mt-8 mb-0;
   }
 
   figcaption {
-    text-align: center;
-    color: var(--color-outline);
-    font-size: 0.625rem;
-    margin-top: 1rem;
-    font-style: italic;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
+    @apply mt-4 text-center text-[0.625rem] tracking-[0.2em] text-outline uppercase italic;
   }
 
   ul,
   ol {
-    padding-left: 1.5rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0;
+    @apply mt-6 mb-0 pl-6;
   }
 
   ul {
-    list-style-type: disc;
+    @apply list-disc;
   }
 
   ol {
-    list-style-type: decimal;
+    @apply list-decimal;
   }
 
   li {
-    margin-top: 0.5rem;
+    @apply mt-2;
 
     &::marker {
-      color: var(--color-outline);
+      @apply text-outline;
     }
   }
 
   hr {
-    border: none;
+    @apply mx-0 my-12 border-none;
     border-top: 1px solid var(--color-surface-4);
-    margin: 3rem 0;
   }
-}
-
-/* Shiki code block overrides */
-.prose-manuscript pre.astro-code {
-  background: #111111 !important;
 }
 
 .astro-code {
