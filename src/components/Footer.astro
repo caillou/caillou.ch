@@ -21,25 +21,25 @@ const year = new Date().getFullYear();
       compact ? "gap-y-6" : "space-y-10 md:space-y-0",
     ]}
   >
-    <div class="text-[0.625rem] tracking-widest text-outline uppercase">
-      &copy; {year} Pierre Spring.
+    <div class="text-sm tracking-widest text-outline uppercase">
+      &copy;{year} Pierre Spring
     </div>
     <div class="flex space-x-10">
       <a
         href="https://github.com/caillou/caillou.ch"
-        class="text-[0.625rem] tracking-widest text-outline uppercase transition-colors hover:text-on-surface"
+        class="text-sm tracking-widest text-outline uppercase transition-colors hover:text-on-surface"
       >
         // source
       </a>
       <a
         href="/rss.xml"
-        class="text-[0.625rem] tracking-widest text-outline uppercase transition-colors hover:text-on-surface"
+        class="text-sm tracking-widest text-outline uppercase transition-colors hover:text-on-surface"
       >
         // rss
       </a>
     </div>
     <a href="/" class:list={[compact && "max-md:hidden"]}>
-      <div class="text-sm text-primary transition-colors hover:text-tertiary">
+      <div class="text-primary transition-colors hover:text-tertiary">
         caillou.ch
       </div>
     </a>
