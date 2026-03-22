@@ -1,0 +1,45 @@
+---
+title: "responsive font-weight with tailwind"
+date: 2026-03-22
+description: "Lighter font weights on HiDPI screens using Tailwind v4 theme variables."
+tags: ["til", "css", "tailwind"]
+---
+
+Fonts render crisper on HiDPI displays, so lighter weights look better. Tailwind v4 theme variables make this easy — override them in a media query and every `font-normal` / `font-bold` usage picks it up.
+
+```css
+/* 1. restrict to only the weights you use */
+@theme {
+  --font-weight-*: initial;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+}
+
+/* 2. connect body to the variable (browser default "normal" is hardcoded 400) */
+@layer base {
+  body {
+    font-weight: var(--font-weight-normal);
+  }
+
+  /* 3. override for HiDPI — all font-normal/font-bold usages follow */
+  @media (min-resolution: 2dppx) {
+    :root {
+      --font-weight-normal: 200;
+      --font-weight-bold: 400;
+    }
+  }
+}
+```
+
+Make sure to load the actual font files for the weights you use.
+
+If you use Astro it's done as follows:
+
+```typescript
+// layout.astro
+import "@fontsource/ibm-plex-mono/200.css";
+import "@fontsource/ibm-plex-mono/200-italic.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/400-italic.css";
+import "@fontsource/ibm-plex-mono/700.css";
+```
