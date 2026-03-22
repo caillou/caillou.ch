@@ -18,20 +18,19 @@ const posts = (await getCollection("blog")).sort(
       <div class="mt-12 space-y-8">
         {
           posts.map((post) => (
-            <a
-              href={`/blog/${post.id}/`}
-              class="group block border-b border-white/5 pb-8"
-            >
-              <div class="text-[0.6875rem] tracking-widest text-outline uppercase">
-                {post.data.date.toISOString().slice(0, 10).replace(/-/g, ".")}
+            <a href={`/blog/${post.id}/`} class="group block pb-8">
+              <div class="text-sm font-bold tracking-widest text-outline uppercase italic">
+                {post.data.date.toISOString().slice(0, 10)}
               </div>
-              <h2 class="mt-2 text-xl font-bold text-on-surface transition-colors group-hover:text-primary">
+              <h2 class="mt-2 ml-[2ch] text-xl font-bold text-primary italic transition-colors group-hover:text-tertiary before:ml-[-2ch] before:text-outline before:content-['#_']">
                 {post.data.title}
               </h2>
               {post.data.description && (
-                <p class="mt-2 text-sm leading-relaxed text-on-surface-variant">
-                  {post.data.description}
-                </p>
+                <>
+                  <p class="mt-2 text-sm leading-relaxed font-bold">
+                    {post.data.description}
+                  </p>
+                </>
               )}
               {post.data.tags.length > 0 && (
                 <div class="mt-4">
