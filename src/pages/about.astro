@@ -1,0 +1,164 @@
+---
+import { Picture } from "astro:assets";
+import portrait from "../assets/portrait.jpg";
+import portraitStanding from "../assets/portrait-standing.jpg";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import PageTitle from "../components/PageTitle.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="about pierre spring"
+  description="Full stack web developer based in Zürich, Switzerland."
+>
+  <Header />
+
+  <main class="grow pt-32 pb-24">
+    <article class="mx-auto max-w-3xl space-y-12 px-6">
+      <header>
+        <PageTitle title="about pierre spring" />
+      </header>
+
+      <section class="prose-manuscript">
+        <p>
+          I'm Pierre, a full stack web developer with over 20 years of
+          experience, based in Zurich, Switzerland. I specialize in
+          <em>TypeScript</em> and care deeply about clean, maintainable code — which
+          I believe is a side-effect of continuously evolving and adapting the development
+          process through code reviews, pair programming, and automated testing.
+        </p>
+
+        <figure class="max-lg:full-bleed">
+          <Picture
+            src={portrait}
+            alt="Portrait of Pierre Spring"
+            widths={[800, 1600, 2400, 3200]}
+            formats={["avif", "webp"]}
+            quality={80}
+          />
+          <figcaption>
+            FIG 1.0: Portrait of Pierre Spring by <a
+              href="https://www.andersstoos.com/">Anders Stoos</a
+            >.
+          </figcaption>
+        </figure>
+
+        <h2>Experience</h2>
+
+        <p>
+          <em>since 2026</em> Frontend Developer <strong>ICFM&nbsp;AG</strong>
+        </p>
+
+        <p>
+          <em>2013 — 2026</em> Node.js and Frontend Developer <strong
+            >Freelance</strong
+          >
+        </p>
+
+        <div class="text-on-surface-variant italic">
+          <p>Selected projects:</p>
+          <ul>
+            <li>
+              <span class="text-on-surface">Migros</span> next.js and contentful website
+            </li>
+            <li>
+              <span class="text-on-surface">BKW</span> web components style guide
+            </li>
+            <li>
+              <span class="text-on-surface">Republik</span> Node.js backend for the
+              Swiss online newspaper
+            </li>
+            <li>
+              <span class="text-on-surface">SBB</span> frontend development on the
+              website relaunch
+            </li>
+            <li>
+              <span class="text-on-surface"
+                >Neue Zürcher Zeitung & Livingdocs</span
+              > full-stack publication tool
+            </li>
+            <li>
+              <span class="text-on-surface">Credit Suisse</span> website redesign
+            </li>
+          </ul>
+        </div>
+
+        <p>
+          <em>2011 – 2013</em> Co-founder and Lead Frontend Developer <strong
+            >Nelmio&nbsp;AG</strong
+          >
+        </p>
+
+        <div class="text-on-surface-variant italic">
+          We bootstrapped a remote web agency specializing in single page
+          applications, working with clients including local.ch, Zürcher
+          Kantonalbank, Unic, Ginetta, and Swiss.
+        </div>
+        <div class="text-on-surface-variant italic">
+          First steps into the world of open source.
+        </div>
+
+        <p>
+          <em>2005 – 2011</em> Full Stack Web Developer <strong
+            >Liip&nbsp;AG</strong
+          >
+        </p>
+
+        <div class="text-on-surface-variant italic">
+          My early career spanning the evolution of responsive design, HTML5
+          adoption, and frontend specialization.
+        </div>
+
+        <p>
+          <em>2000 – 2006</em> BSc Computer Science <strong
+            >University of Fribourg</strong
+          >
+        </p>
+
+        <h2>Community</h2>
+
+        <ul>
+          <li>
+            <strong>JSZurich</strong> 2011–2015<br />
+            Organized a monthly JavaScript meetup.
+          </li>
+          <li>
+            <strong>SwissJS Conference</strong> 2012–2015<br />
+            Organized a national JavaScript community event.
+          </li>
+          <li>
+            <strong>Public Speaking</strong> 2011–2015<br />
+            Conference talks on performance and maintainable code.
+          </li>
+        </ul>
+
+        <h2>Interests</h2>
+
+        <p>
+          Vintage computers (<em>IBM 5155</em> running Minix), self-hosted <em
+            >homelab</em
+          > with <em>ZFS</em> and containers, playing the <em>accordion</em>,
+          and father of four&nbsp;❤️.
+        </p>
+
+        <figure class="full-bleed">
+          <Picture
+            src={portraitStanding}
+            alt="Portrait Pierre Spring standing"
+            widths={[800, 1600, 2400, 3200]}
+            formats={["avif", "webp"]}
+            quality={80}
+          />
+          <figcaption>
+            FIG 1.1: Portrait of Pierre Spring by <a
+              href="https://www.andersstoos.com/">Anders Stoos</a
+            >.
+          </figcaption>
+        </figure>
+      </section>
+    </article>
+  </main>
+
+  <Footer />
+</BaseLayout>

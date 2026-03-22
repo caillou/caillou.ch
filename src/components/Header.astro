@@ -16,26 +16,21 @@ const pathname = Astro.url.pathname;
   <div class="mx-auto flex max-w-4xl items-center justify-end px-6 py-6">
     <nav class="flex space-x-8 text-[0.8125rem] italic">
       <a
-        href="/blog/"
+        href="/blog"
         class:list={[
           "transition-colors hover:text-tertiary",
           "before:text-outline before:content-['#_']",
-          pathname.startsWith("/blog") &&
-          !pathname.startsWith("/blog/2026-02-12-about")
-            ? "text-secondary"
-            : "text-on-surface",
+          pathname.startsWith("/blog") ? "text-secondary" : "text-on-surface",
         ]}
       >
         Blog
       </a>
       <a
-        href="/blog/2026-02-12-about"
+        href="/about"
         class:list={[
           "transition-colors hover:text-tertiary",
           "before:text-outline before:content-['#_']",
-          pathname.startsWith("/blog/2026-02-12-about")
-            ? "text-secondary"
-            : "text-on-surface",
+          pathname.startsWith("/about") ? "text-secondary" : "text-on-surface",
         ]}
       >
         About
