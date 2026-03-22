@@ -7,7 +7,7 @@ tags: ["til", "cli", "git"]
 
 Git _worktrees_ are amazing in concept. But maintaining them is a chore.
 
-The _worktrunk_ cli tool makes it easy to manage multiple worktrees. It create
+The _worktrunk_ cli tool makes it easy to manage multiple worktrees. It creates
 worktrees from the `main` branch, and automatically copies ignored files from
 the main repository to the new worktree, think `.env` file, `node_modules`, or
 `dist` folders.
@@ -60,9 +60,11 @@ node_modules
 ```bash
 # create a new worktree from the main branch and cd into it
 wt switch
-# interactively select a worktree to switch to.-c branch-name
-wt switc
-# list all worktreesh
+# interactively select a worktree to switch to
+wt switch
+# create a new worktree with a specific branch name
+wt switch -c branch-name
+# list all worktrees
 wt list
 # remove a worktree
 wt remove branch-name
