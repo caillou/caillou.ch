@@ -153,6 +153,10 @@
     @apply mt-8 mb-0;
   }
 
+  picture {
+    @apply block;
+  }
+
   figcaption {
     @apply mt-4 text-center text-[0.625rem] tracking-[0.2em] text-outline uppercase italic;
   }

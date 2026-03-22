@@ -31,7 +31,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
         <figure>
           <Picture
-            class="max-lg:full-bleed"
+            pictureAttributes={{ class: "max-lg:full-bleed" }}
             src={portrait}
             alt="Portrait of Pierre Spring"
             widths={[800, 1600, 2400, 3200]}
@@ -144,7 +144,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
         <figure>
           <Picture
-            class="full-bleed"
+            pictureAttributes={{ class: "full-bleed" }}
             src={portraitStanding}
             alt="Portrait Pierre Spring standing"
             widths={[800, 1600, 2400, 3200]}
