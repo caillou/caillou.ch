@@ -17,33 +17,29 @@ const year = new Date().getFullYear();
 >
   <div
     class:list={[
-      "mx-auto flex w-full max-w-4xl flex-col items-center px-6 md:flex-row md:justify-between",
+      "mx-auto flex w-full max-w-4xl flex-col items-center px-6 italic md:flex-row md:justify-between",
       compact ? "gap-y-6" : "space-y-10 md:space-y-0",
     ]}
   >
-    <div
-      class="font-mono text-[0.625rem] tracking-widest text-outline uppercase"
-    >
+    <div class="text-[0.625rem] tracking-widest text-outline uppercase">
       &copy; {year} Pierre Spring.
     </div>
     <div class="flex space-x-10">
       <a
         href="https://github.com/caillou/caillou.ch"
-        class="font-mono text-[0.625rem] tracking-widest text-outline uppercase transition-colors hover:text-on-surface"
+        class="text-[0.625rem] tracking-widest text-outline uppercase transition-colors hover:text-on-surface"
       >
         // source
       </a>
       <a
         href="/rss.xml"
-        class="font-mono text-[0.625rem] tracking-widest text-outline uppercase transition-colors hover:text-on-surface"
+        class="text-[0.625rem] tracking-widest text-outline uppercase transition-colors hover:text-on-surface"
       >
         // rss
       </a>
     </div>
     <a href="/" class:list={[compact && "max-md:hidden"]}>
-      <div
-        class="text-sm text-primary italic transition-colors hover:text-tertiary"
-      >
+      <div class="text-sm text-primary transition-colors hover:text-tertiary">
         caillou.ch
       </div>
     </a>
