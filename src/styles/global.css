@@ -87,7 +87,7 @@
 
   blockquote {
     /* maybe this is a better background: color-mix(in srgb, var(--color-surface-1) 50%, transparent); */
-    @apply mt-6 mb-0 border-l-4 border-l-secondary bg-[#111111] p-6 text-[0.875rem] text-secondary italic;
+    @apply mt-6 mb-0 border-l-4 border-l-secondary bg-[#111111] p-6 text-secondary italic;
 
     @media (max-width: 1150px) {
       @apply full-bleed;
@@ -99,7 +99,7 @@
   }
 
   pre {
-    @apply mt-6 mb-0 overflow-x-auto border-l-4 border-l-primary bg-[#111111] p-8 text-[0.8125rem] leading-[1.7];
+    @apply mt-6 mb-0 overflow-x-auto border-l-4 border-l-primary bg-[#111111] p-8 leading-[1.4];
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -141,7 +141,7 @@
   }
 
   figcaption {
-    @apply mt-4 text-center text-[0.625rem] tracking-[0.2em] text-outline uppercase italic;
+    @apply mt-4 text-center tracking-[0.2em] text-outline uppercase italic md:text-sm;
   }
 
   ul,
