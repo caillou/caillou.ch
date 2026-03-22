@@ -52,19 +52,19 @@
 
 /* Prose styles for markdown-rendered content */
 .prose-manuscript {
-  @apply text-[0.9375rem] leading-[1.8] text-[#fcfcfa];
+  @apply leading-[1.8];
 
   > * + * {
     @apply mt-6;
   }
 
   h2 {
-    @apply mt-12 mb-4 pl-[3ch] text-[1.5rem] font-bold text-primary-dark italic;
+    @apply mt-12 mb-4 pl-[3ch] text-lg font-bold italic;
     @apply before:-ml-[3ch] before:text-outline before:content-['##_'];
   }
 
   h3 {
-    @apply mt-10 mb-3 pl-[4ch] text-[1.25rem] font-bold text-secondary;
+    @apply mt-10 mb-3 pl-[4ch] font-bold italic;
     @apply before:-ml-[4ch] before:text-outline before:content-['###_'];
   }
 
@@ -125,7 +125,7 @@
   }
 
   :not(pre) > code {
-    @apply bg-surface-4 px-1.5 py-0.5 text-[0.875em] text-primary;
+    @apply bg-surface-4 px-1.5 py-0.5 text-sm text-primary not-italic;
   }
 
   img {
