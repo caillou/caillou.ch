@@ -5,7 +5,7 @@ description: "every MDX formatting option this site supports, in one place."
 tags: ["meta", "mdx"]
 ---
 
-import { Picture } from "astro:assets";
+import Figure from "../../components/Figure.astro";
 import portrait from "../../assets/portrait.jpg";
 import portraitStanding from "../../assets/portrait-standing.jpg";
 
@@ -66,32 +66,19 @@ function greet(name: string): string {
 
 ### Picture
 
-<figure>
-  <Picture
-    pictureAttributes={{ class: "max-lg:full-bleed" }}
-    src={portrait}
-    alt="Example image"
-    widths={[800, 1600, 2400, 3200]}
-    formats={["avif", "webp"]}
-    quality={80}
-  />
-  <figcaption>
-    FIG 1.0: A regular picture, full-bleed on mobile only.
-  </figcaption>
-</figure>
+<Figure src={portrait} alt="Example image">
+  FIG 1.0: A regular picture, full-bleed on mobile only.
+</Figure>
 
 ### Full-bleed picture
 
-<figure>
-  <Picture
-    pictureAttributes={{ class: "full-bleed" }}
-    src={portraitStanding}
-    alt="Example full-bleed image"
-    widths={[800, 1600, 2400, 3200]}
-    formats={["avif", "webp"]}
-    quality={80}
-  />
-  <figcaption>
-    FIG 1.1: A full-bleed picture, spanning the entire viewport width.
-  </figcaption>
-</figure>
+<Figure src={portraitStanding} alt="Example full-bleed image" fullBleed>
+  <p>FIG 1.1: A full-bleed picture, spanning the entire viewport width.</p>
+  <p>
+    This demonstrates how images can extend beyond the typical content
+    boundaries to create a more dramatic visual impact, which is particularly
+    effective when showcasing photography or artwork that benefits from maximum
+    screen real estate utilization across all device sizes including ultra-wide
+    monitors and small mobile screens.
+  </p>
+</Figure>

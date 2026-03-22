@@ -1,7 +1,7 @@
 ---
-import { Picture } from "astro:assets";
 import portrait from "../assets/portrait.jpg";
 import portraitStanding from "../assets/portrait-standing.jpg";
+import Figure from "../components/Figure.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import PageTitle from "../components/PageTitle.astro";
@@ -29,21 +29,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           process through code reviews, pair programming, and automated testing.
         </p>
 
-        <figure>
-          <Picture
-            pictureAttributes={{ class: "max-lg:full-bleed" }}
-            src={portrait}
-            alt="Portrait of Pierre Spring"
-            widths={[800, 1600, 2400, 3200]}
-            formats={["avif", "webp"]}
-            quality={80}
-          />
-          <figcaption>
-            FIG 1.0: Portrait of Pierre Spring by <a
-              href="https://www.andersstoos.com/">Anders Stoos</a
-            >.
-          </figcaption>
-        </figure>
+        <Figure src={portrait} alt="Portrait of Pierre Spring">
+          FIG 1.0: Portrait of Pierre Spring by <a
+            href="https://www.andersstoos.com/">Anders Stoos</a
+          >.
+        </Figure>
 
         <h2>Experience</h2>
 
@@ -142,21 +132,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <em>accordion</em>, and father of four&nbsp;❤️.
         </p>
 
-        <figure>
-          <Picture
-            pictureAttributes={{ class: "full-bleed" }}
-            src={portraitStanding}
-            alt="Portrait Pierre Spring standing"
-            widths={[800, 1600, 2400, 3200]}
-            formats={["avif", "webp"]}
-            quality={80}
-          />
-          <figcaption>
-            FIG 1.1: Portrait of Pierre Spring by <a
-              href="https://www.andersstoos.com/">Anders Stoos</a
-            >.
-          </figcaption>
-        </figure>
+        <Figure
+          src={portraitStanding}
+          alt="Portrait Pierre Spring standing"
+          fullBleed
+        >
+          FIG 1.1: Portrait of Pierre Spring by <a
+            href="https://www.andersstoos.com/">Anders Stoos</a
+          >.
+        </Figure>
       </section>
     </article>
   </main>
