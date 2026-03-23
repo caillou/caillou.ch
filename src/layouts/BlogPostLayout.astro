@@ -14,7 +14,7 @@ interface Props {
 
 const { title, date, description, tags = [] } = Astro.props;
 
-const formattedDate = date.toISOString().slice(0, 10).replace(/-/g, ".");
+const formattedDate = date.toISOString().slice(0, 10);
 ---
 
 <BaseLayout title={title} description={description}>
@@ -23,8 +23,8 @@ const formattedDate = date.toISOString().slice(0, 10).replace(/-/g, ".");
   <main class="grow pt-32 pb-24">
     <article class="mx-auto max-w-3xl space-y-12 px-6">
       <header class="space-y-6">
-        <div class="text-[0.6875rem] tracking-widest text-outline uppercase">
-          Published on {formattedDate}
+        <div class="text-sm font-bold text-outline uppercase italic">
+          <span class="tracking-widest">Published on </span>{formattedDate}
         </div>
 
         <PageTitle title={title} />
