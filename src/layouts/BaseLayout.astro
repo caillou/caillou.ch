@@ -1,10 +1,11 @@
 ---
 import "../styles/global.css";
-import "@fontsource/ibm-plex-mono/200.css";
-import "@fontsource/ibm-plex-mono/200-italic.css";
-import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ibm-plex-mono/400-italic.css";
-import "@fontsource/ibm-plex-mono/700.css";
+import latin200italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-200-italic.woff2?url";
+import latin200normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-200-normal.woff2?url";
+import latin400italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-italic.woff2?url";
+import latin400normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url";
+import latin700italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-700-italic.woff2?url";
+import latin700normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-700-normal.woff2?url";
 
 interface Props {
   title: string;
@@ -21,6 +22,52 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {description && <meta name="description" content={description} />}
     <meta name="generator" content={Astro.generator} />
+    <link
+      rel="preload"
+      href={latin400normal}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={latin400italic}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={latin200normal}
+      as="font"
+      type="font/woff2"
+      crossorigin
+      media="(min-resolution: 2dppx)"
+    />
+    <link
+      rel="preload"
+      href={latin200italic}
+      as="font"
+      type="font/woff2"
+      crossorigin
+      media="(min-resolution: 2dppx)"
+    />
+    <link
+      rel="preload"
+      href={latin700normal}
+      as="font"
+      type="font/woff2"
+      crossorigin
+      media="not (min-resolution: 2dppx)"
+    />
+    <link
+      rel="preload"
+      href={latin700italic}
+      as="font"
+      type="font/woff2"
+      crossorigin
+      media="not (min-resolution: 2dppx)"
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
   </head>
