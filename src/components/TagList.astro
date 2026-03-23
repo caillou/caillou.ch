@@ -4,7 +4,7 @@ interface Props {
 }
 
 const { tags } = Astro.props;
-const colors = ["text-tertiary", "text-secondary", "text-primary"];
+const colors = ["text-pink", "text-green", "text-yellow"];
 ---
 
 {
@@ -13,7 +13,7 @@ const colors = ["text-tertiary", "text-secondary", "text-primary"];
       {tags.map((tag, i) => (
         <span
           class:list={[
-            "bg-surface-4 px-3 py-1 text-sm font-bold tracking-wider italic",
+            "bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic",
             colors[i % colors.length],
           ]}
         >

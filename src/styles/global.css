@@ -3,19 +3,13 @@
 @theme {
   --color-*: initial;
   --color-black: #000000;
-  --color-surface-0: #0e0e0e;
-  --color-surface-1: #131313;
-  --color-surface-2: #191919;
-  --color-surface-3: #1f1f1f;
-  --color-surface-4: #262626;
-  --color-primary: #ffd866;
-  --color-primary-dark: #ec9760;
-  --color-secondary: #bef289;
-  --color-tertiary: #ff61ef;
-  --color-on-surface: #ffffff;
-  --color-on-surface-variant: #ababab;
-  --color-outline: #757575;
-  --color-error: #ff6e84;
+  --color-dark-gray: #262626;
+  --color-yellow: #ffd866;
+  --color-green: #bef289;
+  --color-pink: #ff61ef;
+  --color-white: #ffffff;
+  --color-light-gray: #ababab;
+  --color-gray: #757575;
 
   --font-sans: "IBM Plex Mono", ui-monospace, monospace;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -31,11 +25,11 @@
   }
 
   body {
-    @apply bg-black font-normal text-on-surface antialiased;
+    @apply bg-black font-normal text-white antialiased;
   }
 
   ::selection {
-    @apply bg-primary text-black;
+    @apply bg-yellow text-black;
   }
 
   @media (min-resolution: 2dppx) {
@@ -60,12 +54,12 @@
 
   h2 {
     @apply mt-12 mb-4 pl-[3ch] text-2xl italic;
-    @apply before:-ml-[3ch] before:text-outline before:content-['##_'];
+    @apply before:-ml-[3ch] before:text-gray before:content-['##_'];
   }
 
   h3 {
     @apply mt-10 mb-3 pl-[4ch] text-xl italic;
-    @apply before:-ml-[4ch] before:text-outline before:content-['###_'];
+    @apply before:-ml-[4ch] before:text-gray before:content-['###_'];
   }
 
   p {
@@ -73,21 +67,21 @@
   }
 
   strong {
-    @apply font-bold text-primary;
+    @apply font-bold text-yellow;
   }
 
   em {
-    @apply text-secondary italic;
+    @apply text-green italic;
   }
 
   a {
-    @apply text-primary underline underline-offset-[3px] transition-colors duration-200;
-    @apply hover:text-tertiary;
+    @apply text-yellow underline underline-offset-[3px] transition-colors duration-200;
+    @apply hover:text-pink;
   }
 
   blockquote {
     /* maybe this is a better background: color-mix(in srgb, var(--color-surface-1) 50%, transparent); */
-    @apply mt-6 mb-0 border-l-4 border-l-secondary bg-[#111111] p-6 text-secondary italic;
+    @apply mt-6 mb-0 border-l-4 border-l-green bg-[#111111] p-6 text-green italic;
 
     @media (max-width: 1150px) {
       @apply full-bleed;
@@ -99,7 +93,7 @@
   }
 
   pre {
-    @apply mt-6 mb-0 overflow-x-auto border-l-4 border-l-primary bg-[#111111] p-8 leading-[1.4];
+    @apply mt-6 mb-0 overflow-x-auto border-l-4 border-l-yellow bg-[#111111] p-8 leading-[1.4];
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -111,7 +105,7 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background: var(--color-surface-4);
+      background: var(--color-dark-gray);
     }
 
     @media (max-width: 1150px) {
@@ -120,12 +114,13 @@
   }
 
   pre.astro-code {
+    /* todo: add this color to tailwind and @apply it */
     /* Shiki code block overrides */
     background: #111111 !important;
   }
 
   :not(pre) > code {
-    @apply bg-surface-4 px-1.5 py-0.5 text-sm font-bold text-primary not-italic;
+    @apply bg-dark-gray px-1.5 py-0.5 text-sm font-bold text-yellow not-italic;
   }
 
   img {
@@ -141,7 +136,7 @@
   }
 
   figcaption {
-    @apply mt-4 text-center tracking-[0.2em] text-pretty text-outline uppercase italic md:text-sm;
+    @apply mt-4 text-center tracking-[0.2em] text-pretty text-gray uppercase italic md:text-sm;
   }
 
   ul,
@@ -161,13 +156,13 @@
     @apply mt-2;
 
     &::marker {
-      @apply text-outline;
+      @apply text-gray;
     }
   }
 
   hr {
     @apply mx-0 my-12 border-none;
-    border-top: 1px solid var(--color-surface-4);
+    border-top: 1px solid var(--color-dark-gray);
   }
 }
 
@@ -182,7 +177,7 @@
   --astro-code-token-constant: #a79cff;
 
   /* strings → yellow */
-  --astro-code-token-string: var(--color-primary);
+  --astro-code-token-string: var(--color-yellow);
 
   /* comments → dark gray */
   --astro-code-token-comment: #69676c;
@@ -194,10 +189,10 @@
   --astro-code-token-parameter: #fd9353;
 
   /* functions, methods → green */
-  --astro-code-token-function: var(--color-secondary);
+  --astro-code-token-function: var(--color-green);
 
   /* template literals, interpolated strings → yellow */
-  --astro-code-token-string-expression: var(--color-primary);
+  --astro-code-token-string-expression: var(--color-yellow);
 
   /* brackets, delimiters, semicolons → mid gray */
   --astro-code-token-punctuation: #8b888f;

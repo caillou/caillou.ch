@@ -19,10 +19,10 @@ const posts = (await getCollection("blog")).sort(
         {
           posts.map((post) => (
             <a href={`/blog/${post.id}/`} class="group block pb-8">
-              <div class="text-sm font-bold tracking-widest text-outline uppercase italic">
+              <div class="text-sm font-bold tracking-widest text-gray uppercase italic">
                 {post.data.date.toISOString().slice(0, 10)}
               </div>
-              <h2 class="mt-2 ml-[2ch] text-xl font-bold text-primary italic transition-colors group-hover:text-tertiary before:ml-[-2ch] before:text-outline before:content-['#_']">
+              <h2 class="mt-2 ml-[2ch] text-xl font-bold text-yellow italic transition-colors group-hover:text-pink before:ml-[-2ch] before:text-gray before:content-['#_']">
                 {post.data.title}
               </h2>
               {post.data.description && (
