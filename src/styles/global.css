@@ -115,6 +115,7 @@
 
   pre.astro-code {
     /* todo: add this color to tailwind and @apply it */
+    /* maybe use #151209 */
     /* Shiki code block overrides */
     background: #111111 !important;
   }
