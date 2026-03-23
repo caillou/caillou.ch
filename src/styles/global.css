@@ -141,7 +141,7 @@
   }
 
   figcaption {
-    @apply mt-4 text-center tracking-[0.2em] text-outline uppercase italic md:text-sm;
+    @apply mt-4 text-center tracking-[0.2em] text-pretty text-outline uppercase italic md:text-sm;
   }
 
   ul,
