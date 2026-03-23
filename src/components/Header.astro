@@ -7,15 +7,27 @@ const { transparent } = Astro.props;
 const pathname = Astro.url.pathname;
 ---
 
-<header
-  class:list={[
-    "fixed top-0 right-0 left-0 z-50",
-    // todo blur has a hard cut at the bottom. that does not look good.
-    transparent ? "" : "backdrop-blur-md",
-  ]}
->
-  <div class="mx-auto flex max-w-4xl items-center justify-end px-6 py-6">
-    <nav class="flex space-x-8 italic">
+{
+  !transparent && (
+    <div
+      class:list={[
+        "pointer-events-none fixed top-0 right-0 left-0 h-[4.4rem] bg-linear-to-b from-black via-black/60 to-transparent",
+        "z-10", // this ensures the gradient is below the header and figures, but above the page content
+        "2xl:hidden", // on larger screens the gradient is not needed, because the navigation is on the right side of the content
+      ]}
+      aria-hidden="true"
+    />
+  )
+}
+
+<header class="pointer-events-none fixed top-0 right-0 left-0 z-50">
+  <div
+    class:list={[
+      "mx-auto flex max-w-4xl items-center justify-end px-6 py-6",
+      "2xl:max-w-6xl", // this puts the navigation is on the right side of the content on larger screens
+    ]}
+  >
+    <nav class="pointer-events-auto flex space-x-8 italic">
       <a
         href="/blog"
         class:list={[

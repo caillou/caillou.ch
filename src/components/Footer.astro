@@ -7,10 +7,11 @@ const { compact } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
-<footer class:list={["bg-black", compact ? "py-6" : "py-16"]}>
+<footer class:list={[compact ? "py-6" : "py-16"]}>
   <div
     class:list={[
-      "mx-auto flex w-full max-w-4xl flex-col items-center px-6 italic md:flex-row md:justify-between",
+      "mx-auto flex w-full flex-col items-center px-6 italic md:flex-row md:justify-between",
+      "max-w-4xl 2xl:max-w-6xl", // aligns with the header navigation
       compact ? "gap-y-6" : "space-y-10 md:space-y-0",
     ]}
   >

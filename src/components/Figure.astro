@@ -14,7 +14,10 @@ const { src, alt, fullBleed = false } = Astro.props;
 <figure>
   <Picture
     pictureAttributes={{
-      class: fullBleed ? "full-bleed" : "max-lg:full-bleed",
+      "class:list": [
+        fullBleed ? "full-bleed" : "max-lg:full-bleed",
+        "z-20 relative", // this ensures the image is above the header gradient
+      ],
     }}
     src={src}
     alt={alt}
