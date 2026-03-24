@@ -6,10 +6,10 @@ import latin300italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-
 import latin300normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-300-normal.woff2?url";
 import latin400italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-italic.woff2?url";
 import latin400normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url";
+import latin500italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-italic.woff2?url";
+import latin500normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2?url";
 import latin600italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-italic.woff2?url";
 import latin600normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-normal.woff2?url";
-import latin700italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-700-italic.woff2?url";
-import latin700normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-700-normal.woff2?url";
 
 interface Props {
   title: string;
@@ -26,14 +26,14 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {description && <meta name="description" content={description} />}
     <meta name="generator" content={Astro.generator} />
-    <!-- Standard DPI: normal=400, bold=700 -->
+    <!-- Standard DPI: normal=400, bold=600 -->
     <link
       rel="preload"
       href={latin400normal}
       as="font"
       type="font/woff2"
       crossorigin
-      media="not (min-resolution: 2dppx)"
+      media="(resolution < 2dppx)"
     />
     <link
       rel="preload"
@@ -41,40 +41,7 @@ const { title, description } = Astro.props;
       as="font"
       type="font/woff2"
       crossorigin
-      media="not (min-resolution: 2dppx)"
-    />
-    <link
-      rel="preload"
-      href={latin700normal}
-      as="font"
-      type="font/woff2"
-      crossorigin
-      media="not (min-resolution: 2dppx)"
-    />
-    <link
-      rel="preload"
-      href={latin700italic}
-      as="font"
-      type="font/woff2"
-      crossorigin
-      media="not (min-resolution: 2dppx)"
-    />
-    <!-- 2dppx: normal=300, bold=600 -->
-    <link
-      rel="preload"
-      href={latin300normal}
-      as="font"
-      type="font/woff2"
-      crossorigin
-      media="(min-resolution: 2dppx) and (max-resolution: 2.999dppx)"
-    />
-    <link
-      rel="preload"
-      href={latin300italic}
-      as="font"
-      type="font/woff2"
-      crossorigin
-      media="(min-resolution: 2dppx) and (max-resolution: 2.999dppx)"
+      media="(resolution < 2dppx)"
     />
     <link
       rel="preload"
@@ -82,7 +49,7 @@ const { title, description } = Astro.props;
       as="font"
       type="font/woff2"
       crossorigin
-      media="(min-resolution: 2dppx) and (max-resolution: 2.999dppx)"
+      media="(resolution < 2dppx)"
     />
     <link
       rel="preload"
@@ -90,7 +57,40 @@ const { title, description } = Astro.props;
       as="font"
       type="font/woff2"
       crossorigin
-      media="(min-resolution: 2dppx) and (max-resolution: 2.999dppx)"
+      media="(resolution < 2dppx)"
+    />
+    <!-- 2dppx: normal=300, bold=500 -->
+    <link
+      rel="preload"
+      href={latin300normal}
+      as="font"
+      type="font/woff2"
+      crossorigin
+      media="(resolution >= 2dppx) and (resolution < 3dppx)"
+    />
+    <link
+      rel="preload"
+      href={latin300italic}
+      as="font"
+      type="font/woff2"
+      crossorigin
+      media="(resolution >= 2dppx) and (resolution < 3dppx)"
+    />
+    <link
+      rel="preload"
+      href={latin500normal}
+      as="font"
+      type="font/woff2"
+      crossorigin
+      media="(resolution >= 2dppx) and (resolution < 3dppx)"
+    />
+    <link
+      rel="preload"
+      href={latin500italic}
+      as="font"
+      type="font/woff2"
+      crossorigin
+      media="(resolution >= 2dppx) and (resolution < 3dppx)"
     />
     <!-- 3dppx+: normal=200, bold=400 -->
     <link
@@ -99,7 +99,7 @@ const { title, description } = Astro.props;
       as="font"
       type="font/woff2"
       crossorigin
-      media="(min-resolution: 3dppx)"
+      media="(resolution >= 3dppx)"
     />
     <link
       rel="preload"
@@ -107,7 +107,7 @@ const { title, description } = Astro.props;
       as="font"
       type="font/woff2"
       crossorigin
-      media="(min-resolution: 3dppx)"
+      media="(resolution >= 3dppx)"
     />
     <link
       rel="preload"
@@ -115,7 +115,7 @@ const { title, description } = Astro.props;
       as="font"
       type="font/woff2"
       crossorigin
-      media="(min-resolution: 3dppx)"
+      media="(resolution >= 3dppx)"
     />
     <link
       rel="preload"
@@ -123,7 +123,7 @@ const { title, description } = Astro.props;
       as="font"
       type="font/woff2"
       crossorigin
-      media="(min-resolution: 3dppx)"
+      media="(resolution >= 3dppx)"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>

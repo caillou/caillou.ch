@@ -17,7 +17,7 @@
 
   --font-weight-*: initial;
   --font-weight-normal: 400;
-  --font-weight-bold: 700;
+  --font-weight-bold: 600;
 }
 
 @layer base {
@@ -36,7 +36,7 @@
   @media (min-resolution: 2dppx) {
     :root {
       --font-weight-normal: 300;
-      --font-weight-bold: 600;
+      --font-weight-bold: 500;
     }
   }
 
