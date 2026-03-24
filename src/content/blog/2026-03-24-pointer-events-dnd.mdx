@@ -1,0 +1,63 @@
+---
+title: "pointer events replace touch + mouse in drag and drop"
+date: 2026-03-24
+description: "pointerdown/up/move handles both touch and mouse. no more duplicate listeners."
+tags: ["til", "javascript", "dom"]
+---
+
+I was writing drag and drop and ended up with the usual duplicate event
+listeners. One set for mouse, one for touch:
+
+```javascript
+el.addEventListener("mousedown", onStart);
+el.addEventListener("mousemove", onMove);
+el.addEventListener("mouseup", onEnd);
+
+el.addEventListener("touchstart", onStart);
+el.addEventListener("touchmove", onMove);
+el.addEventListener("touchend", onEnd);
+```
+
+Turns out [Pointer Events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events) exist. One set of listeners for mouse, touch, and pen:
+
+```javascript
+el.addEventListener("pointerdown", onStart);
+el.addEventListener("pointermove", onMove);
+el.addEventListener("pointerup", onEnd);
+```
+
+The part that surprised me is `setPointerCapture`. It keeps sending pointer
+events to your element even when the cursor leaves it. Exactly what you need
+during a drag:
+
+```javascript
+function onStart(e) {
+  el.setPointerCapture(e.pointerId);
+  // start dragging
+}
+
+function onMove(e) {
+  if (!el.hasPointerCapture(e.pointerId)) return;
+  // update position
+}
+
+function onEnd(e) {
+  el.releasePointerCapture(e.pointerId);
+  // stop dragging
+}
+```
+
+No more `document`-level listeners to handle the cursor leaving the element. No
+more `e.preventDefault()` on touch events to avoid scrolling.
+
+One gotcha. Add this CSS on the draggable element to prevent browser default
+touch behaviors like long-press menu and text selection:
+
+```css
+.draggable {
+  touch-action: none;
+}
+```
+
+[MDN reference](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events).
+Browser support is universal.
