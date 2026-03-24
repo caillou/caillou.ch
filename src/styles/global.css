@@ -35,6 +35,13 @@
 
   @media (min-resolution: 2dppx) {
     :root {
+      --font-weight-normal: 300;
+      --font-weight-bold: 600;
+    }
+  }
+
+  @media (min-resolution: 3dppx) {
+    :root {
       --font-weight-normal: 200;
       --font-weight-bold: 400;
     }
