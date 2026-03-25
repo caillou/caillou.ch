@@ -5,26 +5,99 @@ description: "lighter font weights on HiDPI screens using Tailwind v4 theme vari
 tags: ["til", "css", "tailwind"]
 ---
 
-Fonts render crisper on HiDPI displays, so lighter weights look better. Tailwind
-v4 theme variables make this easy — override them in a media query and every
-`font-normal` / `font-bold` usage picks it up.
+I love the [IBM Plex Mono](https://www.ibm.com/plex/) font, but the normal font weight (400) is too heavy for my taste.
+
+Yet, on a standard display, with 72 or 96 DPI, the lighter weights are too thin.
+Colors fade and the text becomes harder to read.
+
+On a HiDPI display, with 200+ DPI, the lighter weights look much better. And on an ultra HiDPI display, with 300+ DPI, the lightest weights look amazing.
+
+So I decided to make the font weight responsive!
+
+```md
+| DPI                | normal | bold |
+| ------------------ | ------ | ---- |
+| Standard (72-96)   | 400    | 600  |
+| HiDPI (200+)       | 300    | 500  |
+| Ultra HiDPI (300+) | 200    | 400  |
+```
+
+To achieve this, we need to do 3 things:
+
+1. Custom `@font-face` rules
+2. Responsive Tailwind theme variables for font weight.
+3. Responsive preload of font files.
+
+## Custom `@font-face` rules
+
+Custom `@font-face` rules using `font-display: block` to prevent
+flash of unstyled text (_FOUT_). The `@fontsource` package defaults
+to `font-display: swap`, which can't be overridden via CSS cascade.
+
+See: https://fontsource.org/docs/getting-started/display
+
+```css
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: block;
+  font-weight: 200;
+  src:
+    url("@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-200-normal.woff2")
+      format("woff2"),
+    url("@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-200-normal.woff")
+      format("woff");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: italic;
+  font-display: block;
+  font-weight: 200;
+  src:
+    url("@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-200-italic.woff2")
+      format("woff2"),
+    url("@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-200-italic.woff")
+      format("woff");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+/* And the same for weights 300, 400, 500, 600 */
+```
+
+## Responsive Tailwind theme variables for font weight
 
 ```css
 @theme {
   /* restrict to only the weights you use */
   --font-weight-*: initial;
   --font-weight-normal: 400;
-  --font-weight-bold: 700;
+  --font-weight-bold: 600;
 }
 
 @layer base {
   body {
     /* browser default "normal" is hardcoded 400 */
-    font-weight: var(--font-weight-normal);
+    @apply font-normal;
   }
 
-  /* override for HiDPI */
+  /* override for HiDPI, e.g. MacBook Pro Retina */
   @media (min-resolution: 2dppx) {
+    :root {
+      --font-weight-normal: 300;
+      --font-weight-bold: 500;
+    }
+  }
+
+  /* override for ultra HiDPI, e.g. iPhone, iPad Pro */
+  @media (min-resolution: 3dppx) {
     :root {
       --font-weight-normal: 200;
       --font-weight-bold: 400;
@@ -33,15 +106,43 @@ v4 theme variables make this easy — override them in a media query and every
 }
 ```
 
-Make sure to load the actual font files for the weights you use.
+## Responsive preload of font files
 
-If you use Astro it's done as follows:
+If you use [Astro](https://astro.build/) it's done as follows:
 
 ```typescript
 // layout.astro
-import "@fontsource/ibm-plex-mono/200.css";
-import "@fontsource/ibm-plex-mono/200-italic.css";
-import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ibm-plex-mono/400-italic.css";
-import "@fontsource/ibm-plex-mono/700.css";
+import latin200italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-200-italic.woff2?url";
+import latin200normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-200-normal.woff2?url";
+import latin300italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-300-italic.woff2?url";
+import latin300normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-300-normal.woff2?url";
+import latin400italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-italic.woff2?url";
+import latin400normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url";
+import latin500italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-italic.woff2?url";
+import latin500normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2?url";
+import latin600italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-italic.woff2?url";
+import latin600normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-normal.woff2?url";
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- ... -->
+
+    <!-- smaller than 2dppx: normal=400, bold=600 -->
+    <link rel="preload" href={latin400normal} media="(resolution < 2dppx)" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={latin400italic} media="(resolution < 2dppx)" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={latin600normal} media="(resolution < 2dppx)" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={latin600italic} media="(resolution < 2dppx)" as="font" type="font/woff2" crossorigin />
+
+    <!-- 2dppx to 3dppx: normal=300, bold=500 -->
+    <link rel="preload" href={latin300normal} media="(resolution >= 2dppx) and (resolution < 3dppx)" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={latin300italic} media="(resolution >= 2dppx) and (resolution < 3dppx)" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={latin500normal} media="(resolution >= 2dppx) and (resolution < 3dppx)" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={latin500italic} media="(resolution >= 2dppx) and (resolution < 3dppx)" as="font" type="font/woff2" crossorigin />
+
+    <!-- 3dppx+: normal=200, bold=400 -->
+    <link rel="preload" href={latin200normal} media="(resolution >= 3dppx)" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={latin200italic} media="(resolution >= 3dppx)" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={latin400normal} media="(resolution >= 3dppx)" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={latin400italic} media="(resolution >= 3dppx)" as="font" type="font/woff2" crossorigin />
 ```
