@@ -129,7 +129,7 @@
   }
 
   :not(pre) > code {
-    @apply bg-dark-gray px-1.5 py-0.5 text-sm font-bold text-yellow not-italic;
+    @apply bg-dark-gray px-1.5 py-0.5 text-[0.875em] font-bold text-yellow not-italic;
   }
 
   img {
