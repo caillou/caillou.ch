@@ -1,16 +1,19 @@
 ---
 title: "responsive font-weight with tailwind"
 date: 2026-03-22
-description: "lighter font weights on HiDPI screens using Tailwind v4 theme variables."
+description:
+  "lighter font weights on HiDPI screens using Tailwind v4 theme variables."
 tags: ["til", "css", "tailwind"]
 ---
 
-I love the [IBM Plex Mono](https://www.ibm.com/plex/) font, but the normal font weight (400) is too heavy for my taste.
+I love the [IBM Plex Mono](https://www.ibm.com/plex/) font, but the normal font
+weight (400) is too heavy for my taste.
 
 Yet, on a standard display, with 72 or 96 DPI, the lighter weights are too thin.
 Colors fade and the text becomes harder to read.
 
-On a HiDPI display, with 200+ DPI, the lighter weights look much better. And on an ultra HiDPI display, with 300+ DPI, the lightest weights look amazing.
+On a HiDPI display, with 200+ DPI, the lighter weights look much better. And on
+an ultra HiDPI display, with 300+ DPI, the lightest weights look amazing.
 
 So I decided to make the font weight responsive!
 
@@ -30,9 +33,9 @@ To achieve this, we need to do 3 things:
 
 ## Custom `@font-face` rules
 
-Custom `@font-face` rules using `font-display: block` to prevent
-flash of unstyled text (_FOUT_). The `@fontsource` package defaults
-to `font-display: swap`, which can't be overridden via CSS cascade.
+Custom `@font-face` rules using `font-display: block` to prevent flash of
+unstyled text (_FOUT_). The `@fontsource` package defaults to
+`font-display: swap`, which can't be overridden via CSS cascade.
 
 See: https://fontsource.org/docs/getting-started/display
 
