@@ -27,14 +27,6 @@
       "recommended": true,
       "complexity": {
         "noImportantStyles": "off"
-      },
-      "correctness": {
-        "noUnknownFunction": {
-          "level": "error",
-          "options": {
-            "ignore": ["theme"]
-          }
-        }
       }
     }
   },
