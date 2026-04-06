@@ -16,6 +16,8 @@
   --font-sans: "IBM Plex Mono", ui-monospace, monospace;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 
+  --breakpoint-sidebar-nav: 1700px;
+
   --font-weight-*: initial;
   --font-weight-normal: 400;
   --font-weight-bold: 600;
@@ -60,7 +62,7 @@
     justify-self: end;
   }
 
-  @media (min-width: 1700px) {
+  @media (width >= theme(--breakpoint-sidebar-nav)) {
     body > header nav {
       grid-column: margin-end / full-end;
       justify-self: start;
