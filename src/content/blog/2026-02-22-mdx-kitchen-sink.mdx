@@ -9,8 +9,8 @@ import Figure from "../../components/Figure.astro";
 import portrait from "../../assets/portrait.jpg";
 import portraitStanding from "../../assets/portrait-standing.jpg";
 
-This page contains every MDX formatting option this site supports, all on one page. I use
-this to check the styles during development.
+This page contains every MDX formatting option this site supports, all on one
+page. I use this to check the styles during development.
 
 This is a paragraph with **bold text**, _italic text_, `inline code`, and a
 [link to nowhere](#).
@@ -46,6 +46,14 @@ spacing between consecutive text blocks.
 > This is a blockquote. It can contain **bold**, _italic_, and `inline code`. It
 > gets a green left border and a dark background.
 
+> This is a blockquote. It can contain multiple paragraphs, and the styling
+> should apply to all of them.
+>
+> This is the second paragraph of the blockquote, demonstrating that the styling
+> applies to all paragraphs within the blockquote, not just the first one.
+>
+> – Pierre Spring
+
 ### Code block
 
 ```typescript
@@ -57,7 +65,7 @@ interface Post {
 }
 
 function greet(name: string): string {
-  // this is a comment
+  // this is a very long comment that should trigger the scrollbar in the code block, allowing us to test that feature as well. It should be super long, so that we can be sure it works properly and doesn't cause any layout issues or overflow problems in the design of the code block component.
   return `Hello, ${name}!`;
 }
 ```

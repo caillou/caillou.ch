@@ -1,18 +1,13 @@
 ---
-interface Props {
-  compact?: boolean;
-}
-
-const { compact } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
-<footer class:list={[compact ? "py-6" : "py-16"]}>
+<footer class="col-full py-16">
   <div
     class:list={[
       "mx-auto flex w-full flex-col items-center px-6 italic md:flex-row md:justify-between",
       "max-w-4xl 2xl:max-w-6xl", // aligns with the header navigation
-      compact ? "gap-y-6" : "space-y-10 md:space-y-0",
+      "space-y-10 md:space-y-0",
     ]}
   >
     <div class="text-sm tracking-widest text-gray uppercase">
@@ -32,7 +27,7 @@ const year = new Date().getFullYear();
         // rss
       </a>
     </div>
-    <a href="/" class:list={[compact && "max-md:hidden"]}>
+    <a href="/">
       <div class="text-yellow transition-colors hover:text-pink">
         caillou.ch
       </div>

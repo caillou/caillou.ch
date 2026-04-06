@@ -25,8 +25,55 @@
     @apply text-lg md:text-xl;
   }
 
+  body,
+  body > header {
+    display: grid;
+    grid-template-columns:
+      [full-start]
+      1fr
+      [margin-start]
+      var(--gutter)
+      [main-start]
+      min(48rem, 100% - 2 * var(--gutter))
+      [main-end]
+      var(--gutter)
+      [margin-end]
+      1fr
+      [full-end];
+  }
+
   body {
+    --gutter: 1.5rem;
+
+    @media (min-width: 768px) {
+      --gutter: 3rem;
+    }
+
     @apply bg-black font-normal text-white antialiased;
+    grid-template-rows: 1fr auto; /* second row is for the footer */
+    min-height: 100dvh;
+  }
+
+  body > header nav {
+    grid-column: main;
+    justify-self: end;
+  }
+
+  @media (min-width: 1700px) {
+    body > header nav {
+      grid-column: margin-end / full-end;
+      justify-self: start;
+      padding-left: var(--gutter);
+    }
+  }
+
+  body > * {
+    grid-column: full;
+    grid-row: 1;
+  }
+
+  body > footer {
+    grid-row: 2;
   }
 
   ::selection {
@@ -48,16 +95,35 @@
   }
 }
 
-@utility full-bleed {
-  @apply relative left-1/2 -ml-[50vw] w-screen;
+@utility subgrid-cols {
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
+@utility col-full {
+  grid-column: full;
+}
+
+@utility col-main {
+  grid-column: main;
+}
+
+@utility col-margin {
+  grid-column: margin;
 }
 
 /* Prose styles for markdown-rendered content */
 .prose-manuscript {
+  --border-w: 4px;
+
   @apply leading-[1.8];
 
   > * + * {
     @apply mt-6;
+  }
+
+  > * {
+    grid-column: main;
   }
 
   h2 {
@@ -87,21 +153,32 @@
     @apply hover:text-pink;
   }
 
-  blockquote {
-    /* maybe this is a better background: color-mix(in srgb, var(--color-surface-1) 50%, transparent); */
-    @apply mt-6 mb-0 border-l-4 border-l-green bg-[#111111] p-6 text-green italic;
+  --half-gutter: calc(var(--gutter) / 2);
 
-    @media (max-width: 1150px) {
-      @apply full-bleed;
+  blockquote {
+    @apply bg-[#111111] text-green italic;
+    border-left: var(--border-w) solid var(--color-green);
+    grid-column: margin;
+    display: grid;
+    grid-template-columns: subgrid;
+    padding: var(--half-gutter) 0;
+
+    > * {
+      grid-column: main;
     }
 
-    p {
+    > :first-child {
       @apply m-0;
     }
   }
 
   pre {
-    @apply mt-6 mb-0 overflow-x-auto border-l-4 border-l-yellow bg-[#111111] p-8 leading-[1.4];
+    /* no subgrid here: we want overflow scroll to use all available space. */
+    @apply overflow-x-auto bg-[#111111] leading-[1.6];
+    border-left: var(--border-w) solid var(--color-yellow);
+    grid-column: margin;
+    padding: var(--half-gutter) var(--gutter) var(--half-gutter)
+      calc(var(--gutter) - var(--border-w));
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -114,10 +191,6 @@
 
     &::-webkit-scrollbar-thumb {
       background: var(--color-dark-gray);
-    }
-
-    @media (max-width: 1150px) {
-      @apply full-bleed;
     }
   }
 
@@ -138,10 +211,22 @@
 
   figure {
     @apply mt-8 mb-0;
-  }
+    grid-column: full;
+    display: grid;
+    grid-template-columns: subgrid;
 
-  picture {
-    @apply block;
+    & > * {
+      grid-column: main;
+    }
+
+    picture {
+      @apply block;
+      grid-column: margin;
+
+      .figure-full-bleed > & {
+        grid-column: full;
+      }
+    }
   }
 
   figcaption {

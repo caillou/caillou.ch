@@ -11,11 +11,10 @@ interface Props {
 const { src, alt, fullBleed = false } = Astro.props;
 ---
 
-<figure>
+<figure class:list={[fullBleed && "figure-full-bleed"]}>
   <Picture
     pictureAttributes={{
       "class:list": [
-        fullBleed ? "full-bleed" : "max-lg:full-bleed",
         "z-20 relative", // this ensures the image is above the header gradient
       ],
     }}

@@ -20,9 +20,9 @@ const formattedDate = date.toISOString().slice(0, 10);
 <BaseLayout title={title} description={description}>
   <Header />
 
-  <main class="grow pt-32 pb-24">
-    <article class="mx-auto max-w-3xl space-y-12 px-6">
-      <header class="space-y-6">
+  <main class="col-full subgrid-cols pt-32 pb-24">
+    <article class="col-full subgrid-cols space-y-12">
+      <header class="col-main space-y-6">
         <div class="text-sm font-bold text-gray uppercase italic">
           <span class="tracking-widest">Published on </span>{formattedDate}
         </div>
@@ -30,13 +30,13 @@ const formattedDate = date.toISOString().slice(0, 10);
         <PageTitle title={title} />
       </header>
 
-      <section class="prose-manuscript">
+      <section class="prose-manuscript col-full subgrid-cols">
         <slot />
       </section>
 
       {
         tags.length > 0 && (
-          <footer class="pt-12">
+          <footer class="col-main pt-12">
             <TagList tags={tags} />
           </footer>
         )

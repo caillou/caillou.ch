@@ -20,34 +20,27 @@ const pathname = Astro.url.pathname;
   )
 }
 
-<header class="pointer-events-none fixed top-0 right-0 left-0 z-50">
-  <div
-    class:list={[
-      "mx-auto flex max-w-4xl items-center justify-end px-6 py-6",
-      "2xl:max-w-6xl", // this puts the navigation is on the right side of the content on larger screens
-    ]}
-  >
-    <nav class="pointer-events-auto flex space-x-8 italic">
-      <a
-        href="/blog"
-        class:list={[
-          "transition-colors hover:text-pink",
-          "before:text-gray before:content-['#_']",
-          pathname.startsWith("/blog") ? "text-green" : "text-white",
-        ]}
-      >
-        Blog
-      </a>
-      <a
-        href="/about"
-        class:list={[
-          "transition-colors hover:text-pink",
-          "before:text-gray before:content-['#_']",
-          pathname.startsWith("/about") ? "text-green" : "text-white",
-        ]}
-      >
-        About
-      </a>
-    </nav>
-  </div>
+<header class="pointer-events-none fixed top-0 right-0 left-0 z-50 py-6">
+  <nav class="pointer-events-auto flex space-x-8 italic">
+    <a
+      href="/blog"
+      class:list={[
+        "transition-colors hover:text-pink",
+        "before:text-gray before:content-['#_']",
+        pathname.startsWith("/blog") ? "text-green" : "text-white",
+      ]}
+    >
+      Blog
+    </a>
+    <a
+      href="/about"
+      class:list={[
+        "transition-colors hover:text-pink",
+        "before:text-gray before:content-['#_']",
+        pathname.startsWith("/about") ? "text-green" : "text-white",
+      ]}
+    >
+      About
+    </a>
+  </nav>
 </header>
