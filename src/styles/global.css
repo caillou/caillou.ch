@@ -11,6 +11,7 @@
   --color-white: #ffffff;
   --color-light-gray: #ababab;
   --color-gray: #757575;
+  --color-code-bg: #111111;
 
   --font-sans: "IBM Plex Mono", ui-monospace, monospace;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -152,7 +153,7 @@
   --half-gutter: calc(var(--gutter) / 2);
 
   blockquote {
-    @apply bg-[#111111] text-green italic;
+    @apply bg-code-bg text-green italic;
     border-left: var(--border-w) solid var(--color-green);
     grid-column: margin;
     display: grid;
@@ -170,7 +171,7 @@
 
   pre {
     /* no subgrid here: we want overflow scroll to use all available space. */
-    @apply overflow-x-auto bg-[#111111] leading-[1.6];
+    @apply overflow-x-auto bg-code-bg leading-[1.6];
     border-left: var(--border-w) solid var(--color-yellow);
     grid-column: margin;
     padding: var(--half-gutter) var(--gutter) var(--half-gutter)
@@ -182,7 +183,7 @@
     }
 
     &::-webkit-scrollbar-track {
-      background: #111111;
+      background: var(--color-code-bg);
     }
 
     &::-webkit-scrollbar-thumb {
@@ -194,7 +195,7 @@
     /* todo: add this color to tailwind and @apply it */
     /* maybe use #151209 */
     /* Shiki code block overrides */
-    background: #111111 !important;
+    background: var(--color-code-bg) !important;
   }
 
   :not(pre) > code {
@@ -261,7 +262,7 @@
   --astro-code-foreground: #f7f1ff;
 
   /* editor background */
-  --astro-code-background: #111111;
+  --astro-code-background: var(--color-code-bg);
 
   /* constants, numbers, enums → purple */
   --astro-code-token-constant: #a79cff;
