@@ -13,7 +13,7 @@ const pathname = Astro.url.pathname;
       class:list={[
         "pointer-events-none fixed top-0 right-0 left-0 h-[4.4rem] bg-linear-to-b from-black via-black/60 to-transparent",
         "z-10", // this ensures the gradient is below the header and figures, but above the page content
-        "2xl:hidden", // on larger screens the gradient is not needed, because the navigation is on the right side of the content
+        "min-[1700px]:hidden", // on larger screens the gradient is not needed, because the navigation is on the right side of the content
       ]}
       aria-hidden="true"
     />
