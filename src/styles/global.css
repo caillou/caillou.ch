@@ -125,12 +125,12 @@
   }
 
   h2 {
-    @apply mt-12 mb-4 pl-[3ch] text-2xl italic;
+    @apply mt-12 mb-4 pl-[3ch] text-2xl italic xl:pl-0;
     @apply before:-ml-[3ch] before:text-gray before:content-['##_'];
   }
 
   h3 {
-    @apply mt-10 mb-3 pl-[4ch] text-xl italic;
+    @apply mt-10 mb-3 pl-[4ch] text-xl italic xl:pl-0;
     @apply before:-ml-[4ch] before:text-gray before:content-['###_'];
   }
 
