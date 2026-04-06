@@ -60,6 +60,7 @@
     justify-self: end;
   }
 
+  /* 1700px: nav moves to the side — keep in sync with Header.astro gradient */
   @media (min-width: 1700px) {
     body > header nav {
       grid-column: margin-end / full-end;
