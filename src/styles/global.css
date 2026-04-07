@@ -326,7 +326,7 @@
   --astro-code-token-comment: #69676c;
 
   /* keywords, control flow, operators → pink */
-  --astro-code-token-keyword: #fc618d;
+  --astro-code-token-keyword: var(--color-red);
 
   /* function parameters → orange */
   --astro-code-token-parameter: #fd9353;
