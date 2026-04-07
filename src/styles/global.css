@@ -8,6 +8,7 @@
   --color-yellow: #ffd866;
   --color-green: #bef289;
   --color-pink: #ff61ef;
+  --color-red: #fc618d;
   --color-white: #ffffff;
   --color-light-gray: #ababab;
   --color-gray: #757575;
@@ -19,6 +20,11 @@
   --font-weight-*: initial;
   --font-weight-normal: 400;
   --font-weight-bold: 600;
+}
+
+@counter-style decimal-no-suffix {
+  system: extends decimal;
+  suffix: "";
 }
 
 @layer base {
@@ -234,22 +240,67 @@
   ul,
   ol {
     @apply mt-6 mb-0 pl-6;
+
+    /* nested lists: no extra top margin; nested ul keeps padding at xl
+       so it doesn't hang into the gutter like the top-level list */
+    & ul,
+    & ol {
+      @apply mt-0 xl:pl-[2ch];
+    }
   }
 
+  /* top-level ul: room for the bullet at base, hangs into gutter at xl */
   ul {
-    @apply list-disc;
+    @apply list-none pl-[2ch] xl:pl-0;
   }
 
+  /* top-level ol: tight at base (marker hangs partly into gutter even on
+     small screens); decimal-no-suffix counter style strips the trailing
+     dot from the native marker so we can render it separately in gray */
   ol {
-    @apply list-decimal;
+    @apply pl-[1ch] xl:pl-0;
+    list-style: decimal-no-suffix outside;
+  }
+
+  /* nested ol: more padding so the marker lines up with parent text */
+  li ol {
+    @apply pl-[2ch];
   }
 
   li {
     @apply mt-2;
+  }
 
-    &::marker {
-      @apply text-gray;
-    }
+  /* `* ` bullet hung into the padding via negative margin */
+  ul > li {
+    @apply before:-ml-[2ch] before:text-red before:content-['*_'];
+  }
+
+  /* `relative` anchors the absolute `::before` (the gray dot);
+     `pl-[2ch]` reserves space for `N. `;
+     `xl:-ml-[2ch]` pulls the whole li left so its text aligns with
+     paragraph text and the marker hangs into the gutter */
+  ol > li {
+    @apply relative pl-[2ch] xl:-ml-[2ch];
+  }
+
+  /* nested ol items: 1ch shift so the single-digit marker lines up
+     with parent text (parent text is 1ch right of where parent's li
+     starts, since the parent's marker takes 1ch) */
+  li ol > li {
+    @apply -ml-[1ch];
+  }
+
+  /* the number itself (no dot, thanks to decimal-no-suffix) */
+  ol > li::marker {
+    @apply text-red;
+  }
+
+  /* the gray dot, absolute-positioned at the li's left edge so it sits
+     right after the marker without consuming space in the text flow */
+  ol > li::before {
+    content: ".\a0";
+    @apply absolute left-0 text-gray;
   }
 
   hr {
