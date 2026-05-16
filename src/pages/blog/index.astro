@@ -22,15 +22,13 @@ const posts = (await getCollection("blog")).sort(
               <div class="text-sm font-bold tracking-widest text-gray uppercase italic">
                 {post.data.date.toISOString().slice(0, 10)}
               </div>
-              <h2 class="mt-2 ml-[2ch] text-xl font-bold text-yellow italic transition-colors group-hover:text-pink before:ml-[-2ch] before:text-gray before:content-['#_']">
+              <h2 class="mt-2 ml-[2ch] text-xl text-yellow italic transition-colors group-hover:text-pink before:ml-[-2ch] before:text-gray before:content-['#_']">
                 {post.data.title}
               </h2>
               {post.data.description && (
-                <>
-                  <p class="mt-2 text-sm leading-relaxed font-bold">
-                    {post.data.description}
-                  </p>
-                </>
+                <p class="mt-2 text-sm leading-relaxed">
+                  {post.data.description}
+                </p>
               )}
               {post.data.tags.length > 0 && (
                 <div class="mt-4">
