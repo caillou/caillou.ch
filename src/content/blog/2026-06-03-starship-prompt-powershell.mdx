@@ -1,0 +1,61 @@
+---
+title: "a fish-style prompt for PowerShell"
+date: 2026-06-03
+description: "starship gives PowerShell a prompt i can live with."
+tags: ["til", "windows", "shell"]
+---
+
+I have to work on Windows for work sometimes. The default `PowerShell` prompt is
+not for me.
+
+On my own machines I run [`fish`](https://fishshell.com/) with the
+[`pure`](https://github.com/pure-fish/pure) prompt. Clean, no clutter, just the
+path and the branch. I wanted that feel on Windows too.
+
+[`starship`](https://starship.rs/) gets me close. I was amazed it runs on
+Windows at all. It installs for `PowerShell` and the config lives in
+`~\.config\starship.toml`.
+
+## Installation
+
+```bash
+winget install starship
+```
+
+## Configuration
+
+Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can
+check the location of this file by querying the `$PROFILE` variable in
+`PowerShell`. Typically the path is
+`~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`.
+
+```bash
+Invoke-Expression (&starship init powershell)
+```
+
+The edit `~\.config\starship.toml` if you want to configure how the prompt
+looks. The following config that makes me happy. It gets pretty close to `pure`:
+
+```toml
+# Top-level format: only the modules we want, in order.
+format = "$directory$git_branch$cmd_duration$line_break$character"
+
+[directory]
+# Keep the last 4 dirs in full; abbreviate any leading dirs to their first
+# letter (fish-style) instead of dropping them.
+truncation_length = 4
+fish_style_pwd_dir_length = 1
+# Show the path from the filesystem root, not just from the repo root.
+truncate_to_repo = false
+# Use the native Windows separator (\) rather than /.
+use_os_path_sep = true
+
+[git_branch]
+# Drop the "on " prefix; keep the branch (with its symbol) in gray.
+format = "[$symbol$branch]($style) "
+style = "bright-black"
+
+[cmd_duration]
+# "took XXmYYs" in yellow, same as the default.
+style = "yellow bold"
+```
