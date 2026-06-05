@@ -1,0 +1,87 @@
+---
+title: "fish-style abbreviations for PowerShell"
+date: 2026-06-05
+description: "abbreviations expand inline before they run. here's how in PowerShell."
+tags: ["til", "windows", "shell"]
+---
+
+import Figure from "../../components/Figure.astro";
+import demo from "../../assets/fish-abbreviations-powershell.gif";
+
+After [getting the prompt sorted](/blog/2026-06-03-starship-prompt-powershell/),
+the next thing I missed on Windows was fish abbreviations.
+
+[fish `abbr`](https://fishshell.com/docs/current/cmds/abbr.html) expands a short
+word into the full command, right in the buffer, before it runs. Type `ggp`, hit
+space, and it becomes `git push`. Unlike an alias, you see the real command and
+can edit it before pressing enter.
+
+`PowerShell` has no `abbr`, but `PSReadLine` lets you bind keys. So I rebuilt it.
+
+<Figure src={demo} alt="typing glog in PowerShell and hitting space expands it to a pretty git log command" animated>
+  `glog` expanded inline: pretty git log
+</Figure>
+
+## The abbreviations
+
+Open your profile:
+
+```powershell
+code $PROFILE
+```
+
+Define the abbreviations in a hashtable:
+
+```powershell
+$global:abbrs = @{
+    g    = 'lazygit'
+    ggl  = 'git pull'
+    ggp  = 'git push'
+    e    = 'code'
+    glog = "git log --pretty='format:%C(auto)%h %s %Cgreen@%al %Cred@%ar' --graph"
+}
+```
+
+## Expand on space
+
+Bind `spacebar`. If the word before the cursor is an abbreviation, replace it.
+Then insert the space as usual, so you keep typing or editing:
+
+```powershell
+# Expand on Space (editable before you run)
+Set-PSReadLineKeyHandler -Key Spacebar -ScriptBlock {
+    $line = $null; $cursor = $null
+    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
+    if ($line.Substring(0, $cursor) -match '^\s*(\S+)$' -and $abbrs.ContainsKey($matches[1])) {
+        [Microsoft.PowerShell.PSConsoleReadLine]::Replace(
+            $cursor - $matches[1].Length, $matches[1].Length, $abbrs[$matches[1]])
+    }
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert(' ')
+}
+```
+
+## Expand on enter
+
+Same idea on `enter`, for when the whole line is just the abbreviation.
+`ValidateAndAcceptLine` expands it, runs the line, and keeps multi-line handling
+intact:
+
+```powershell
+# Expand on Enter, then run (ValidateAndAcceptLine keeps proper multi-line handling)
+Set-PSReadLineKeyHandler -Key Enter -ScriptBlock {
+    $line = $null; $cursor = $null
+    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
+    if ($line -match '^\s*(\S+)' -and $abbrs.ContainsKey($matches[1])) {
+        [Microsoft.PowerShell.PSConsoleReadLine]::Replace(0, $matches[1].Length, $abbrs[$matches[1]])
+    }
+    [Microsoft.PowerShell.PSConsoleReadLine]::ValidateAndAcceptLine()
+}
+```
+
+Reload the profile and the abbreviations expand as you type:
+
+```powershell
+. $PROFILE
+```
+
+Not quite fish, but close enough that my muscle memory works on Windows now.

@@ -6,24 +6,39 @@ interface Props {
   src: ImageMetadata;
   alt: string;
   fullBleed?: boolean;
+  // animated images (e.g. GIFs) must skip Picture, which re-encodes to a
+  // static frame. render them as a plain img so the animation survives.
+  animated?: boolean;
 }
 
-const { src, alt, fullBleed = false } = Astro.props;
+const { src, alt, fullBleed = false, animated = false } = Astro.props;
 ---
 
 <figure class:list={[fullBleed && "figure-full-bleed"]}>
-  <Picture
-    pictureAttributes={{
-      "class:list": [
-        "z-20 relative", // this ensures the image is above the header gradient
-      ],
-    }}
-    src={src}
-    alt={alt}
-    widths={[800, 1600, 2400, 3200]}
-    formats={["avif", "webp"]}
-    quality={80}
-  />
+  {
+    animated ? (
+      <img
+        class="relative z-20 h-auto"
+        src={src.src}
+        alt={alt}
+        width={src.width}
+        height={src.height}
+      />
+    ) : (
+      <Picture
+        pictureAttributes={{
+          "class:list": [
+            "z-20 relative", // this ensures the image is above the header gradient
+          ],
+        }}
+        src={src}
+        alt={alt}
+        widths={[800, 1600, 2400, 3200]}
+        formats={["avif", "webp"]}
+        quality={80}
+      />
+    )
+  }
   <figcaption>
     <slot />
   </figcaption>

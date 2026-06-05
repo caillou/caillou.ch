@@ -223,13 +223,15 @@
       grid-column: main;
     }
 
-    picture {
+    & > picture,
+    & > img {
       @apply block;
       grid-column: margin;
+    }
 
-      .figure-full-bleed > & {
-        grid-column: full;
-      }
+    &.figure-full-bleed > picture,
+    &.figure-full-bleed > img {
+      grid-column: full;
     }
   }
 
