@@ -22,19 +22,30 @@ Windows at all. It installs for `PowerShell` and the config lives in
 winget install starship
 ```
 
-## Configuration
+## Setup
 
-Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can
-check the location of this file by querying the `$PROFILE` variable in
-`PowerShell`. Typically the path is
-`~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`.
+Open your profile:
+
+```powershell
+code $PROFILE
+```
+
+Add the starship init line to the end:
 
 ```powershell
 Invoke-Expression (&starship init powershell)
 ```
 
-Then edit `~\.config\starship.toml` if you want to configure how the prompt
-looks. The following config that makes me happy. It gets pretty close to `pure`:
+Reload the profile to see the new prompt without restarting the shell:
+
+```powershell
+. $PROFILE
+```
+
+## Configuration
+
+Edit `~\.config\starship.toml` if you want to configure how the prompt looks.
+The following config that makes me happy. It gets pretty close to `pure`:
 
 ```toml
 # Top-level format: only the modules we want, in order.
