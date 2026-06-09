@@ -18,7 +18,7 @@ Windows at all. It installs for `PowerShell` and the config lives in
 
 ## Installation
 
-```bash
+```powershell
 winget install starship
 ```
 
@@ -29,11 +29,11 @@ check the location of this file by querying the `$PROFILE` variable in
 `PowerShell`. Typically the path is
 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`.
 
-```bash
+```powershell
 Invoke-Expression (&starship init powershell)
 ```
 
-The edit `~\.config\starship.toml` if you want to configure how the prompt
+Then edit `~\.config\starship.toml` if you want to configure how the prompt
 looks. The following config that makes me happy. It gets pretty close to `pure`:
 
 ```toml
