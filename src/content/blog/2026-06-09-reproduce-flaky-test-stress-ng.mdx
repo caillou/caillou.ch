@@ -1,0 +1,100 @@
+---
+title: "reproduce a flaky test with stress-ng"
+date: 2026-06-09
+description: "it passed locally and failed on CI. stress-ng made it fail locally too."
+tags: ["til", "testing", "cli"]
+---
+
+A test kept failing on CI and passing on my machine. I find it hard to fix a
+flake I can't reproduce, and it would not fail for me however many times I ran
+it.
+
+The difference is load. CI runs on a busy, oversubscribed box. My laptop sits
+there idle. So I had to figure out how to load my own machine until the test
+failed too.
+
+Turns out [`stress-ng`](https://github.com/ColinIanKing/stress-ng) does exactly
+that. It pressures the cores while the test runs in a loop. The `--timeout` flag
+makes it clean up after itself, so there are no runaway hogs to remember to
+kill.
+
+```bash
+brew install stress-ng
+```
+
+## soak the cores
+
+```bash
+stress-ng \
+  # 0 means one worker per online CPU
+  --cpu 0 \
+  # each targets 75%, leaving headroom
+  --cpu-load 75 \
+  # self-terminate after 20 minutes
+  --timeout 1200s \
+  # print a summary when it ends
+  --metrics-brief
+```
+
+The test still makes progress, but at 75% it gets descheduled at random moments.
+In another terminal, loop it:
+
+```bash
+npx playwright test \
+  # only the suspect test
+  --grep="my flaky test" \
+  # run it 300 times
+  --repeat-each=300 \
+  # 6 in parallel
+  --workers=6 \
+  # no retries, do not mask the flake
+  --retries=0 \
+  # stop on the first failure so the trace survives
+  --max-failures=1
+```
+
+If, like me, you sometimes have to use [`nx`](https://nx.dev/), this is how you
+invoke it:
+
+```bash
+NX_TUI=false nx run myapp:e2e -- \
+  --grep="my flaky test" \
+  --repeat-each=300 --workers=6 --retries=0 --max-failures=1
+```
+
+## turn it up
+
+If it stays green, add context-switch stressors and let stress-ng win the
+scheduler:
+
+```bash
+stress-ng \
+  # 6 cpu workers
+  --cpu 6 \
+  # plus 4 context-switch stressors
+  --switch 4 \
+  # self-terminate after 30 minutes
+  --timeout 1800s
+```
+
+```bash
+# nice the test so it loses the scheduler fight
+nice -n 19 \
+  npx playwright test --grep="my flaky test" \
+  --repeat-each=600 --workers=6 --retries=0 --max-failures=1
+```
+
+If you start seeing generic test timeouts instead of your real failure, you have
+over-starved the machine. Back off `--cpu-load` or drop the `nice`.
+
+## clean up
+
+`--timeout` ends each run on its own. To stop early:
+
+```bash
+pkill stress-ng
+```
+
+Once the test goes red, `--max-failures=1` halts the loop and keeps the trace.
+Now I have a flake I can reproduce on demand, which is most of the work of
+fixing it.
