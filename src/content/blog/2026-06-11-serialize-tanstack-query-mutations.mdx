@@ -1,0 +1,76 @@
+---
+title: "serialize TanStack Query mutations"
+date: 2026-06-11
+description: "my optimistic drag and drop raced itself. one scope id fixed it."
+tags: ["til", "react", "tanstack-query"]
+---
+
+I was building drag and drop reordering with
+[optimistic updates](https://tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates).
+The API takes positions, not ids. A move is `from` one index `to` another:
+
+```tsx
+import { useMutation } from "@tanstack/react-query";
+
+const moveItem = useMutation({
+  mutationFn: ({ from, to }) => api.patch("/items/move", { from, to }),
+});
+```
+
+Each drop calls `mutate()`. The optimistic update reorders the list right away,
+so the UI feels instant. Then a fast user drags twice, and the server moves the
+wrong item.
+
+The problem: mutations run in parallel by default. The second drag computes its
+`from` against the optimistic list, but the requests race, and the server may
+apply them in a different order:
+
+```text
+server list: [A, B, C, D]
+
+drag 1: D to the top
+  optimistic: [D, A, B, C]
+  sends { from: 3, to: 0 }
+
+drag 2: B to the end
+  optimistic: [D, A, C, B]
+  sends { from: 2, to: 3 }
+
+drag 2 arrives first:
+  [A, B, C, D]
+  from: 2 is C, not B
+  [A, B, D, C]
+
+then drag 1:
+  from: 3 is C again
+  [C, A, B, D]
+
+server: [C, A, B, D]
+client: [D, A, C, B]
+```
+
+With ids the damage would be a wrong position. With positions the server moves a
+different item entirely.
+
+Turns out
+[mutation scopes](https://tanstack.com/query/latest/docs/framework/react/guides/mutations#mutation-scopes)
+exist. Give mutations the same scope id and they run in serial:
+
+```tsx
+const moveItem = useMutation({
+  mutationFn: ({ from, to }) => api.patch("/items/move", { from, to }),
+  scope: {
+    id: "list-reorder",
+  },
+});
+```
+
+While one move is in flight, the next one waits in `isPaused: true` state and
+fires once the previous one settles. The server applies the moves in the order
+the user made them, so `from` always points at the item the user dragged.
+
+The queue costs no perceived latency. `onMutate` runs immediately, even for a
+paused mutation, so the optimistic reorder still happens on drop.
+
+Mutation scopes shipped in
+[v5.31.0](https://github.com/TanStack/query/releases/tag/v5.31.0).
