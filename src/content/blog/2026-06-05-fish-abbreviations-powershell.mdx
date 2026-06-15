@@ -1,7 +1,8 @@
 ---
 title: "fish-style abbreviations for PowerShell"
 date: 2026-06-05
-description: "abbreviations expand inline before they run. here's how in PowerShell."
+description:
+  "abbreviations expand inline before they run. here's how in PowerShell."
 tags: ["til", "windows", "shell"]
 ---
 
@@ -16,9 +17,14 @@ word into the full command, right in the buffer, before it runs. Type `ggp`, hit
 space, and it becomes `git push`. Unlike an alias, you see the real command and
 can edit it before pressing enter.
 
-`PowerShell` has no `abbr`, but `PSReadLine` lets you bind keys. So I rebuilt it.
+`PowerShell` has no `abbr`, but `PSReadLine` lets you bind keys. So I rebuilt
+it.
 
-<Figure src={demo} alt="typing glog in PowerShell and hitting space expands it to a pretty git log command" animated>
+<Figure
+  src={demo}
+  alt="typing glog in PowerShell and hitting space expands it to a pretty git log command"
+  animated
+>
   `glog` expanded inline: pretty git log
 </Figure>
 

@@ -1,7 +1,9 @@
 ---
 title: "pointer events replace touch + mouse in drag and drop"
 date: 2026-03-24
-description: "pointerdown/up/move handles both touch and mouse. no more duplicate listeners."
+description:
+  "pointerdown/up/move handles both touch and mouse. no more duplicate
+  listeners."
 tags: ["til", "javascript", "dom"]
 ---
 
@@ -18,7 +20,9 @@ el.addEventListener("touchmove", onMove);
 el.addEventListener("touchend", onEnd);
 ```
 
-Turns out [Pointer Events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events) exist. One set of listeners for mouse, touch, and pen:
+Turns out
+[Pointer Events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events)
+exist. One set of listeners for mouse, touch, and pen:
 
 ```javascript
 el.addEventListener("pointerdown", onStart);
