@@ -1,0 +1,106 @@
+---
+title: "TIL the <a> tag has a download attribute"
+date: 2026-06-15
+description:
+  "i spotted the download attribute on an anchor tag and assumed
+  Content-Disposition already did the job. turns out it's for when you can't
+  touch the server."
+tags: ["til", "html", "anchor"]
+---
+
+I found a `download` attribute on an `<a>` tag while reading some code. I had
+never seen it, and I wanted to know what it did and why anyone would need it.
+`Content-Disposition` already seemed good enough.
+
+Turns out the
+[`download` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a#download)
+turns a link into a save. Click it and the browser saves the target instead of
+navigating to it.
+
+The way I had always done this is a response header from the server:
+
+```text
+Content-Disposition: attachment; filename="report.pdf"
+```
+
+The attribute does the same job from the markup, and it can rename the file too:
+
+```html
+<a href="/files/a8f3c9.pdf" download="report.pdf">download the report</a>
+```
+
+The ugly hashed name on disk saves as `report.pdf`.
+
+So why have both? Because we don't always control the server. GitHub Pages does
+not let you set custom response headers. No header means no
+`Content-Disposition`, which used to mean no forced download and no clean
+filename. The attribute does not care. It lives in the HTML, so a static host is
+enough.
+
+It also covers a case a header never could: files that never touched a server. A
+single page app can build a CSV in the browser and hand it straight to the user
+with the same attribute.
+
+There is a limit, though.
+[`download` only works for same-origin URLs](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a#download),
+plus `blob:` and `data:` URLs. Point it at another origin and the browser
+ignores it and navigates instead. So the header is not dead. It is still the
+only way to force a download of a file you do not host. The two split the work:
+the attribute for my own files, the header for everyone else's. It tracks with
+where each one lives. The header is an HTTP thing
+([RFC 6266](https://www.rfc-editor.org/rfc/rfc6266)). The attribute is an HTML
+thing
+([WHATWG](https://html.spec.whatwg.org/multipage/links.html#downloading-resources)).
+
+The attribute shipped in Chrome in 2011 and has been in every browser
+since 2017. Almost a decade as a safe default, and I am only meeting it now. It
+was there the whole time. Still learning the basics, all these years in.
+
+## down the rabbit hole
+
+I couldn't help but notice the gap. Chrome shipped `download` in 2011. Safari
+did not get there until 2017.
+[Five and a half years](https://caniuse.com/download). I wanted to know why.
+
+The trail led to this WebKit Bug, open from 2012 to 2016:
+[102914 - \[WK2\] Support download attribute feature](https://bugs.webkit.org/show_bug.cgi?id=102914)
+
+I asked Claude to summarize this, and this is what she came back with:
+
+> Summary of the bug discussion — WebKit engineer
+> [Brady Eidson](https://mastodon.social/@bradeeoh) did most of the objecting.
+>
+> 1. **It didn't fit WebKit's architecture.** This is the big one. Eidson's
+>    position: "downloads have been 100% a browser feature and not at all a
+>    browser-engine feature." In Safari's world, Safari the app handled
+>    downloads, not WebKit the engine. The `download` attribute forced download
+>    logic down into the engine, which is a layering violation they didn't want
+>    to rush. Chrome didn't have this problem the same way.
+> 2. **The advisory-vs-mandatory fight.** Early patches treated `download` as
+>    "force a download." Eidson pushed back hard: "Nothing in the spec requires
+>    the user agent to download." The attribute is a hint, and they wanted the
+>    implementation to respect that the UA can decline. Getting the semantics
+>    right took iteration.
+> 3. **The cross-origin / `Content-Disposition` check.** The spec requires
+>    verifying the response's `Content-Disposition` before honoring a
+>    cross-origin download, and as Eidson noted, that "cannot possibly be met
+>    until after the connection has been made to the server." That same-origin
+>    and header dance was a genuine implementation headache for them.
+> 4. **No test infrastructure.** Because downloads lived in the browser UI
+>    layer, WebKit had no layout tests for download behavior. They had to build
+>    that scaffolding.
+> 5. **Blob pressure finally forced it.** Through 2014–2015 developers kept
+>    hitting the wall that you couldn't save a client-generated `Blob` (CSV,
+>    XLSX) on Safari without a server round-trip — a limitation unique to
+>    WebKit. That demand is what pushed it over the line.
+>
+> And even after 2016 it wasn't clean — there are follow-up bugs about disabling
+> it on iOS and then separately adding it for iOS, because the file-system model
+> on iOS was its own problem.
+
+I had assumed negligence on Safari's part. The bug showed otherwise. The
+objections were real: downloads belonged to the app, not the engine, so the
+attribute forced a real architectural change, and getting the cross-origin part
+right was genuinely hard.
+
+I keep underestimating how hard the simple-looking problems are.
