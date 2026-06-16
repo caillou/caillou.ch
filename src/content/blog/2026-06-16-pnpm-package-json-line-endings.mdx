@@ -1,0 +1,75 @@
+---
+title: "stop pnpm churning package.json line endings"
+date: 2026-06-16
+description:
+  "pnpm add rewrote package.json from CRLF to LF and git diffed the whole file.
+  one line in gitattributes fixed it."
+tags: ["til", "git", "gitattributes"]
+---
+
+I work on a Windows repo from my Mac. The tree is CRLF everywhere, pinned by
+`.editorconfig` and `prettier`. I ran `pnpm add` for a single dependency and
+`git diff` lit up the entire `package.json`.
+
+```bash
+$ pnpm add zod
+$ git diff --stat
+ package.json | 95 +++++++++++++++++++---------------------------
+ 1 file changed, 48 insertions(+), 47 deletions(-)
+```
+
+One new line, the whole file changed. Did I break something?
+
+After a short investigation, I figured out `pnpm` writes `package.json` with LF
+endings and ignores both `.editorconfig` and `prettier`. And the repo's
+`.gitattributes` is:
+
+```bash
+$ cat .gitattributes
+* -text          # do no line-ending conversion, store bytes as-is
+*.xlsx diff=zip
+```
+
+`-text` tells git to never normalize line endings. So git faithfully recorded
+that every CRLF line was now an LF line. The whole file.
+
+Turns out [`.gitattributes`](https://git-scm.com/docs/gitattributes) can pin one
+file against that. I added a line:
+
+```
+package.json text eol=crlf   # store LF in git, check out as CRLF
+```
+
+Then renormalized once:
+
+```bash
+git add --renormalize package.json   # re-stage as LF (this commit is EOL-only)
+git commit -m "normalize package.json line endings"
+```
+
+Now `pnpm add` diffs to only the line I actually added:
+
+```bash
+$ pnpm add zod
+$ git diff
++    "zod": "^3.23.0"
+```
+
+The one gotcha: right after `pnpm add`, git still marks the file modified and
+warns `LF will be replaced by CRLF the next time Git touches it`. The diff stays
+clean. Git just has not rewritten the bytes on disk yet. My `prettier` hook does
+that on commit, and a fresh checkout does too.
+
+## down the rabbit hole
+
+That is the practical bit. What made it click: with `text eol=crlf`, git keeps
+two copies of the file. LF in its index, CRLF on my disk. It normalizes both to
+LF before diffing, so it stops caring which one `pnpm` wrote.
+`git ls-files --eol` shows both states at once:
+
+```bash
+$ git ls-files --eol package.json
+i/lf    w/crlf  attr/text eol=crlf   package.json
+# i/lf   = stored in git as LF
+# w/crlf = checked out on disk as CRLF
+```
