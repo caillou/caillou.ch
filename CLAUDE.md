@@ -21,6 +21,8 @@ check it against these. Apply them when you draft a post for me too.
 - Body prose uses normal capitalization (capital I, sentences start with a
   capital). Inline code identifiers use backticks: `download`,
   `Content-Disposition`.
+- American English, not British: `color` over `colour`, `-ize` over `-ise`,
+  `P.S.` with periods over `PS`.
 
 ## Post shape (TIL)
 
@@ -28,6 +30,10 @@ check it against these. Apply them when you draft a post for me too.
   project's own docs, a GitHub release or bug.
 - Show the naive/before code, then the after. Comments inside the code fence
   explain the flag or the interesting line.
+- When a point rests on a primary source (a man page entry, a source comment, a
+  config file, command output), I show it verbatim in a code fence rather than
+  paraphrasing it in prose. I copy the exact text from the real source so the
+  fence is faithful (e.g. `$ man open`, `cat .gitattributes`).
 - Keep it around 60 lines. One idea per post. Link out for the surrounding
   concepts instead of explaining them.
 - End on a practical note: a gotcha, a "back off if X", or the version something
