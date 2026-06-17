@@ -1,0 +1,41 @@
+---
+title: "fake a non-retina screen on Chrome"
+date: 2026-06-17
+description:
+  "a Chrome flag retired the old non-retina monitor I kept around just to test
+  on."
+tags: ["til", "chrome", "device-scale-factor"]
+---
+
+My Mac is Retina. So are my external screens. Plenty of people still browse on
+plain 1x displays though, and things that look crisp on Retina can fall apart
+there: hairline borders, 1px lines, downscaled images. I kept an old non-retina
+monitor around just to check that.
+
+Then [Alain](https://mastodon.online/@elhornair) posted this in our dev channel:
+
+> TIL you can start chrome with `--force-device-scale-factor=1` if you want to
+> quickly check how everything renders on a non-retina screen
+
+Turns out `--force-device-scale-factor` is a real Chromium flag. The
+[source comment](https://chromium.googlesource.com/chromium/src/+/main/ui/display/display_switches.cc)
+reads:
+
+```cpp
+// Overrides the device scale factor for the browser UI and the contents.
+const char kForceDeviceScaleFactor[] = "force-device-scale-factor";
+```
+
+So it renders the whole browser at the factor I pass, not just the page. Set it
+to `1` and Chrome draws like a non-retina screen.
+
+On a Mac, Chrome is not on the path, so I launch it through `open`:
+
+```bash
+# quit Chrome completely first (Cmd+Q), then:
+open -a "Google Chrome" --args --force-device-scale-factor=1
+```
+
+The gotcha is that `--args` only takes effect on a fresh launch. If Chrome is
+already running, `open` just brings the existing window forward and drops the
+flag. So the full quit matters. My old monitor can finally go in a drawer.
