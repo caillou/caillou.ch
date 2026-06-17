@@ -38,4 +38,41 @@ open -a "Google Chrome" --args --force-device-scale-factor=1
 
 The gotcha is that `--args` only takes effect on a fresh launch. If Chrome is
 already running, `open` just brings the existing window forward and drops the
-flag. So the full quit matters. My old monitor can finally go in a drawer.
+flag. Quitting Chrome first is the easiest way around that. My old monitor can
+finally go in a drawer.
+
+## down the rabbit hole
+
+Quitting is the easiest way, not the only one. Alain found `-n` in `man open`:
+
+```bash
+$ man open
+  # ...
+  -n  Open a new instance of the application(s) even if one is already running.
+```
+
+So why quit at all?
+
+Because Chrome is not a normal Mac app. It keeps a
+[single instance per profile](https://www.chromium.org/developers/how-tos/run-chromium-with-flags/),
+guarded by a lock in the user data directory. A second `open` against that same
+profile sees the lock, hands its command line to the running Chrome, and exits.
+The startup-only flag goes with it. `-n` does not change that.
+
+Pointing the new instance at its own profile sidesteps the lock:
+
+```bash
+open -n -a "Google Chrome" --args \
+  --user-data-dir="$(mktemp -d)" \
+  --force-device-scale-factor=1 http://localhost:4321
+```
+
+Now a 1x Chrome sits next to my Retina one, no quitting. That throwaway profile
+is signed out with no extensions, which for a render check is fine.
+
+## P.S. my old eyes
+
+I wear glasses now, the kind that come with age. On a soft non-retina screen my
+brain forgets they are there. It blames my eyes instead and tells them to work
+harder, so I squint at pixels no squint can sharpen. Non-retina is not just a
+compatibility checkbox. For older eyes it is genuinely hard to read.
