@@ -33,7 +33,9 @@ check it against these. Apply them when you draft a post for me too.
 - When a point rests on a primary source (a man page entry, a source comment, a
   config file, command output), I show it verbatim in a code fence rather than
   paraphrasing it in prose. I copy the exact text from the real source so the
-  fence is faithful (e.g. `$ man open`, `cat .gitattributes`).
+  fence is faithful (e.g. `$ man open`, `cat .gitattributes`). The one thing I
+  normalize is the shell prompt: write it as `$ `, not my own prompt character
+  (`❯`), so the fence reads as a generic shell.
 - Keep it around 60 lines. One idea per post. Link out for the surrounding
   concepts instead of explaining them.
 - End on a practical note: a gotcha, a "back off if X", or the version something
