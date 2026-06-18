@@ -1,0 +1,137 @@
+---
+title: "keep an AVD session awake with f15"
+date: 2026-06-19
+description:
+  "AVD logged me out over lunch and killed a long job. f15 is a key that does
+  nothing, so I send one every two minutes to look busy."
+tags: ["til", "windows", "avd"]
+---
+
+import Figure from "../../components/Figure.astro";
+import macSleep from "../../assets/keep-avd-awake-mac-no-sleep.png";
+
+Some of my work happens on a Windows box, reached over remote desktop from my
+Mac. Inside that _AVD_ (Azure Virtual Desktop) session I start the slow things
+and walk away: a download and restore of a large database, or a Claude loop
+grinding through a stack of issues.
+
+One lunchtime I came back to find the database job gone.
+
+<span role="img" aria-label="flipping a table in rage">
+  (╯°□°)╯︵ ┻━┻
+</span>
+
+Or as we say... _FFFFFUUUUUUUU-_
+
+_AVD_ had signed me out for sitting idle, and the work died with the session. It
+kept happening. The long jobs I run in the background all need the session to
+stay alive while I am not touching it.
+
+[PowerToys Awake](https://learn.microsoft.com/en-us/windows/powertoys/awake) is
+the obvious tool. It keeps a Windows machine awake. We tried it. It did not
+help. AVD does not sign me out for sleeping. It signs me out for not typing, and
+Awake never types anything.
+
+So I needed input to keep arriving while I was away, doing nothing when it
+landed. Turns out there is a key for exactly that: `f15`.
+
+`f15` is a real key. It has its own virtual-key code,
+[`VK_F15`](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes)
+(`0x7E`), and
+[`SendKeys`](https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys)
+sends it as `{F15}`. But nothing on my machine reacts to it. There is no `f15`
+button on my keyboard, and no app I run has it bound to anything. So I can press
+it on a loop, and the only thing that happens is the session stops counting me
+as gone.
+
+The whole keep-alive is a COM object and a loop:
+
+```powershell
+# keep-active-5h.ps1
+$intervalSeconds = 120   # comfortably under the idle timeout
+$runHours        = 5
+
+$wsh      = New-Object -ComObject WScript.Shell
+$deadline = (Get-Date).AddHours($runHours)
+
+while ((Get-Date) -lt $deadline) {
+    $wsh.SendKeys('{F15}')   # a key that does nothing, pressed on purpose
+    Start-Sleep -Seconds $intervalSeconds
+}
+```
+
+It works. But it runs blind. Five hours was baked in, and I had no idea how much
+time was left without doing the math.
+
+I came up through Unix. PowerShell is not a language I think in. The COM object
+and the loop I could manage. A parameter with a sane default, and a countdown
+that rewrites itself in place, I could not. So I pasted the script back to
+Claude and asked her:
+
+> keep-active-5h.ps1 i want it to take a param for the time, and default to 2h.
+> also, is it possible, in powershell to show a timer going down, on how long
+> remians. updating chars in place?
+
+She came back with this. One parameter, defaulting to two hours, and a status
+line that overwrites itself instead of scrolling:
+
+```powershell
+# keep-active.ps1
+param(
+    [double]$Hours = 2   # run time in hours; 5 for five, 0.5 for thirty minutes
+)
+
+$intervalSeconds = 120   # comfortably under the idle timeout
+
+$wsh      = New-Object -ComObject WScript.Shell
+$deadline = (Get-Date).AddHours($Hours)
+$nextKey  = Get-Date     # send the first keystroke right away
+
+while ((Get-Date) -lt $deadline) {
+    $now = Get-Date
+
+    if ($now -ge $nextKey) {
+        $wsh.SendKeys('{F15}')
+        $nextKey = $now.AddSeconds($intervalSeconds)
+    }
+
+    $remaining = $deadline - $now
+    $untilKey  = [int][math]::Ceiling(($nextKey - $now).TotalSeconds)
+    $line = "Time remaining: {0:hh\:mm\:ss}   (next {{F15}} in {1,3}s)" -f $remaining, $untilKey
+
+    # `r returns to column 0; -NoNewline avoids a newline; PadRight clears leftovers.
+    Write-Host ("`r" + $line.PadRight(60)) -NoNewline
+    Start-Sleep -Seconds 1
+}
+
+Write-Host "`nReached the $Hours-hour limit. Keep-active stopped."
+```
+
+I run it from a PowerShell window inside the session. `Ctrl+C` stops it early:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\keep-active.ps1        # default two hours
+powershell -ExecutionPolicy Bypass -File .\keep-active.ps1 5      # five hours
+```
+
+That is the practical bit. The countdown was pure bonus. The one thing left that
+kept biting me lives on the other machine.
+
+`f15` only helps while the session stays connected. The keystroke goes to the
+AVD session, so the session has to be there to catch it. If my Mac dozed off
+while I was at lunch, the remote desktop link dropped, the session went
+disconnected, and a disconnected session gets signed out the same as an idle
+one. The job died anyway, and `f15` never got its chance.
+
+So the Windows trick needed a Mac-side partner. I keep the Mac awake too:
+
+<Figure
+  src={macSleep}
+  alt="macOS Battery settings, 'Prevent automatic sleeping on power adapter when the display is off' turned on"
+>
+  System Settings → Battery → Options. With this on, the Mac stays up and the
+  remote desktop link holds while I am away from the keyboard.
+</Figure>
+
+Two machines, two ways of nodding off. `f15` keeps the far one busy. The Battery
+toggle keeps the near one awake. Both have to hold for the job to outlast lunch.
