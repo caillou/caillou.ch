@@ -1,0 +1,122 @@
+---
+title: "make shift+enter a newline in Claude Code on Windows"
+date: 2026-06-18
+description:
+  "shift+enter sent my half-written message instead of making a newline. ctrl+j
+  fixes it in any terminal; a keybinding wins back the muscle memory."
+tags: ["til", "terminal", "keyboard-protocol"]
+---
+
+I was mid-prompt in Claude Code, on a Windows box, and pressed `shift+enter` to
+drop to a new line. My half-written message sent itself. Years of muscle memory
+tell my fingers that `shift+enter` means newline, not send. The machine on the
+far end disagreed.
+
+## change your muscle memory…
+
+The one to reach for is `ctrl+j`. It drops a newline without sending, and it
+works in every terminal with no setup. The
+[Claude Code docs](https://code.claude.com/docs/en/terminal-config) put it
+first, alongside typing `\` and then `enter`.
+
+## …or change the config
+
+The one I actually use is a Windows Terminal keybinding, because my fingers will
+not unlearn the chord. It lives in `settings.json`:
+
+```json
+// settings.json
+"actions": [
+  {
+    // send a line feed: the newline byte ctrl+j produces
+    "command": { "action": "sendInput", "input": "\n" },
+    "id": "User.sendInput.ShiftEnter"
+  }
+],
+"keybindings": [
+  { "id": "User.sendInput.ShiftEnter", "keys": "shift+enter" }
+]
+```
+
+Now `shift+enter` sends exactly what Claude reads as a newline, and my hands
+never learned the difference.
+
+That is the practical bit. `ctrl+j` unblocks anyone. The rest is why.
+
+## down the rabbit hole
+
+This all seemed like a hack to me. Why `ctrl+j`, of all keys? I asked Claude.
+
+`ctrl` plus a letter sends the control byte at that letter's position in the
+alphabet. `J` is the tenth letter, so `ctrl+j` is byte `0x0A`: line feed, `\n`,
+the newline character itself. `M` is the thirteenth, so `ctrl+m` is `0x0D`,
+carriage return. And `0x0D` is exactly what the `enter` key sends. So `enter` is
+secretly `ctrl+m`, and `ctrl+j` is me typing the other newline byte by hand.
+
+That raised a better question. If `enter` is just a byte, why can the terminal
+not tell `shift+enter` apart from it? I asked Claude to dig in deeper. She
+pulled a thread that runs back to the VT100. She also pointed me at
+[Jesse Vincent](https://metasocial.com/@jesse)'s
+[write-up](https://blog.fsck.com/agent-blog/2026/02/26/terminal-keyboard-protocol/),
+which lays the whole thing out. He had Claude research and write that one too,
+which felt about right.
+
+A terminal sends bytes, not key presses. `enter` sends `0x0D`. What `shift` does
+in the old encoding is to pick the alternate printable character: capital `A`,
+the bang above the `1`. `enter` is not printable. It is a control byte with no
+alternate for `shift` to choose. So `shift+enter` sends the same `0x0D`, and
+from the byte stream it is indistinguishable from a bare `enter`.
+
+```
+# what reaches the app, byte for byte
+enter        0x0D
+shift+enter  0x0D
+```
+
+No program can tell them apart, Claude Code included. This is a limitation older
+than I am, not a bug.
+
+The collision has been fixed more than once. Terminals grew opt-in protocols
+that encode the modifier as its own field, so the bytes stop colliding: xterm's
+`modifyOtherKeys`, then Paul Evans's fixterms and its `CSI u` encoding, then
+[Kovid Goyal's kitty keyboard protocol](https://sw.kovidgoyal.net/kitty/keyboard-protocol/),
+the modern one. Under it, `shift+enter` gets its own sequence, `ESC[13;2u`,
+where `13` is `enter` and `2` is `shift`. Claude Code asks for the protocol when
+it starts (`CSI > 1 u`) and then reads `shift+enter` as a key of its own.
+
+Which explained the split I started with. The shell was never the variable. The
+terminal emulator was. mintty, the one behind Git Bash, speaks the protocol and
+sends `shift+enter` as a distinct byte with no configuration, so Claude just
+works there. Windows Terminal only gained the kitty protocol in
+[Preview 1.25](https://devblogs.microsoft.com/commandline/windows-terminal-preview-1-25-release/),
+whose release notes name "agentic command line tools" as the reason. My stable
+build is 1.24, a release behind:
+
+```
+❯ winget upgrade Microsoft.WindowsTerminal
+No available upgrade found.
+No newer package versions are available from the configured sources.
+```
+
+So 1.24 ignores Claude's request and keeps sending bare `0x0D` for both keys.
+The Claude Code docs list Windows Terminal under "works without setup," which is
+true, for the build one release newer than mine.
+
+That is what the keybinding is really for. It makes `shift+enter` send the same
+`\n` byte `ctrl+j` does, then skips the protocol my terminal cannot speak yet.
+When 1.25 reaches stable I can delete it, and `shift+enter` will work on its
+own.
+
+## P.S. the red herring
+
+For the first hour I blamed the remote desktop. I reach the Windows box from my
+Mac over RDP, and `shift+enter` worked when I opened the same machine through a
+VS Code tunnel but not here. So surely the remote-desktop link was eating the
+modifier on the way.
+
+It was not. I ran `[Console]::ReadKey()` over the RDP session, pressed the
+chord, and it reported `Mods=Shift`. The `shift` press reached Windows perfectly
+intact, never lost in transit. The terminal on the far end was folding it into
+the same byte with or without the protocol. It took a fair bit of poking to be
+sure I was chasing the wrong layer, and that working remotely had nothing to do
+with it.
