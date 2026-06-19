@@ -76,42 +76,34 @@ She came back with this. One parameter, defaulting to two hours, and a status
 line that overwrites itself instead of scrolling:
 
 ```powershell
-# keep-active.ps1
-param(
-    [double]$Hours = 2   # run time in hours; 5 for five, 0.5 for thirty minutes
-)
+# keep-active.ps1: keep an AVD session alive by sending the no-op {F15} key.
+# Usage:  .\keep-active.ps1 [hours]
+#         e.g.  .\keep-active.ps1 0.5   (30 min)    .\keep-active.ps1 5   (5 hours)
+# Stop early with Ctrl+C. Keep the AVD session CONNECTED while this runs.
+param([double]$Hours = 2)
 
-$intervalSeconds = 120   # comfortably under the idle timeout
-
+$IntervalSeconds = 120        # how often to send {F15}; well under the ~30 min idle limit
 $wsh      = New-Object -ComObject WScript.Shell
 $deadline = (Get-Date).AddHours($Hours)
-$nextKey  = Get-Date     # send the first keystroke right away
 
+Write-Host ("Keeping active until {0:HH:mm:ss}. Ctrl+C to stop." -f $deadline)
+
+$i = 0
 while ((Get-Date) -lt $deadline) {
-    $now = Get-Date
-
-    if ($now -ge $nextKey) {
-        $wsh.SendKeys('{F15}')
-        $nextKey = $now.AddSeconds($intervalSeconds)
-    }
-
-    $remaining = $deadline - $now
-    $untilKey  = [int][math]::Ceiling(($nextKey - $now).TotalSeconds)
-    $line = "Time remaining: {0:hh\:mm\:ss}   (next {{F15}} in {1,3}s)" -f $remaining, $untilKey
-
-    # `r returns to column 0; -NoNewline avoids a newline; PadRight clears leftovers.
-    Write-Host ("`r" + $line.PadRight(60)) -NoNewline
+    if ($i % $IntervalSeconds -eq 0) { $wsh.SendKeys('{F15}') }
+    Write-Host ("`rTime remaining: {0:hh\:mm\:ss} " -f ($deadline - (Get-Date))) -NoNewline
     Start-Sleep -Seconds 1
+    $i++
 }
 
-Write-Host "`nReached the $Hours-hour limit. Keep-active stopped."
+Write-Host "`nDone."
 ```
 
 I run it from a PowerShell window inside the session. `Ctrl+C` stops it early:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\keep-active.ps1        # default two hours
-powershell -ExecutionPolicy Bypass -File .\keep-active.ps1 5      # five hours
+.\keep-active.ps1     # default two hours
+.\keep-active.ps1 5   # five hours
 ```
 
 That is the practical bit. The countdown was pure bonus. The one thing left that
