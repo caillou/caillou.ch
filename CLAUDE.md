@@ -21,6 +21,10 @@ check it against these. Apply them when you draft a post for me too.
 - Body prose uses normal capitalization (capital I, sentences start with a
   capital). Inline code identifiers use backticks: `download`,
   `Content-Disposition`.
+- Keyboard keys and chords are lowercase when referenced as text: in prose (as
+  inline code: `ctrl+c`, `shift+enter`, `f15`) and inside code comments alike.
+  Only uppercase when the code itself requires it: a format specifier (`HH:mm`),
+  a SendKeys token (`{F15}`), a constant (`VK_F15`).
 - American English, not British: `color` over `colour`, `-ize` over `-ise`,
   `P.S.` with periods over `PS`.
 
