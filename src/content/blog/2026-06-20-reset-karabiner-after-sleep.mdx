@@ -1,0 +1,78 @@
+---
+title: "reset Karabiner after sleep without a reboot"
+date: 2026-06-20
+description:
+  "Karabiner stopped remapping after my Mac woke. i finally found a way to reset
+  it without a reboot."
+tags: ["til", "macos", "karabiner"]
+---
+
+I tap `caps lock` for `esc` and hold it for `ctrl`, my most-used
+[Karabiner](https://karabiner-elements.pqrs.org/) remap. After the Mac woke from
+sleep one day, it stopped: `caps lock` went dead, and so did every other
+Karabiner remap.
+
+For a long time a reboot was the only thing that brought it back. Restarting the
+Karabiner app did nothing. Its "Restart Karabiner" menu item runs
+[a documented one-liner](https://karabiner-elements.pqrs.org/docs/manual/operation/restart/):
+
+```bash
+$ launchctl kickstart -k \
+    gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server
+```
+
+That only kickstarts the per-user _agent_, and after a wake the agent is fine.
+The part that hangs is the root _daemons_. The agent restart never touches them.
+
+Turns out
+[since Karabiner 15.0](https://karabiner-elements.pqrs.org/docs/releasenotes/)
+those daemons register through Apple's
+[SMAppService](https://developer.apple.com/documentation/servicemanagement/smappservice)
+and run under `launchd` as root. So I can cycle them the same way, in the
+`system/` domain instead of `gui/`. That, plus reactivating the DriverKit
+extension, brings the remaps back with no reboot.
+
+## the commands
+
+```bash
+# re-activate the driverkit extension (no-op when already active)
+sudo '/Applications/.Karabiner-VirtualHIDDevice-Manager.app/Contents/MacOS/Karabiner-VirtualHIDDevice-Manager' activate
+
+# cycle the two root daemons (this clears the stuck state)
+sudo launchctl kickstart -k system/org.pqrs.service.daemon.Karabiner-VirtualHIDDevice-Daemon
+sudo launchctl kickstart -k system/org.pqrs.service.daemon.Karabiner-Core-Service
+
+# the per-user agent too, same as the app's menu
+launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server
+```
+
+`launchctl kickstart -k` force-restarts a running service, killing the old
+instance first. The `system/` daemons need `sudo`; the `gui/` agent runs in my
+own domain, so it does not.
+
+## the fish function
+
+I keep it in a [fish](https://fishshell.com/) function so I don't have to
+remember any of that:
+
+```fish
+function karabinerRestart
+    echo "Restarting Karabiner daemons (sudo password needed)…"
+
+    sudo '/Applications/.Karabiner-VirtualHIDDevice-Manager.app/Contents/MacOS/Karabiner-VirtualHIDDevice-Manager' activate
+
+    sudo launchctl kickstart -k system/org.pqrs.service.daemon.Karabiner-VirtualHIDDevice-Daemon
+    sudo launchctl kickstart -k system/org.pqrs.service.daemon.Karabiner-Core-Service
+
+    launchctl kickstart -k gui/(id -u)/org.pqrs.service.agent.karabiner_console_user_server
+
+    echo "Done. Try your remaps now (no reboot needed)."
+end
+```
+
+The bug is still open
+([#3914](https://github.com/pqrs-org/Karabiner-Elements/issues/3914),
+[#4470](https://github.com/pqrs-org/Karabiner-Elements/issues/4470)) on
+Karabiner 16.x and Apple Silicon. The #4470 thread lands on the same
+daemon-kickstart fix, which is how I confirmed restarting the agent was never
+going to be enough.
