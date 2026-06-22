@@ -3,6 +3,13 @@ import { Picture } from "astro:assets";
 import portrait from "../assets/portrait.jpg";
 import Header from "../components/Header.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { edgeTint } from "../utils/edge-tint";
+
+// Read the original source asset (portrait.src is an emitted/hashed URL, not a
+// path sharp can open). The path is relative to the project root, which is the
+// cwd during astro build. Runs at build time only (static output).
+const portraitPath = "src/assets/portrait.jpg";
+const bgColor = await edgeTint(portraitPath);
 ---
 
 <BaseLayout title="caillou.ch">
@@ -20,10 +27,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <main></main>
 
   <!-- iOS Safari tints its status bar / toolbar to the page background color.
-       Match the portrait's dark edge so those bars blend instead of going white. -->
-  <style is:global>
-    body {
-      background-color: #1b1f1d;
-    }
-  </style>
+       Derived from the portrait's dark top and bottom edges so those bars blend
+       instead of going white. See src/utils/edge-tint.ts. -->
+  <style is:global set:html={`body{background-color:${bgColor}}`}></style>
 </BaseLayout>
