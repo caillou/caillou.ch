@@ -18,4 +18,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   />
 
   <main></main>
+
+  <!-- iOS Safari tints its status bar / toolbar to the page background color.
+       Match the portrait's dark edge so those bars blend instead of going white. -->
+  <style is:global>
+    body {
+      background-color: #1b1f1d;
+    }
+  </style>
 </BaseLayout>
