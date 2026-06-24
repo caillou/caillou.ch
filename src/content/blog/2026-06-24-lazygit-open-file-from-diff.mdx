@@ -1,0 +1,39 @@
+---
+title: "lazygit: open a file straight from the diff"
+date: 2026-06-24
+description:
+  "to edit the file i'm looking at, i'd have to find it again in my editor.
+  pressing `e` opens it directly, in whatever editor i configure."
+tags: ["til", "git", "lazygit"]
+---
+
+I was looking at a file's diff in
+[lazygit](https://github.com/jesseduffield/lazygit) and wanted to fix something
+in it. To do that I'd switch to VS Code and go find the same file again.
+
+Turns out I don't have to. Hitting `e` on the file in lazygit opens it right in
+my editor.
+
+lazygit needs to know which editor that is. One line in my
+`~/.config/lazygit/config.yml`:
+
+```yaml
+os:
+  editPreset: "vscode"
+```
+
+Now `e` opens the file in VS Code, the same one I was looking at, no hunting for
+it.
+
+`vscode` is one of many presets. I could swap it for `vim`, `zed`, `sublime`, or
+any of the others listed in the
+[lazygit docs](https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md).
+
+lazygit often guesses the editor on its own, from `git config core.editor` or
+`$EDITOR`. I set `editPreset` anyway, so the choice is explicit.
+
+P.S. lazygit even runs on Windows, which is where I first set this up.
+
+P.P.S. lazygit is the work of one person,
+[Jesse Duffield](https://github.com/sponsors/jesseduffield), and it's amazing.
+If you can afford to back open source, he's a great one to sponsor.
