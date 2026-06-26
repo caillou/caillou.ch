@@ -1,0 +1,132 @@
+---
+title: "disable Chrome's AI features with a macOS config profile"
+date: 2026-06-26
+description:
+  "Chrome put AI in my address bar, and the flags I turned off came back after
+  an update. a macOS config profile sets the enterprise policy that turns it off
+  for good."
+tags: ["til", "chrome", "enterprise-policy"]
+---
+
+I reach for [Claude](https://claude.ai) all day to write code. That part I
+chose. What I did not choose was Chrome putting its own AI in my address bar: an
+"AI Mode" button on the right, and an "Ask Google about this page" row down in
+the suggestions.
+
+I started where all the guides do, in `chrome://flags`. I turned off the AI Mode
+entry points and the contextual suggestions, relaunched, and the bar was quiet
+again. Then Chrome updated. The toggles were back on, with a couple of new flags
+next to the old ones. Flags are stored once for the whole Chrome install, not
+per Chrome profile, so covering all of mine was never the problem. They just do
+not stick. Google rolls these out in stages and flips them back.
+
+So I asked Claude for help. Turns out Chrome reads enterprise policy on macOS.
+The policies come from a configuration profile, the same `.mobileconfig` an IT
+department pushes to a managed work laptop 🤮. Except on my own Mac I can write
+one myself. She found the policy that covers this,
+[`GenAiDefaultSettings`](https://chromeenterprise.google/policies/gen-ai-default-settings/),
+which sets the default for Chrome's whole "covered" generative-AI set. The doc
+is blunt about the value I wanted:
+
+> 2 = Do not allow the feature.
+
+## the profile
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- the one payload this profile carries -->
+	<key>PayloadContent</key>
+	<array>
+		<dict>
+			<!-- the app these keys configure -->
+			<key>PayloadType</key>
+			<string>com.google.Chrome</string>
+			<!-- payload format version (always 1) -->
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+			<!-- unique id for this payload -->
+			<key>PayloadIdentifier</key>
+			<string>ch.caillou.chrome.disableAI.payload</string>
+			<!-- any uuid; just macOS bookkeeping -->
+			<key>PayloadUUID</key>
+			<string>16E1D735-1060-4D16-971E-DA04529204F4</string>
+			<!-- label for this payload -->
+			<key>PayloadDisplayName</key>
+			<string>Chrome: Disable AI Features</string>
+			<!-- switch this payload on -->
+			<key>PayloadEnabled</key>
+			<true/>
+
+			<!--
+			  disable Chrome's whole "covered"
+			  generative-AI set
+			-->
+			<key>GenAiDefaultSettings</key>
+			<integer>2</integer>
+
+			<!--
+			  disable the AI Mode omnibox button.
+			  1 = do not allow; only 0 and 1 exist
+			-->
+			<key>AIModeSettings</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<!-- the outer dict is the profile itself -->
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<!-- profile format version (always 1) -->
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+	<!-- profile id; the same id replaces on reinstall -->
+	<key>PayloadIdentifier</key>
+	<string>ch.caillou.chrome.disableAI</string>
+	<!-- any uuid; just macOS bookkeeping -->
+	<key>PayloadUUID</key>
+	<string>96B0E260-8A89-48A4-9B6E-1F4A24EAF040</string>
+	<!-- name shown in Device Management -->
+	<key>PayloadDisplayName</key>
+	<string>Disable Chrome AI Features</string>
+	<!-- apply machine-wide, every user account -->
+	<key>PayloadScope</key>
+	<string>System</string>
+	<!-- false = I can remove it later -->
+	<key>PayloadRemovalDisallowed</key>
+	<false/>
+</dict>
+</plist>
+```
+
+The two `PayloadUUID`s and the `PayloadIdentifier`s are macOS bookkeeping, so it
+can track the profile to update or remove later. Any unique values work; I made
+mine with `uuidgen`.
+
+One value bit me. My first draft set `AIModeSettings` to `2`, by analogy with
+the line above it. That value does not exist. The
+[Chromium source](https://cocalc.com/github/chromium/chromium/blob/main/components/policy/resources/templates/policy_definitions/GenerativeAI/AIModeSettings.yaml)
+defines only `0` (allow) and `1` (do not allow). `1` is the one I wanted.
+
+## installing it
+
+Double-click the file. macOS reports a profile was downloaded, then waits. The
+install lives in System Settings, under General, then Device Management (older
+macOS files it under Privacy & Security, as Profiles). Select "Disable Chrome AI
+Features", install it, enter the admin password, then quit and reopen Chrome.
+
+`chrome://policy` is where I confirmed it took: `GenAiDefaultSettings` and
+`AIModeSettings` both show up as mandatory, source Platform. Because they come
+from the OS layer below Chrome, they apply to every Chrome profile at once, and
+a Chrome update cannot flip them back.
+
+One feature still slips past. `GenAiDefaultSettings` reliably kills the AI Mode
+button, but the "Ask Google about this page" row may not fall under it. If that
+one survives, the `omnibox-contextual-*` flags are the cleanup, with the usual
+caveat that flags drift back.
+
+I will switch browsers eventually. Looking at you,
+[Vivaldi](https://vivaldi.com). For now this holds, and I like the small irony
+of it: I asked an AI to turn off an AI. She dug up the policy and wrote the
+profile. I clicked install. I learned a lot today.
