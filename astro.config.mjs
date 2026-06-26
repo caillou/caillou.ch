@@ -1,6 +1,11 @@
 // @ts-check
 
 import mdx from "@astrojs/mdx";
+import {
+  transformerNotationFocus,
+  transformerNotationHighlight,
+  transformerRemoveLineBreak,
+} from "@shikijs/transformers";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
@@ -12,6 +17,11 @@ export default defineConfig({
   markdown: {
     shikiConfig: {
       theme: "css-variables",
+      transformers: [
+        transformerNotationFocus(),
+        transformerNotationHighlight(),
+        transformerRemoveLineBreak(),
+      ],
     },
   },
 

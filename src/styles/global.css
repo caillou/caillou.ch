@@ -181,8 +181,13 @@
     @apply overflow-x-auto bg-code-bg leading-[1.6];
     border-left: var(--border-w) solid var(--color-yellow);
     grid-column: margin;
-    padding: var(--half-gutter) var(--gutter) var(--half-gutter)
-      calc(var(--gutter) - var(--border-w));
+    /* horizontal text inset lives on .line, so a highlighted row's own
+       background is the full-bleed band. only vertical padding here. */
+    padding-block: var(--half-gutter);
+
+    /* Firefox scrollbar (the ::-webkit rules below are Chromium/Safari only) */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-dark-gray) var(--color-code-bg);
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -203,6 +208,42 @@
     /* maybe use #151209 */
     /* Shiki code block overrides */
     background: var(--color-code-bg) !important;
+  }
+
+  /* shiki line transformers: make each line a full-width block so line
+     backgrounds span the whole row. removeLineBreak() strips the \n
+     separators, so block lines don't double-space. */
+  pre.astro-code code {
+    display: inline-block;
+    min-width: 100%;
+    vertical-align: top; /* drop the inline-block descender gap under the code */
+  }
+
+  pre.astro-code .line {
+    display: block;
+    min-height: 1lh; /* keep blank lines from collapsing */
+    /* the horizontal text inset. the line's background is the highlight band,
+       so it spans border-to-edge for free, scrolled or not. */
+    padding-inline: calc(var(--gutter) - var(--border-w)) var(--gutter);
+  }
+
+  /* highlight transformer: a faint full-row wash (the line's own background,
+     already border-to-edge thanks to the inset above) plus a second yellow bar
+     flush against pre's border, doubling it to 8px on highlighted rows. */
+  pre.astro-code .line.highlighted {
+    background: rgb(255 255 255 / 6%);
+    box-shadow: inset var(--border-w) 0 0 0 var(--color-yellow);
+  }
+
+  /* focus transformer: dim every line except the [!code focus] ones */
+  pre.astro-code.has-focused .line:not(.focused) {
+    filter: brightness(0.55) saturate(0.6);
+    transition: filter 0.2s;
+  }
+
+  /* un-dim every line while hovering the block */
+  pre.astro-code.has-focused:hover .line:not(.focused) {
+    filter: none;
   }
 
   :not(pre) > code {
