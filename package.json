@@ -2,13 +2,14 @@
   "name": "caillou.ch-2026-03",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@10.32.1",
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
-    "deploy": "pnpm build && wrangler deploy",
+    "deploy": "pnpm build && gh-pages -d dist -t -b gh-pages",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "biome check .",
@@ -30,11 +31,11 @@
     "@astrojs/check": "^0.9.9",
     "@biomejs/biome": "^2.4.16",
     "@shikijs/transformers": "^4.3.0",
+    "gh-pages": "^6.3.0",
     "lefthook": "^2.1.9",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.4",
-    "typescript": "^5.9.3",
-    "wrangler": "^4.98.0"
+    "typescript": "^5.9.3"
   }
 }
