@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="i spotted the download attribute on an anchor tag and assumed Content-Disposition already did the job. turns out it's for when you can't touch the server."><meta name="generator" content="Astro v6.4.4"><!-- Standard DPI: normal=400, bold=600 --><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-normal.DMJ8VG8y.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-italic.BqAiT5Ww.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-600-normal.BgSNZQsw.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-600-italic.DrfJ59vG.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><!-- 2dppx: normal=300, bold=500 --><link rel="preload" href="/_astro/ibm-plex-mono-latin-300-normal.BRS-C4KA.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-300-italic.EVyQTKsu.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-500-normal.DSY6xOcd.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-500-italic.As4cCeDr.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><!-- 3dppx+: normal=200, bold=400 --><link rel="preload" href="/_astro/ibm-plex-mono-latin-200-normal.Cj_OANUP.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-200-italic.D1L1haj5.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-normal.DMJ8VG8y.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-italic.BqAiT5Ww.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><title>TIL the &lt;a&gt; tag has a download attribute</title><link rel="stylesheet" href="/_astro/BaseLayout.DoOz07wm.css"></head> <body>  <div class="pointer-events-none fixed top-0 right-0 left-0 h-[4.4rem] bg-linear-to-b from-black via-black/60 to-transparent z-10 min-[1700px]:hidden" aria-hidden="true"></div><header class="pointer-events-none fixed top-0 right-0 left-0 z-50 py-6"> <nav class="pointer-events-auto flex space-x-8 italic"> <a href="/blog" class="transition-colors hover:text-pink before:text-gray before:content-['#_'] text-green">
+Blog
+</a> <a href="/about" class="transition-colors hover:text-pink before:text-gray before:content-['#_'] text-white">
+About
+</a> </nav> </header> <main class="subgrid-cols pt-32 pb-24"> <article class="col-full subgrid-cols space-y-12"> <header class="col-main space-y-6"> <div class="text-sm font-bold text-gray uppercase italic"> <span class="tracking-widest">Published on </span>2026-06-15 </div> <h1 class="pl-[2ch] text-3xl leading-tight text-yellow italic before:ml-[-2ch] before:text-gray before:content-['#_'] xl:pl-0"> TIL the &lt;a&gt; tag has a download attribute </h1> </header> <section class="prose-manuscript col-full subgrid-cols">  <p>I found a <code>download</code> attribute on an <code>&lt;a&gt;</code> tag while reading some code. I had
+never seen it, and I wanted to know what it did and why anyone would need it.
+<code>Content-Disposition</code> already seemed good enough.</p>
+<p>Turns out the
+<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a#download"><code>download</code> attribute</a>
+turns a link into a save. Click it and the browser saves the target instead of
+navigating to it.</p>
+<p>The way I had always done this is a response header from the server:</p>
+<pre class="astro-code css-variables" style="background-color:var(--astro-code-background);color:var(--astro-code-foreground);overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>Content-Disposition: attachment; filename=&quot;report.pdf&quot;</span></span></code></pre>
+<p>The attribute does the same job from the markup, and it can rename the file too:</p>
+<pre class="astro-code css-variables" style="background-color:var(--astro-code-background);color:var(--astro-code-foreground);overflow-x:auto" tabindex="0" data-language="html"><code><span class="line"><span style="color:var(--astro-code-foreground)">&lt;</span><span style="color:var(--astro-code-token-string-expression)">a</span><span style="color:var(--astro-code-token-function)"> href</span><span style="color:var(--astro-code-token-keyword)">=</span><span style="color:var(--astro-code-token-string-expression)">&quot;/files/a8f3c9.pdf&quot;</span><span style="color:var(--astro-code-token-function)"> download</span><span style="color:var(--astro-code-token-keyword)">=</span><span style="color:var(--astro-code-token-string-expression)">&quot;report.pdf&quot;</span><span style="color:var(--astro-code-foreground)">&gt;download the report&lt;/</span><span style="color:var(--astro-code-token-string-expression)">a</span><span style="color:var(--astro-code-foreground)">&gt;</span></span></code></pre>
+<p>The ugly hashed name on disk saves as <code>report.pdf</code>.</p>
+<p>So why have both? Because we don’t always control the server. GitHub Pages does
+not let you set custom response headers. No header means no
+<code>Content-Disposition</code>, which used to mean no forced download and no clean
+filename. The attribute does not care. It lives in the HTML, so a static host is
+enough.</p>
+<p>It also covers a case a header never could: files that never touched a server. A
+single page app can build a CSV in the browser and hand it straight to the user
+with the same attribute.</p>
+<p>There is a limit, though.
+<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a#download"><code>download</code> only works for same-origin URLs</a>,
+plus <code>blob:</code> and <code>data:</code> URLs. Point it at another origin and the browser
+ignores it and navigates instead. So the header is not dead. It is still the
+only way to force a download of a file you do not host. The two split the work:
+the attribute for my own files, the header for everyone else’s. It tracks with
+where each one lives. The header is an HTTP thing
+(<a href="https://www.rfc-editor.org/rfc/rfc6266">RFC 6266</a>). The attribute is an HTML
+thing
+(<a href="https://html.spec.whatwg.org/multipage/links.html#downloading-resources">WHATWG</a>).</p>
+<p>The attribute shipped in Chrome in 2011 and has been in every browser
+since 2017. Almost a decade as a safe default, and I am only meeting it now. It
+was there the whole time. Still learning the basics, all these years in.</p>
+<h2 id="down-the-rabbit-hole">down the rabbit hole</h2>
+<p>I couldn’t help but notice the gap. Chrome shipped <code>download</code> in 2011. Safari
+did not get there until 2017.
+<a href="https://caniuse.com/download">Five and a half years</a>. I wanted to know why.</p>
+<p>The trail led to this WebKit Bug, open from 2012 to 2016:
+<a href="https://bugs.webkit.org/show_bug.cgi?id=102914">102914 - [WK2] Support download attribute feature</a></p>
+<p>I asked Claude to summarize this, and this is what she came back with:</p>
+<blockquote>
+<p>Summary of the bug discussion — WebKit engineer
+<a href="https://mastodon.social/@bradeeoh">Brady Eidson</a> did most of the objecting.</p>
+<ol>
+<li><strong>It didn’t fit WebKit’s architecture.</strong> This is the big one. Eidson’s
+position: “downloads have been 100% a browser feature and not at all a
+browser-engine feature.” In Safari’s world, Safari the app handled
+downloads, not WebKit the engine. The <code>download</code> attribute forced download
+logic down into the engine, which is a layering violation they didn’t want
+to rush. Chrome didn’t have this problem the same way.</li>
+<li><strong>The advisory-vs-mandatory fight.</strong> Early patches treated <code>download</code> as
+“force a download.” Eidson pushed back hard: “Nothing in the spec requires
+the user agent to download.” The attribute is a hint, and they wanted the
+implementation to respect that the UA can decline. Getting the semantics
+right took iteration.</li>
+<li><strong>The cross-origin / <code>Content-Disposition</code> check.</strong> The spec requires
+verifying the response’s <code>Content-Disposition</code> before honoring a
+cross-origin download, and as Eidson noted, that “cannot possibly be met
+until after the connection has been made to the server.” That same-origin
+and header dance was a genuine implementation headache for them.</li>
+<li><strong>No test infrastructure.</strong> Because downloads lived in the browser UI
+layer, WebKit had no layout tests for download behavior. They had to build
+that scaffolding.</li>
+<li><strong>Blob pressure finally forced it.</strong> Through 2014–2015 developers kept
+hitting the wall that you couldn’t save a client-generated <code>Blob</code> (CSV,
+XLSX) on Safari without a server round-trip — a limitation unique to
+WebKit. That demand is what pushed it over the line.</li>
+</ol>
+<p>And even after 2016 it wasn’t clean — there are follow-up bugs about disabling
+it on iOS and then separately adding it for iOS, because the file-system model
+on iOS was its own problem.</p>
+</blockquote>
+<p>I had assumed negligence on Safari’s part. The bug showed otherwise. The
+objections were real: downloads belonged to the app, not the engine, so the
+attribute forced a real architectural change, and getting the cross-origin part
+right was genuinely hard.</p>
+<p>I keep underestimating how hard the simple-looking problems are.</p>  </section> <footer class="col-main pt-12"> <div class="flex flex-wrap gap-3"><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-pink">
+#til</span><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-green">
+#html</span><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-yellow">
+#anchor</span></div> </footer> </article> </main> <footer class="py-16"> <div class="mx-auto flex w-full flex-col items-center px-6 italic md:flex-row md:justify-between max-w-4xl 2xl:max-w-6xl space-y-10 md:space-y-0"> <div class="text-sm tracking-widest text-gray uppercase">
+&copy;2026 Pierre Spring
+</div> <div class="flex space-x-10"> <a href="https://github.com/caillou/caillou.ch" class="text-sm tracking-widest text-gray uppercase transition-colors hover:text-white">
+// source
+</a> <a href="/rss.xml" class="text-sm tracking-widest text-gray uppercase transition-colors hover:text-white">
+// rss
+</a> </div> <a href="/"> <div class="text-yellow transition-colors hover:text-pink">
+caillou.ch
+</div> </a> </div> </footer>  </body></html>

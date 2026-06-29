@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="shift+enter sent my half-written message instead of making a newline. ctrl+j fixes it in any terminal; a keybinding wins back the muscle memory."><meta name="generator" content="Astro v6.4.4"><!-- Standard DPI: normal=400, bold=600 --><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-normal.DMJ8VG8y.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-italic.BqAiT5Ww.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-600-normal.BgSNZQsw.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-600-italic.DrfJ59vG.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><!-- 2dppx: normal=300, bold=500 --><link rel="preload" href="/_astro/ibm-plex-mono-latin-300-normal.BRS-C4KA.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-300-italic.EVyQTKsu.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-500-normal.DSY6xOcd.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-500-italic.As4cCeDr.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><!-- 3dppx+: normal=200, bold=400 --><link rel="preload" href="/_astro/ibm-plex-mono-latin-200-normal.Cj_OANUP.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-200-italic.D1L1haj5.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-normal.DMJ8VG8y.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-italic.BqAiT5Ww.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><title>make shift+enter a newline in Claude Code on Windows</title><link rel="stylesheet" href="/_astro/BaseLayout.DoOz07wm.css"></head> <body>  <div class="pointer-events-none fixed top-0 right-0 left-0 h-[4.4rem] bg-linear-to-b from-black via-black/60 to-transparent z-10 min-[1700px]:hidden" aria-hidden="true"></div><header class="pointer-events-none fixed top-0 right-0 left-0 z-50 py-6"> <nav class="pointer-events-auto flex space-x-8 italic"> <a href="/blog" class="transition-colors hover:text-pink before:text-gray before:content-['#_'] text-green">
+Blog
+</a> <a href="/about" class="transition-colors hover:text-pink before:text-gray before:content-['#_'] text-white">
+About
+</a> </nav> </header> <main class="subgrid-cols pt-32 pb-24"> <article class="col-full subgrid-cols space-y-12"> <header class="col-main space-y-6"> <div class="text-sm font-bold text-gray uppercase italic"> <span class="tracking-widest">Published on </span>2026-06-18 </div> <h1 class="pl-[2ch] text-3xl leading-tight text-yellow italic before:ml-[-2ch] before:text-gray before:content-['#_'] xl:pl-0"> make shift+enter a newline in Claude Code on Windows </h1> </header> <section class="prose-manuscript col-full subgrid-cols">  <p>I was mid-prompt in Claude Code, on a Windows box, and pressed <code>shift+enter</code> to
+drop to a new line. My half-written message sent itself. Years of muscle memory
+tell my fingers that <code>shift+enter</code> means newline, not send. The machine on the
+far end disagreed.</p>
+<h2 id="change-your-muscle-memory">change your muscle memory…</h2>
+<p>The one to reach for is <code>ctrl+j</code>. It drops a newline without sending, and it
+works in every terminal with no setup. The
+<a href="https://code.claude.com/docs/en/terminal-config">Claude Code docs</a> put it
+first, alongside typing <code>\</code> and then <code>enter</code>.</p>
+<h2 id="or-change-the-config">…or change the config</h2>
+<p>The one I actually use is a Windows Terminal keybinding, because my fingers will
+not unlearn the chord. It lives in <code>settings.json</code>:</p>
+<pre class="astro-code css-variables" style="background-color:var(--astro-code-background);color:var(--astro-code-foreground);overflow-x:auto" tabindex="0" data-language="json"><code><span class="line"><span style="color:var(--astro-code-token-comment)">// settings.json</span></span><span class="line"><span style="color:var(--astro-code-token-string-expression)">&quot;actions&quot;</span><span style="color:var(--astro-code-foreground)">: [</span></span><span class="line"><span style="color:var(--astro-code-foreground)">  {</span></span><span class="line"><span style="color:var(--astro-code-token-comment)">    // send a line feed: the newline byte ctrl+j produces</span></span><span class="line"><span style="color:var(--astro-code-token-keyword)">    &quot;command&quot;</span><span style="color:var(--astro-code-token-punctuation)">:</span><span style="color:var(--astro-code-foreground)"> { </span><span style="color:var(--astro-code-token-keyword)">&quot;action&quot;</span><span style="color:var(--astro-code-token-punctuation)">:</span><span style="color:var(--astro-code-token-string-expression)"> &quot;sendInput&quot;</span><span style="color:var(--astro-code-token-punctuation)">,</span><span style="color:var(--astro-code-token-keyword)"> &quot;input&quot;</span><span style="color:var(--astro-code-token-punctuation)">:</span><span style="color:var(--astro-code-token-string-expression)"> &quot;\n&quot;</span><span style="color:var(--astro-code-foreground)"> }</span><span style="color:var(--astro-code-token-punctuation)">,</span></span><span class="line"><span style="color:var(--astro-code-token-keyword)">    &quot;id&quot;</span><span style="color:var(--astro-code-token-punctuation)">:</span><span style="color:var(--astro-code-token-string-expression)"> &quot;User.sendInput.ShiftEnter&quot;</span></span><span class="line"><span style="color:var(--astro-code-foreground)">  }</span></span><span class="line"><span style="color:var(--astro-code-foreground)">],</span></span><span class="line"><span style="color:var(--astro-code-token-string-expression)">&quot;keybindings&quot;</span><span style="color:var(--astro-code-foreground)">: [</span></span><span class="line"><span style="color:var(--astro-code-foreground)">  { </span><span style="color:var(--astro-code-token-keyword)">&quot;id&quot;</span><span style="color:var(--astro-code-token-punctuation)">:</span><span style="color:var(--astro-code-token-string-expression)"> &quot;User.sendInput.ShiftEnter&quot;</span><span style="color:var(--astro-code-token-punctuation)">,</span><span style="color:var(--astro-code-token-keyword)"> &quot;keys&quot;</span><span style="color:var(--astro-code-token-punctuation)">:</span><span style="color:var(--astro-code-token-string-expression)"> &quot;shift+enter&quot;</span><span style="color:var(--astro-code-foreground)"> }</span></span><span class="line"><span style="color:var(--astro-code-foreground)">]</span></span></code></pre>
+<p>Now <code>shift+enter</code> sends exactly what Claude reads as a newline, and my hands
+never learned the difference.</p>
+<p>That is the practical bit. <code>ctrl+j</code> unblocks anyone. The rest is why.</p>
+<h2 id="down-the-rabbit-hole">down the rabbit hole</h2>
+<p>This all seemed like a hack to me. Why <code>ctrl+j</code>, of all keys? I asked Claude.</p>
+<p><code>ctrl</code> plus a letter sends the control byte at that letter’s position in the
+alphabet. <code>J</code> is the tenth letter, so <code>ctrl+j</code> is byte <code>0x0A</code>: line feed, <code>\n</code>,
+the newline character itself. <code>M</code> is the thirteenth, so <code>ctrl+m</code> is <code>0x0D</code>,
+carriage return. And <code>0x0D</code> is exactly what the <code>enter</code> key sends. So <code>enter</code> is
+secretly <code>ctrl+m</code>, and <code>ctrl+j</code> is me typing the other newline byte by hand.</p>
+<p>That raised a better question. If <code>enter</code> is just a byte, why can the terminal
+not tell <code>shift+enter</code> apart from it? I asked Claude to dig in deeper. She
+pulled a thread that runs back to the VT100. She also pointed me at
+<a href="https://metasocial.com/@jesse">Jesse Vincent</a>’s
+<a href="https://blog.fsck.com/agent-blog/2026/02/26/terminal-keyboard-protocol/">write-up</a>,
+which lays the whole thing out. He had Claude research and write that one too,
+which felt about right.</p>
+<p>A terminal sends bytes, not key presses. <code>enter</code> sends <code>0x0D</code>. What <code>shift</code> does
+in the old encoding is to pick the alternate printable character: capital <code>A</code>,
+the bang above the <code>1</code>. <code>enter</code> is not printable. It is a control byte with no
+alternate for <code>shift</code> to choose. So <code>shift+enter</code> sends the same <code>0x0D</code>, and
+from the byte stream it is indistinguishable from a bare <code>enter</code>.</p>
+<pre class="astro-code css-variables" style="background-color:var(--astro-code-background);color:var(--astro-code-foreground);overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span># what reaches the app, byte for byte</span></span><span class="line"><span>enter        0x0D</span></span><span class="line"><span>shift+enter  0x0D</span></span></code></pre>
+<p>No program can tell them apart, Claude Code included. This is a limitation older
+than I am, not a bug.</p>
+<p>The collision has been fixed more than once. Terminals grew opt-in protocols
+that encode the modifier as its own field, so the bytes stop colliding: xterm’s
+<code>modifyOtherKeys</code>, then Paul Evans’s fixterms and its <code>CSI u</code> encoding, then
+<a href="https://sw.kovidgoyal.net/kitty/keyboard-protocol/">Kovid Goyal’s kitty keyboard protocol</a>,
+the modern one. Under it, <code>shift+enter</code> gets its own sequence, <code>ESC[13;2u</code>,
+where <code>13</code> is <code>enter</code> and <code>2</code> is <code>shift</code>. Claude Code asks for the protocol when
+it starts (<code>CSI &gt; 1 u</code>) and then reads <code>shift+enter</code> as a key of its own.</p>
+<p>Which explained the split I started with. The shell was never the variable. The
+terminal emulator was. mintty, the one behind Git Bash, speaks the protocol and
+sends <code>shift+enter</code> as a distinct byte with no configuration, so Claude just
+works there. Windows Terminal only gained the kitty protocol in
+<a href="https://devblogs.microsoft.com/commandline/windows-terminal-preview-1-25-release/">Preview 1.25</a>,
+whose release notes name “agentic command line tools” as the reason. My stable
+build is 1.24, a release behind:</p>
+<pre class="astro-code css-variables" style="background-color:var(--astro-code-background);color:var(--astro-code-foreground);overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>$ winget upgrade Microsoft.WindowsTerminal</span></span><span class="line"><span>No available upgrade found.</span></span><span class="line"><span>No newer package versions are available from the configured sources.</span></span></code></pre>
+<p>So 1.24 ignores Claude’s request and keeps sending bare <code>0x0D</code> for both keys.
+The Claude Code docs list Windows Terminal under “works without setup,” which is
+true, for the build one release newer than mine.</p>
+<p>That is what the keybinding is really for. It makes <code>shift+enter</code> send the same
+<code>\n</code> byte <code>ctrl+j</code> does, then skips the protocol my terminal cannot speak yet.
+When 1.25 reaches stable I can delete it, and <code>shift+enter</code> will work on its
+own.</p>
+<h2 id="ps-the-red-herring">P.S. the red herring</h2>
+<p>For the first hour I blamed the remote desktop. I reach the Windows box from my
+Mac over RDP, and <code>shift+enter</code> worked when I opened the same machine through a
+VS Code tunnel but not here. So surely the remote-desktop link was eating the
+modifier on the way.</p>
+<p>It was not. I ran <code>[Console]::ReadKey()</code> over the RDP session, pressed the
+chord, and it reported <code>Mods=Shift</code>. The <code>shift</code> press reached Windows perfectly
+intact, never lost in transit. The terminal on the far end was folding it into
+the same byte with or without the protocol. It took a fair bit of poking to be
+sure I was chasing the wrong layer, and that working remotely had nothing to do
+with it.</p>  </section> <footer class="col-main pt-12"> <div class="flex flex-wrap gap-3"><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-pink">
+#til</span><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-green">
+#terminal</span><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-yellow">
+#keyboard-protocol</span></div> </footer> </article> </main> <footer class="py-16"> <div class="mx-auto flex w-full flex-col items-center px-6 italic md:flex-row md:justify-between max-w-4xl 2xl:max-w-6xl space-y-10 md:space-y-0"> <div class="text-sm tracking-widest text-gray uppercase">
+&copy;2026 Pierre Spring
+</div> <div class="flex space-x-10"> <a href="https://github.com/caillou/caillou.ch" class="text-sm tracking-widest text-gray uppercase transition-colors hover:text-white">
+// source
+</a> <a href="/rss.xml" class="text-sm tracking-widest text-gray uppercase transition-colors hover:text-white">
+// rss
+</a> </div> <a href="/"> <div class="text-yellow transition-colors hover:text-pink">
+caillou.ch
+</div> </a> </div> </footer>  </body></html>
