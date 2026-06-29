@@ -10,13 +10,16 @@ import latin500italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-
 import latin500normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2?url";
 import latin600italic from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-italic.woff2?url";
 import latin600normal from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-normal.woff2?url";
+import appleTouchUrl from "../icons/apple-touch.png?url";
+import faviconUrl from "../icons/favicon.png?url";
 
 interface Props {
   title: string;
   description?: string;
+  themeColor?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, themeColor = "#000000" } = Astro.props;
 ---
 
 <!doctype html>
@@ -125,7 +128,9 @@ const { title, description } = Astro.props;
       crossorigin
       media="(resolution >= 3dppx)"
     />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href={faviconUrl} />
+    <link rel="apple-touch-icon" href={appleTouchUrl} />
+    <meta name="theme-color" content={themeColor} />
     <title>{title}</title>
   </head>
   <body>

@@ -12,6 +12,7 @@
     "deploy": "pnpm build && gh-pages -d dist -t -b gh-pages",
     "preview": "astro preview",
     "astro": "astro",
+    "icons": "node scripts/generate-icons.mjs",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "prettier --write .",
