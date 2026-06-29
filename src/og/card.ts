@@ -24,7 +24,7 @@ const COLORS = {
   red: "#fc618d", // red traffic light + the footer `#`
   green: "#bef289", // context `~/caillou.ch` dir + green traffic light
   purple: "#a79cff", // the `main` branch
-  black: "#000000", // outer frame + titlebar bottom border
+  black: "#000000", // titlebar bottom border
   termBg: "#0a0a0a", // terminal background
   termBorder: "#2c2c2c", // terminal frame border
   titleBarBg: "#1c1c1c",
@@ -117,240 +117,234 @@ function buildTree(post: CardPost): Node {
     );
   });
 
+  // The terminal window is the root node, so its 16px rounded corners fall on
+  // satori's transparent canvas (sharp keeps the alpha). A wrapper with a solid
+  // background would otherwise show through the corner notches as opaque squares.
   return h(
     "div",
     {
       width: 1200,
       height: 630,
+      position: "relative",
       display: "flex",
-      background: COLORS.black,
+      flexDirection: "column",
+      background: COLORS.termBg,
+      border: `1px solid ${COLORS.termBorder}`,
+      borderRadius: 16,
+      overflow: "hidden",
       fontFamily: "IBM Plex Mono",
     },
-    h(
-      "div",
-      {
-        width: 1200,
-        height: 630,
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        background: COLORS.termBg,
-        border: `1px solid ${COLORS.termBorder}`,
-        borderRadius: 16,
-        overflow: "hidden",
-      },
-      [
-        // title bar: traffic lights + centered window title
-        h(
-          "div",
-          {
-            height: 60,
-            flexShrink: 0,
-            display: "flex",
-            alignItems: "center",
-            padding: "0 28px",
-            background: COLORS.titleBarBg,
-            borderBottom: `1px solid ${COLORS.black}`,
-            position: "relative",
-          },
-          [
-            h(
-              "div",
-              { display: "flex", flexDirection: "row", alignItems: "center" },
-              [
-                h(
-                  "div",
-                  {
-                    width: 18,
-                    height: 18,
-                    borderRadius: 9,
-                    background: COLORS.red,
-                    marginRight: 13,
-                  },
-                  "",
-                ),
-                h(
-                  "div",
-                  {
-                    width: 18,
-                    height: 18,
-                    borderRadius: 9,
-                    background: COLORS.accent,
-                    marginRight: 13,
-                  },
-                  "",
-                ),
-                h(
-                  "div",
-                  {
-                    width: 18,
-                    height: 18,
-                    borderRadius: 9,
-                    background: COLORS.green,
-                  },
-                  "",
-                ),
-              ],
-            ),
-            h(
-              "div",
-              {
-                position: "absolute",
-                left: 0,
-                right: 0,
-                display: "flex",
-                justifyContent: "center",
-                color: COLORS.dim,
-                fontSize: FONT_SIZES.titleBar,
-                fontWeight: 400,
-                letterSpacing: "0.02em",
-              },
-              [
-                h(
-                  "span",
-                  { color: COLORS.winTitle, fontWeight: 600 },
-                  "caillou.ch",
-                ),
-                h("span", { whiteSpace: "pre" }, " — fish"),
-              ],
-            ),
-          ],
-        ),
-        // body: context line, command line (prompt + title), description
-        h(
-          "div",
-          {
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            padding: "42px 56px 96px",
-          },
-          [
-            h(
-              "div",
-              {
-                display: "flex",
-                flexDirection: "row",
-                fontSize: FONT_SIZES.context,
-                fontWeight: 400,
-                letterSpacing: "0.01em",
-                marginBottom: 22,
-              },
-              [
-                h("span", { color: COLORS.green }, "~/caillou.ch"),
-                h("span", { color: COLORS.dim, whiteSpace: "pre" }, " on "),
-                h("span", { color: COLORS.purple }, "main"),
-              ],
-            ),
-            h(
-              "div",
-              {
-                display: "flex",
-                flexDirection: "row",
-                fontSize,
-                fontWeight: 600,
-                lineHeight: 1.1,
-                marginBottom: 22,
-              },
-              [
-                // prompt hangs in a fixed 2ch gutter; wrapped title lines then
-                // align under the first title character.
-                h(
-                  "span",
-                  {
-                    color: COLORS.accent,
-                    whiteSpace: "pre",
-                    flexShrink: 0,
-                    width: promptWidth,
-                  },
-                  "> ",
-                ),
-                h(
-                  "div",
-                  {
-                    display: "flex",
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                    alignItems: "baseline",
-                    flex: 1,
-                    color: COLORS.title,
-                  },
-                  titleChildren,
-                ),
-              ],
-            ),
-            h(
-              "div",
-              {
-                display: "flex",
-                color: COLORS.description,
-                fontSize: FONT_SIZES.description,
-                fontWeight: 400,
-                fontStyle: "italic",
-                lineHeight: 1.5,
-                maxWidth: 1020,
-                overflow: "hidden",
-              },
-              description,
-            ),
-          ],
-        ),
-        // footer: tags (left) + full date (right), pinned to the edge
-        h(
-          "div",
-          {
-            position: "absolute",
-            left: 56,
-            right: 56,
-            bottom: 30,
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "baseline",
-            justifyContent: "space-between",
-          },
-          [
-            h(
-              "div",
-              {
-                display: "flex",
-                flexDirection: "row",
-                minWidth: 0,
-                overflow: "hidden",
-                color: COLORS.dim,
-                fontSize: FONT_SIZES.tags,
-                fontWeight: 400,
-                letterSpacing: "0.01em",
-                whiteSpace: "nowrap",
-              },
-              [
-                h("span", { color: COLORS.red, whiteSpace: "pre" }, "# "),
-                h(
-                  "span",
-                  {
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  },
-                  tags,
-                ),
-              ],
-            ),
-            h(
-              "div",
-              {
-                flexShrink: 0,
-                color: COLORS.dim,
-                fontSize: FONT_SIZES.date,
-                fontWeight: 400,
-                marginLeft: 28,
-              },
-              date,
-            ),
-          ],
-        ),
-      ],
-    ),
+    [
+      // title bar: traffic lights + centered window title
+      h(
+        "div",
+        {
+          height: 60,
+          flexShrink: 0,
+          display: "flex",
+          alignItems: "center",
+          padding: "0 28px",
+          background: COLORS.titleBarBg,
+          borderBottom: `1px solid ${COLORS.black}`,
+          position: "relative",
+        },
+        [
+          h(
+            "div",
+            { display: "flex", flexDirection: "row", alignItems: "center" },
+            [
+              h(
+                "div",
+                {
+                  width: 18,
+                  height: 18,
+                  borderRadius: 9,
+                  background: COLORS.red,
+                  marginRight: 13,
+                },
+                "",
+              ),
+              h(
+                "div",
+                {
+                  width: 18,
+                  height: 18,
+                  borderRadius: 9,
+                  background: COLORS.accent,
+                  marginRight: 13,
+                },
+                "",
+              ),
+              h(
+                "div",
+                {
+                  width: 18,
+                  height: 18,
+                  borderRadius: 9,
+                  background: COLORS.green,
+                },
+                "",
+              ),
+            ],
+          ),
+          h(
+            "div",
+            {
+              position: "absolute",
+              left: 0,
+              right: 0,
+              display: "flex",
+              justifyContent: "center",
+              color: COLORS.dim,
+              fontSize: FONT_SIZES.titleBar,
+              fontWeight: 400,
+              letterSpacing: "0.02em",
+            },
+            [
+              h(
+                "span",
+                { color: COLORS.winTitle, fontWeight: 600 },
+                "caillou.ch",
+              ),
+              h("span", { whiteSpace: "pre" }, " — fish"),
+            ],
+          ),
+        ],
+      ),
+      // body: context line, command line (prompt + title), description
+      h(
+        "div",
+        {
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "42px 56px 96px",
+        },
+        [
+          h(
+            "div",
+            {
+              display: "flex",
+              flexDirection: "row",
+              fontSize: FONT_SIZES.context,
+              fontWeight: 400,
+              letterSpacing: "0.01em",
+              marginBottom: 22,
+            },
+            [
+              h("span", { color: COLORS.green }, "~/caillou.ch"),
+              h("span", { color: COLORS.dim, whiteSpace: "pre" }, " on "),
+              h("span", { color: COLORS.purple }, "main"),
+            ],
+          ),
+          h(
+            "div",
+            {
+              display: "flex",
+              flexDirection: "row",
+              fontSize,
+              fontWeight: 600,
+              lineHeight: 1.1,
+              marginBottom: 22,
+            },
+            [
+              // prompt hangs in a fixed 2ch gutter; wrapped title lines then
+              // align under the first title character.
+              h(
+                "span",
+                {
+                  color: COLORS.accent,
+                  whiteSpace: "pre",
+                  flexShrink: 0,
+                  width: promptWidth,
+                },
+                "> ",
+              ),
+              h(
+                "div",
+                {
+                  display: "flex",
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  alignItems: "baseline",
+                  flex: 1,
+                  color: COLORS.title,
+                },
+                titleChildren,
+              ),
+            ],
+          ),
+          h(
+            "div",
+            {
+              display: "flex",
+              color: COLORS.description,
+              fontSize: FONT_SIZES.description,
+              fontWeight: 400,
+              fontStyle: "italic",
+              lineHeight: 1.5,
+              maxWidth: 1020,
+              overflow: "hidden",
+            },
+            description,
+          ),
+        ],
+      ),
+      // footer: tags (left) + full date (right), pinned to the edge
+      h(
+        "div",
+        {
+          position: "absolute",
+          left: 56,
+          right: 56,
+          bottom: 30,
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "baseline",
+          justifyContent: "space-between",
+        },
+        [
+          h(
+            "div",
+            {
+              display: "flex",
+              flexDirection: "row",
+              minWidth: 0,
+              overflow: "hidden",
+              color: COLORS.dim,
+              fontSize: FONT_SIZES.tags,
+              fontWeight: 400,
+              letterSpacing: "0.01em",
+              whiteSpace: "nowrap",
+            },
+            [
+              h("span", { color: COLORS.red, whiteSpace: "pre" }, "# "),
+              h(
+                "span",
+                {
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                },
+                tags,
+              ),
+            ],
+          ),
+          h(
+            "div",
+            {
+              flexShrink: 0,
+              color: COLORS.dim,
+              fontSize: FONT_SIZES.date,
+              fontWeight: 400,
+              marginLeft: 28,
+            },
+            date,
+          ),
+        ],
+      ),
+    ],
   );
 }
 
