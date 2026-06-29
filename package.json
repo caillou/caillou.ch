@@ -25,6 +25,7 @@
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.4",
+    "satori": "^0.26.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.3.0"
   },
@@ -32,6 +33,7 @@
     "@astrojs/check": "^0.9.9",
     "@biomejs/biome": "^2.4.16",
     "@shikijs/transformers": "^4.3.0",
+    "@types/node": "^22.20.0",
     "gh-pages": "^6.3.0",
     "lefthook": "^2.1.9",
     "prettier": "^3.8.3",

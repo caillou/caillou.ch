@@ -17,9 +17,19 @@ interface Props {
   title: string;
   description?: string;
   themeColor?: string;
+  ogImage?: string;
+  ogType?: "website" | "article";
 }
 
-const { title, description, themeColor = "#000000" } = Astro.props;
+const {
+  title,
+  description,
+  themeColor = "#000000",
+  ogImage,
+  ogType = "website",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
@@ -29,6 +39,27 @@ const { title, description, themeColor = "#000000" } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {description && <meta name="description" content={description} />}
     <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:site_name" content="caillou.ch" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    {
+      ogImage && (
+        <>
+          <meta property="og:image" content={ogImage} />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta property="og:image:type" content="image/png" />
+          <meta name="twitter:image" content={ogImage} />
+          <meta name="twitter:card" content="summary_large_image" />
+        </>
+      )
+    }
+    {!ogImage && <meta name="twitter:card" content="summary" />}
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
     <!-- Standard DPI: normal=400, bold=600 -->
     <link
       rel="preload"

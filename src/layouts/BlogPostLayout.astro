@@ -8,16 +8,22 @@ import BaseLayout from "./BaseLayout.astro";
 interface Props {
   title: string;
   date: Date;
-  description?: string;
-  tags?: string[];
+  description: string;
+  tags: string[];
+  ogImage: string;
 }
 
-const { title, date, description, tags = [] } = Astro.props;
+const { title, date, description, tags, ogImage } = Astro.props;
 
 const formattedDate = date.toISOString().slice(0, 10);
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  ogType="article"
+>
   <Header />
 
   <main class="subgrid-cols pt-32 pb-24">
