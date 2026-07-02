@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="cmd+click on a type froze VS Code, and the tsserver log looked healthy. an extension host profile found the culprit."><meta name="generator" content="Astro v6.4.4"><link rel="canonical" href="https://caillou.ch/blog/2026-07-02-vscode-tsserver-log-extension-host-profile/"><meta property="og:site_name" content="caillou.ch"><meta property="og:type" content="article"><meta property="og:url" content="https://caillou.ch/blog/2026-07-02-vscode-tsserver-log-extension-host-profile/"><meta property="og:title" content="finding what freezes VS Code: tsserver log and extension host profile"><meta property="og:description" content="cmd+click on a type froze VS Code, and the tsserver log looked healthy. an extension host profile found the culprit."><meta property="og:image" content="https://caillou.ch/og/2026-07-02-vscode-tsserver-log-extension-host-profile.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:type" content="image/png"><meta name="twitter:image" content="https://caillou.ch/og/2026-07-02-vscode-tsserver-log-extension-host-profile.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="finding what freezes VS Code: tsserver log and extension host profile"><meta name="twitter:description" content="cmd+click on a type froze VS Code, and the tsserver log looked healthy. an extension host profile found the culprit."><!-- Standard DPI: normal=400, bold=600 --><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-normal.DMJ8VG8y.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-italic.BqAiT5Ww.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-600-normal.BgSNZQsw.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-600-italic.DrfJ59vG.woff2" as="font" type="font/woff2" crossorigin media="(resolution < 2dppx)"><!-- 2dppx: normal=300, bold=500 --><link rel="preload" href="/_astro/ibm-plex-mono-latin-300-normal.BRS-C4KA.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-300-italic.EVyQTKsu.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-500-normal.DSY6xOcd.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-500-italic.As4cCeDr.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 2dppx) and (resolution < 3dppx)"><!-- 3dppx+: normal=200, bold=400 --><link rel="preload" href="/_astro/ibm-plex-mono-latin-200-normal.Cj_OANUP.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-200-italic.D1L1haj5.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-normal.DMJ8VG8y.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="preload" href="/_astro/ibm-plex-mono-latin-400-italic.BqAiT5Ww.woff2" as="font" type="font/woff2" crossorigin media="(resolution >= 3dppx)"><link rel="icon" type="image/png" href="/_astro/favicon.BlZ2sT7S.png"><link rel="apple-touch-icon" href="/_astro/apple-touch.DYNxwUFf.png"><meta name="theme-color" content="#000000"><title>finding what freezes VS Code: tsserver log and extension host profile</title><link rel="stylesheet" href="/_astro/BaseLayout.BvzqTvzH.css"></head> <body>  <div class="pointer-events-none fixed top-0 right-0 left-0 h-[4.4rem] bg-linear-to-b from-black via-black/60 to-transparent z-10 min-[1700px]:hidden" aria-hidden="true"></div><header class="pointer-events-none fixed top-0 right-0 left-0 z-50 py-6"> <nav class="pointer-events-auto flex space-x-8 italic"> <a href="/blog" class="transition-colors hover:text-pink before:text-gray before:content-['#_'] text-green">
+Blog
+</a> <a href="/about" class="transition-colors hover:text-pink before:text-gray before:content-['#_'] text-white">
+About
+</a> </nav> </header> <main class="subgrid-cols pt-32 pb-24"> <article class="col-full subgrid-cols space-y-12"> <header class="col-main space-y-6"> <div class="text-sm font-bold text-gray uppercase italic"> <span class="tracking-widest">Published on </span>2026-07-02 </div> <h1 class="pl-[2ch] text-3xl leading-tight text-yellow italic before:ml-[-2ch] before:text-gray before:content-['#_'] xl:pl-0"> finding what freezes VS Code: tsserver log and extension host profile </h1> </header> <section class="prose-manuscript col-full subgrid-cols">  <p>VS Code kept freezing in our TypeScript monorepo at work. Only when I
+<code>cmd+click</code>ed a type, only in certain files, and only on my machine. The editor
+would hang for up to 20 seconds, then jump to the definition as if nothing
+happened. Bizarre. And since go to definition is tsserver’s job, tsserver looked
+guilty as charged.</p>
+<p>I knew I would never invest the time to learn to read TypeScript server logs. So
+the plan was different: record everything and hand the artifacts to Claude.
+Turns out VS Code ships two recorders for exactly this, one for each side of the
+problem.</p>
+<p>The first is the tsserver log:</p>
+<pre class="astro-code css-variables" style="background-color:var(--astro-code-background);color:var(--astro-code-foreground);overflow-x:auto" tabindex="0" data-language="jsonc"><code><span class="line"><span style="color:var(--astro-code-token-comment)">// .vscode/settings.json</span></span><span class="line"><span style="color:var(--astro-code-token-string-expression)">&quot;js/ts.tsserver.log&quot;</span><span style="color:var(--astro-code-foreground)">: </span><span style="color:var(--astro-code-token-string-expression)">&quot;normal&quot;</span></span></code></pre>
+<p>Restart the TS server, reproduce the freeze, then run the
+<code>TypeScript: Open TS Server log</code> command from the Command Palette to get the
+file. I stayed on <code>normal</code>. The <code>verbose</code> level dumps every request payload and
+added almost five seconds to every project load when we tried it, which skews
+the very timings it records.</p>
+<p>I gave Claude the log path and the exact repro. It grepped the 10MB file and
+came back with a verdict I did not expect: healthy project loads, fast request
+times, an idle server during the freezes. A dead end, but a useful one. If
+Claude was right, it was not the tsserver’s fault.</p>
+<p>That left the extensions, and bisecting dozens of them by feel did not sound
+like an evening well spent. The second recorder settled it instead. Run the
+<code>Developer: Show Running Extensions</code> command, hit the record button, reproduce a
+few of the slow jumps, save the profile. That produces a <code>.cpuprofile</code> file, and
+the same view flags extensions that block the host as “unresponsive”. The
+<a href="https://github.com/microsoft/vscode/wiki/Performance-Issues">VS Code wiki on performance issues</a>
+covers the whole flow.</p>
+<p>Claude scripted the analysis of that file too, bucketing self-time per
+extension. The profile was pegged with one extension’s modules while the
+tsserver log showed an idle server, so the case was proven from both sides:
+<a href="https://marketplace.visualstudio.com/items?itemName=wix.glean">Glean</a>
+(<code>wix.glean</code>) re-parsed the whole 9,000-line generated file with Babel on every
+selection change, just to decide whether to offer its wrap-with-useEffect
+refactoring. Its last release was in March 2021, and reports like
+<a href="https://github.com/wix-incubator/vscode-glean/issues/153">“Extreme latency”</a>
+have sat unanswered since.</p>
+<p>I did not disable Glean, I deleted it. I had installed it years ago, maybe used
+it here and there at first, then not at all. The freeze was self-inflicted.</p>
+<p>Two files, one question to Claude, no log-reading skills required.</p>
+<p>I would never have found the time to learn to read and understand these log
+files myself. That is what makes life with agents bliss: expertise I would never
+have acquired is one question away.</p>
+<p>P.S. I will go through all my extensions and check which ones I still use. Pinky
+promise. I swear. Really.</p>  </section> <footer class="col-main pt-12"> <div class="flex flex-wrap gap-3"><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-pink">
+#til</span><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-green">
+#vscode</span><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-yellow">
+#performance</span></div> </footer> </article> </main> <footer class="py-16"> <div class="mx-auto flex w-full flex-col items-center px-6 italic md:flex-row md:justify-between max-w-4xl 2xl:max-w-6xl space-y-10 md:space-y-0"> <div class="text-sm tracking-widest text-gray uppercase">
+&copy;2026 Pierre Spring
+</div> <div class="flex space-x-10"> <a href="https://github.com/caillou/caillou.ch" class="text-sm tracking-widest text-gray uppercase transition-colors hover:text-white">
+// source
+</a> <a href="/rss.xml" class="text-sm tracking-widest text-gray uppercase transition-colors hover:text-white">
+// rss
+</a> </div> <a href="/"> <div class="text-yellow transition-colors hover:text-pink">
+caillou.ch
+</div> </a> </div> </footer>  </body></html>
