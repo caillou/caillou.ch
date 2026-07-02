@@ -1,0 +1,67 @@
+---
+title: "finding what freezes VS Code: tsserver log and extension host profile"
+date: 2026-07-02
+description:
+  "cmd+click on a type froze VS Code, and the tsserver log looked healthy. an
+  extension host profile found the culprit."
+tags: ["til", "vscode", "performance"]
+---
+
+VS Code kept freezing in our TypeScript monorepo at work. Only when I
+`cmd+click`ed a type, only in certain files, and only on my machine. The editor
+would hang for up to 20 seconds, then jump to the definition as if nothing
+happened. Bizarre. And since go to definition is tsserver's job, tsserver looked
+guilty as charged.
+
+I knew I would never invest the time to learn to read TypeScript server logs. So
+the plan was different: record everything and hand the artifacts to Claude.
+Turns out VS Code ships two recorders for exactly this, one for each side of the
+problem.
+
+The first is the tsserver log:
+
+```jsonc
+// .vscode/settings.json
+"js/ts.tsserver.log": "normal"
+```
+
+Restart the TS server, reproduce the freeze, then run the
+`TypeScript: Open TS Server log` command from the Command Palette to get the
+file. I stayed on `normal`. The `verbose` level dumps every request payload and
+added almost five seconds to every project load when we tried it, which skews
+the very timings it records.
+
+I gave Claude the log path and the exact repro. It grepped the 10MB file and
+came back with a verdict I did not expect: healthy project loads, fast request
+times, an idle server during the freezes. A dead end, but a useful one. If
+Claude was right, it was not the tsserver's fault.
+
+That left the extensions, and bisecting dozens of them by feel did not sound
+like an evening well spent. The second recorder settled it instead. Run the
+`Developer: Show Running Extensions` command, hit the record button, reproduce a
+few of the slow jumps, save the profile. That produces a `.cpuprofile` file, and
+the same view flags extensions that block the host as "unresponsive". The
+[VS Code wiki on performance issues](https://github.com/microsoft/vscode/wiki/Performance-Issues)
+covers the whole flow.
+
+Claude scripted the analysis of that file too, bucketing self-time per
+extension. The profile was pegged with one extension's modules while the
+tsserver log showed an idle server, so the case was proven from both sides:
+[Glean](https://marketplace.visualstudio.com/items?itemName=wix.glean)
+(`wix.glean`) re-parsed the whole 9,000-line generated file with Babel on every
+selection change, just to decide whether to offer its wrap-with-useEffect
+refactoring. Its last release was in March 2021, and reports like
+["Extreme latency"](https://github.com/wix-incubator/vscode-glean/issues/153)
+have sat unanswered since.
+
+I did not disable Glean, I deleted it. I had installed it years ago, maybe used
+it here and there at first, then not at all. The freeze was self-inflicted.
+
+Two files, one question to Claude, no log-reading skills required.
+
+I would never have found the time to learn to read and understand these log
+files myself. That is what makes life with agents bliss: expertise I would never
+have acquired is one question away.
+
+P.S. I will go through all my extensions and check which ones I still use. Pinky
+promise. I swear. Really.
