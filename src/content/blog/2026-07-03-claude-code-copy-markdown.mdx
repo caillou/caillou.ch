@@ -1,0 +1,32 @@
+---
+title: "copy a Claude Code answer as markdown with /copy"
+date: 2026-07-03
+description:
+  "mouse-copying a Claude Code answer loses the code ticks and the links. /copy
+  puts the raw markdown on the clipboard instead."
+tags: ["til", "cli", "claude-code"]
+---
+
+I often select an answer in Claude Code with the mouse, and copy-paste it into a
+note. But the `code` ticks are gone, the links are stripped, and sometimes
+newlines are added where they shouldn't. The selection copies what the terminal
+renders, not what the model writes.
+
+For a while my workaround was to `/export`. It can put the whole conversation on
+the clipboard, and I fished the one answer out of it by hand.
+
+Turns out `/copy` exists. It puts the last response on the clipboard as raw
+markdown, backticks and links intact. From the
+[commands reference](https://code.claude.com/docs/en/commands):
+
+> Copy the last assistant response to clipboard.
+>
+> Pass a number N to copy the Nth-latest response: /copy 2 copies the
+> second-to-last.
+>
+> When code blocks are present, shows an interactive picker to select individual
+> blocks or the full response. Press w in the picker to write the selection to a
+> file instead of the clipboard, which is useful over SSH
+
+I found it by asking Claude Code whether some setting could make the mouse-copy
+keep the markdown. There is no such setting. At least there's `/copy`.
