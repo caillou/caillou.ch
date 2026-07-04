@@ -130,14 +130,17 @@
     grid-column: main;
   }
 
+  /* the `##_` markers are absolutely positioned, not negative-margined:
+     a negative margin on the ::before makes Chromium bail out of
+     text-wrap: pretty and orphan the last word */
   h2 {
-    @apply mt-12 mb-4 pl-[3ch] text-2xl text-pretty italic xl:pl-0;
-    @apply before:-ml-[3ch] before:text-gray before:content-['##_'];
+    @apply relative mt-12 mb-4 pl-[3ch] text-2xl text-pretty italic xl:pl-0;
+    @apply before:absolute before:left-0 before:text-gray before:content-['##_'] xl:before:left-[-3ch];
   }
 
   h3 {
-    @apply mt-10 mb-3 pl-[4ch] text-xl text-pretty italic xl:pl-0;
-    @apply before:-ml-[4ch] before:text-gray before:content-['###_'];
+    @apply relative mt-10 mb-3 pl-[4ch] text-xl text-pretty italic xl:pl-0;
+    @apply before:absolute before:left-0 before:text-gray before:content-['###_'] xl:before:left-[-4ch];
   }
 
   p {

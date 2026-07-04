@@ -6,8 +6,10 @@ interface Props {
 const { title } = Astro.props;
 ---
 
+<!-- the `#_` marker is absolutely positioned: a negative margin on the
+::before makes Chromium bail out of text-wrap: pretty and orphan the last word -->
 <h1
-  class="pl-[2ch] text-3xl leading-tight text-pretty text-yellow italic before:ml-[-2ch] before:text-gray before:content-['#_'] xl:pl-0"
+  class="relative pl-[2ch] text-3xl leading-tight text-pretty text-yellow italic before:absolute before:left-0 before:text-gray before:content-['#_'] xl:pl-0 xl:before:left-[-2ch]"
 >
   {title}
 </h1>
