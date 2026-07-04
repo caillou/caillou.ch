@@ -49,7 +49,17 @@ caveat that flags drift back.</p>
 <p>I will switch browsers eventually. Looking at you,
 <a href="https://vivaldi.com">Vivaldi</a>. For now this holds, and I like the small irony
 of it: I asked an AI to turn off an AI. She dug up the policy and wrote the
-profile. I clicked install. I learned a lot today.</p>  </section> <footer class="col-main pt-12"> <div class="flex flex-wrap gap-3"><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-pink">
+profile. I clicked install. I learned a lot today.</p>
+<h2 id="ps-the-same-trick-on-windows">P.S. the same trick on Windows</h2>
+<p>On Windows the same policies live in
+<a href="https://support.google.com/chrome/a/answer/9131254">the registry</a>, under
+<code>Software\Policies\Google\Chrome</code>. The profile becomes a <code>.reg</code> file with the
+same keys and values:</p>
+<pre class="astro-code css-variables" style="background-color:var(--astro-code-background);color:var(--astro-code-foreground);overflow-x:auto" tabindex="0" data-language="reg"><code><span class="line"><span style="color:var(--astro-code-token-keyword)">Windows Registry Editor Version 5.00</span></span><span class="line"></span><span class="line"><span style="color:var(--astro-code-token-function)">[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome]</span></span><span class="line"><span style="color:var(--astro-code-token-comment)">; disable Chrome&#39;s whole &quot;covered&quot; generative-AI set</span></span><span class="line"><span style="color:var(--astro-code-foreground)">&quot;</span><span style="color:var(--astro-code-token-function)">GenAiDefaultSettings</span><span style="color:var(--astro-code-foreground)">&quot;=</span><span style="color:var(--astro-code-token-constant)">dword</span><span style="color:var(--astro-code-token-keyword)">:</span><span style="color:var(--astro-code-token-constant)">00000002</span></span><span class="line"><span style="color:var(--astro-code-token-comment)">; disable the AI Mode omnibox button (only 0 and 1 exist)</span></span><span class="line"><span style="color:var(--astro-code-foreground)">&quot;</span><span style="color:var(--astro-code-token-function)">AIModeSettings</span><span style="color:var(--astro-code-foreground)">&quot;=</span><span style="color:var(--astro-code-token-constant)">dword</span><span style="color:var(--astro-code-token-keyword)">:</span><span style="color:var(--astro-code-token-constant)">00000001</span></span></code></pre>
+<p><code>HKEY_LOCAL_MACHINE</code> is the counterpart of <code>PayloadScope: System</code>, machine-wide
+and admin-only. <code>HKEY_CURRENT_USER</code> works per-user without admin rights.
+Double-click the file to import it, restart Chrome, and <code>chrome://policy</code> shows
+the same two mandatory Platform policies. Deleting the values undoes it.</p>  </section> <footer class="col-main pt-12"> <div class="flex flex-wrap gap-3"><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-pink">
 #til</span><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-green">
 #chrome</span><span class="bg-dark-gray px-3 py-1 text-sm font-bold tracking-wider italic text-yellow">
 #enterprise-policy</span></div> </footer> </article> </main> <footer class="py-16"> <div class="mx-auto flex w-full flex-col items-center px-6 italic md:flex-row md:justify-between max-w-4xl 2xl:max-w-6xl space-y-10 md:space-y-0"> <div class="text-sm tracking-widest text-gray uppercase">
