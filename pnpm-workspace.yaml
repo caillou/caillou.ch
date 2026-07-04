@@ -1,0 +1,7 @@
+allowBuilds:
+  esbuild: true
+  lefthook: true
+  sharp: true
+# explicit value also enables minimumReleaseAgeStrict, so fresh releases are
+# held back instead of auto-excluded. keep in sync with cooldown in .ncurc.yml.
+minimumReleaseAge: 1440

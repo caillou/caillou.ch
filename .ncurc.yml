@@ -1,0 +1,2 @@
+# keep in sync with minimumReleaseAge in pnpm-workspace.yaml (1440 minutes)
+cooldown: 1d
