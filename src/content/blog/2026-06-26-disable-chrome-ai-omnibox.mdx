@@ -134,3 +134,25 @@ I will switch browsers eventually. Looking at you,
 [Vivaldi](https://vivaldi.com). For now this holds, and I like the small irony
 of it: I asked an AI to turn off an AI. She dug up the policy and wrote the
 profile. I clicked install. I learned a lot today.
+
+## P.S. the same trick on Windows
+
+On Windows the same policies live in
+[the registry](https://support.google.com/chrome/a/answer/9131254), under
+`Software\Policies\Google\Chrome`. The profile becomes a `.reg` file with the
+same keys and values:
+
+```reg
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome]
+; disable Chrome's whole "covered" generative-AI set
+"GenAiDefaultSettings"=dword:00000002
+; disable the AI Mode omnibox button (only 0 and 1 exist)
+"AIModeSettings"=dword:00000001
+```
+
+`HKEY_LOCAL_MACHINE` is the counterpart of `PayloadScope: System`, machine-wide
+and admin-only. `HKEY_CURRENT_USER` works per-user without admin rights.
+Double-click the file to import it, restart Chrome, and `chrome://policy` shows
+the same two mandatory Platform policies. Deleting the values undoes it.
