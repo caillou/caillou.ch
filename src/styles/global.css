@@ -156,18 +156,24 @@
   }
 
   a {
-    @apply text-yellow underline decoration-dashed underline-offset-[3px] transition-colors duration-200;
+    @apply relative mx-[1ch] text-yellow underline decoration-dashed underline-offset-[3px] transition-colors duration-200;
     @apply hover:text-pink;
 
-    /* markdown-source brackets. inline-block keeps the anchor's underline
-       from propagating onto them, so the dashes stop at the text. */
+    /* markdown-source brackets. absolutely positioned (into the space the
+       anchor's margins reserve) for two reasons: the underline does not
+       propagate to out-of-flow pseudos, and unlike inline-block they create
+       no soft-wrap opportunity, so a bracket never breaks off its word.
+       no left/right offsets: the static position already hugs the link
+       text on the correct line fragment when the link wraps, where
+       left/right would resolve against the fragments' bounding box. */
     &::before,
     &::after {
-      @apply inline-block text-gray;
+      @apply absolute text-gray;
     }
 
     &::before {
       content: "[";
+      margin-left: -1ch;
     }
 
     &::after {
