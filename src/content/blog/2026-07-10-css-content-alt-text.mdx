@@ -1,0 +1,46 @@
+---
+title: "hiding ::before decorations from screen readers"
+date: 2026-07-10
+description:
+  "this site fakes markdown syntax with css generated content, and screen
+  readers read every marker aloud. the content property accepts empty alt text
+  that mutes them."
+tags: ["til", "css", "a11y"]
+---
+
+The headings on this site wear a fake markdown marker: a gray `#` in front of
+every `h1`, put there by a `::before`. Same trick for the backticks around
+`inline code` and the brackets around [links](#). Screen readers announce all of
+it. I was about to move the markers into real elements, just to be able to put
+`aria-hidden="true"` on them:
+
+```html
+<h1>
+  <span aria-hidden="true"># </span>
+  hiding ::before decorations from screen readers
+</h1>
+```
+
+Turns out CSS can do it in place. The
+[`content` property accepts alternative text](https://developer.mozilla.org/en-US/docs/Web/CSS/content)
+after a slash, and an empty string tells assistive technology there is nothing
+to say:
+
+```css
+h1::before {
+  content: "# "; /* announced by screen readers */
+  content: "# " / ""; /* the empty alt text mutes it */
+}
+```
+
+The first declaration is not leftover. A browser that does not know the slash
+syntax treats the second line as invalid and drops it, and the cascade falls
+back to the first. Without it, those browsers would lose the marker entirely,
+visual and all.
+
+That fallback still earns its keep. Chrome has parsed the slash
+[since version 77](https://caniuse.com/mdn-css_properties_content_alt_text), but
+Safari only caught up in 17.4 and Firefox in 128, both in 2024.
+
+P.S. There is some irony in tagging an accessibility post `a11y`, a numeronym
+that itself needs decoding. Accessible or ironic? I am still deciding.
