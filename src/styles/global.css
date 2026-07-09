@@ -116,6 +116,18 @@
   grid-column: main;
 }
 
+/* `# ` marker content for titles and nav links. a utility instead of
+   before:content-['#_'] because the `/ ""` alt text, which hides the
+   marker from screen readers, can't be expressed in an arbitrary
+   content value. the plain declaration is the no-slash fallback. */
+@utility title-marker {
+  &::before {
+    content: "# ";
+    /* biome-ignore lint/suspicious/noDuplicateProperties: fallback pair for the alt-text content syntax */
+    content: "# " / "";
+  }
+}
+
 /* Prose styles for markdown-rendered content */
 .prose-manuscript {
   --border-w: 4px;
@@ -132,15 +144,31 @@
 
   /* the `##_` markers are absolutely positioned, not negative-margined:
      a negative margin on the ::before makes Chromium bail out of
-     text-wrap: pretty and orphan the last word */
+     text-wrap: pretty and orphan the last word.
+     content is plain CSS, not a Tailwind utility: the `/ ""` alt text
+     hides the marker from screen readers, and content-[...] can't
+     express the slash syntax. the plain declaration before it is the
+     fallback for engines that don't parse the slash form. */
   h2 {
     @apply relative mt-12 mb-4 pl-[3ch] text-2xl text-pretty italic xl:pl-0;
-    @apply before:absolute before:left-0 before:text-gray before:content-['##_'] xl:before:left-[-3ch];
+    @apply before:absolute before:left-0 before:text-gray xl:before:left-[-3ch];
+
+    &::before {
+      content: "## ";
+      /* biome-ignore lint/suspicious/noDuplicateProperties: fallback pair for the alt-text content syntax */
+      content: "## " / "";
+    }
   }
 
   h3 {
     @apply relative mt-10 mb-3 pl-[4ch] text-xl text-pretty italic xl:pl-0;
-    @apply before:absolute before:left-0 before:text-gray before:content-['###_'] xl:before:left-[-4ch];
+    @apply before:absolute before:left-0 before:text-gray xl:before:left-[-4ch];
+
+    &::before {
+      content: "### ";
+      /* biome-ignore lint/suspicious/noDuplicateProperties: fallback pair for the alt-text content syntax */
+      content: "### " / "";
+    }
   }
 
   p {
@@ -171,13 +199,19 @@
       @apply absolute text-gray;
     }
 
+    /* `/ ""` hides the brackets from screen readers; the plain
+       declaration is the fallback for engines without the slash syntax */
     &::before {
       content: "[";
+      /* biome-ignore lint/suspicious/noDuplicateProperties: fallback pair for the alt-text content syntax */
+      content: "[" / "";
       margin-left: -1ch;
     }
 
     &::after {
       content: "]";
+      /* biome-ignore lint/suspicious/noDuplicateProperties: fallback pair for the alt-text content syntax */
+      content: "]" / "";
     }
   }
 
@@ -273,10 +307,14 @@
   :not(pre) > code {
     @apply bg-dark-gray px-1.5 py-0.5 text-[0.875em] font-bold text-yellow not-italic;
 
-    /* markdown-source backticks, gray like the other syntax markers */
+    /* markdown-source backticks, gray like the other syntax markers.
+       `/ ""` hides them from screen readers; the plain declaration is
+       the fallback for engines without the slash syntax */
     &::before,
     &::after {
       content: "`";
+      /* biome-ignore lint/suspicious/noDuplicateProperties: fallback pair for the alt-text content syntax */
+      content: "`" / "";
       @apply font-normal text-gray;
     }
   }
@@ -345,9 +383,17 @@
     @apply mt-2;
   }
 
-  /* `* ` bullet hung into the padding via negative margin */
+  /* `* ` bullet hung into the padding via negative margin.
+     `/ ""` hides it from screen readers, which announce list items
+     on their own; the plain declaration is the no-slash fallback */
   ul > li {
-    @apply before:-ml-[2ch] before:text-red before:content-['*_'];
+    @apply before:-ml-[2ch] before:text-red;
+
+    &::before {
+      content: "* ";
+      /* biome-ignore lint/suspicious/noDuplicateProperties: fallback pair for the alt-text content syntax */
+      content: "* " / "";
+    }
   }
 
   /* `relative` anchors the absolute `::before` (the gray dot);
@@ -374,6 +420,8 @@
      right after the marker without consuming space in the text flow */
   ol > li::before {
     content: ".\a0";
+    /* biome-ignore lint/suspicious/noDuplicateProperties: fallback pair for the alt-text content syntax */
+    content: ".\a0" / "";
     @apply absolute left-0 text-gray;
   }
 

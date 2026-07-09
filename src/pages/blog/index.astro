@@ -22,7 +22,7 @@ const posts = (await getCollection("blog")).sort(
               <div class="text-sm font-bold tracking-widest text-gray uppercase italic">
                 {post.data.date.toISOString().slice(0, 10)}
               </div>
-              <h2 class="relative mt-2 pl-[2ch] text-xl text-pretty text-yellow italic transition-colors group-hover:text-pink before:absolute before:left-0 before:text-gray before:content-['#_']">
+              <h2 class="relative mt-2 pl-[2ch] text-xl text-pretty text-yellow italic transition-colors title-marker group-hover:text-pink before:absolute before:left-0 before:text-gray">
                 {post.data.title}
               </h2>
               {post.data.description && (
