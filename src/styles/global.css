@@ -116,16 +116,17 @@
   grid-column: main;
 }
 
-/* `# ` marker content for titles and nav links. a utility instead of
-   before:content-['#_'] because the `/ ""` alt text, which hides the
-   marker from screen readers, can't be expressed in an arbitrary
-   content value. the plain declaration is the no-slash fallback. */
-@utility title-marker {
-  &::before {
-    content: "# ";
-    /* biome-ignore lint/suspicious/noDuplicateProperties: fallback pair for the alt-text content syntax */
-    content: "# " / "";
-  }
+/* `# ` marker content for titles and nav links. plain unlayered CSS,
+   not @utility: the `/ ""` alt text, which hides the marker from screen
+   readers, can't be expressed in an arbitrary content value, and inside
+   the utilities layer the before:* utilities that come later re-declare
+   content: var(--tw-content) (default "") and blank the marker out.
+   unlayered rules win over the utilities layer. the plain declaration
+   is the no-slash fallback. */
+.title-marker::before {
+  content: "# ";
+  /* biome-ignore lint/suspicious/noDuplicateProperties: fallback pair for the alt-text content syntax */
+  content: "# " / "";
 }
 
 /* Prose styles for markdown-rendered content */
