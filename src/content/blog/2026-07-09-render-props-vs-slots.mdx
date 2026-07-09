@@ -1,0 +1,134 @@
+---
+title: "react: a render prop is called, a slot is mounted"
+date: 2026-07-09
+description:
+  "MUI render props always looked like remount traps to me. turns out my
+  suspicion was exactly backwards: called functions never enter the tree,
+  mounted components do."
+tags: ["til", "react", "render-props"]
+---
+
+We enabled the
+[react/no-unstable-nested-components](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/no-unstable-nested-components.md)
+eslint rule at work, and reading its options I realized I could not explain the
+difference between a render prop and a component passed as a prop. MUI's render
+props had always made me suspicious anyway. `renderInput` on
+[Autocomplete](https://mui.com/material-ui/api/autocomplete/#autocomplete-prop-renderInput)
+takes a fresh arrow function on every render, and I had the feeling that could
+not be the ideal way to do things in React. Surely each render created a new
+component.
+
+```jsx
+<Autocomplete
+  options={options}
+  renderInput={
+    // [!code highlight:1]
+    (params) => <TextField {...params} label="user" />
+  }
+/>
+```
+
+The rule exists because nested component definitions
+[reset state](https://react.dev/learn/preserving-and-resetting-state#different-components-at-the-same-position-reset-state).
+React compares element types across renders by reference. A function defined
+during render is a new reference every time, so React sees a different
+component, throws the subtree away, and mounts a fresh one.
+
+Turns out whether that happens to a function prop has nothing to do with how the
+function is created. It is decided entirely by the receiver. Both patterns look
+identical at the call site:
+
+```jsx
+<Panel header={() => <SearchBox />} />
+```
+
+But `Panel` can do two different things with the prop:
+
+```jsx
+// render prop: Panel calls the function.
+// only the returned <SearchBox /> enters React's tree.
+function Panel({ header }) {
+  return <div>{header()}</div>;
+}
+
+// slot: Panel mounts the function. the arrow itself becomes
+// the element type, a new type on every render of the caller.
+function Panel({ header: Header }) {
+  return (
+    <div>
+      <Header />
+    </div>
+  );
+}
+```
+
+In the first version the arrow function is called and gone. React never sees it,
+only the stable `SearchBox` it returned, so its changing identity is as harmless
+as any helper function's. In the second version the function is stored as the
+element's `type`, React compares it by reference on the next render, and the
+fresh arrow loses. `SearchBox` unmounts, state wiped, focus gone.
+
+So my suspicion about MUI was exactly backwards. In
+[MUI's own source](https://github.com/mui/material-ui/blob/v9.2.0/packages/mui-material/src/Autocomplete/Autocomplete.js#L750),
+`renderInput` is called, never mounted:
+
+```jsx
+return (
+  <React.Fragment>
+    <RootSlot {...rootProps}>
+      {renderInput({
+        id,
+```
+
+The inline arrow I side-eyed for years was the safe pattern all along.
+
+The eslint rule has a harder job than I do, though. It runs in the caller's
+file, and whether `Panel` calls the prop or mounts it is decided somewhere else,
+often in `node_modules`. The rule cannot look. Even a type-aware rule could not
+settle it. A component and a render prop have the same type, a function taking
+props and returning JSX, and for a library like MUI the implementation is
+compiled JS the type checker never reads. So the rule trusts a naming convention
+instead: by default a function prop is only allowed when its name starts with
+`render`. The prefix is a promise that the receiver will call it. Setting
+`allowAsProps: true` extends that trust to every prop name, and
+[the docs](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/no-unstable-nested-components.md)
+hand the responsibility straight back:
+
+> When using this option make sure you are **calling** the props in the
+> receiving component and not using them as elements.
+
+The rule shipped in eslint-plugin-react 7.23.0, and since 7.34.0 a
+`propNamePattern` option teaches it other naming conventions. Either way the
+name stays a promise, not a guarantee. Nothing verifies it.
+
+## down the rabbit hole
+
+While I was in `Autocomplete.js` I noticed the same file ships the opposite
+pattern too. Autocomplete has a `slots` prop, and those values do become element
+types.
+[`useSlot`](https://github.com/mui/material-ui/blob/v9.2.0/packages/mui-material/src/utils/useSlot.ts#L116)
+resolves the component:
+
+```ts
+const elementType = slots[name] || initialElementType;
+```
+
+and Autocomplete
+[mounts it](https://github.com/mui/material-ui/blob/v9.2.0/packages/mui-material/src/Autocomplete/Autocomplete.js#L813):
+
+```jsx
+<ListboxSlot {...listboxProps}>
+```
+
+The [MUI X docs](https://mui.com/x/common-concepts/custom-components/) warn
+about exactly the trap I had imagined for `renderInput`:
+
+> A slot is a React component; therefore, it should keep the same JavaScript
+> reference between two renders. If the JavaScript reference of component
+> changes between two renders, React will remount it. You can avoid it by not
+> inlining the component definition in the `slots` prop.
+
+So one MUI component carries both patterns. `renderInput` is safe to inline,
+`slots.listbox` never is, and the prop name is the only visible difference.
+Which is exactly why the eslint rule leans on the name. I spent years
+side-eyeing the safe pattern and never once suspected the dangerous one.
