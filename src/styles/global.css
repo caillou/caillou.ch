@@ -237,7 +237,7 @@
 
   pre {
     /* no subgrid here: we want overflow scroll to use all available space. */
-    @apply overflow-x-auto bg-code-bg leading-[1.6];
+    @apply overflow-x-auto bg-code-bg leading-[1.6] italic;
     border-left: var(--border-w) solid var(--color-yellow);
     grid-column: margin;
     /* horizontal text inset lives on .line, so a highlighted row's own
