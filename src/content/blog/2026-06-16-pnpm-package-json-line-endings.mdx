@@ -11,7 +11,7 @@ I work on a Windows repo from my Mac. The tree is CRLF everywhere, pinned by
 `.editorconfig` and `prettier`. I ran `pnpm add` for a single dependency and
 `git diff` lit up the entire `package.json`.
 
-```bash
+```console
 $ pnpm add zod
 $ git diff --stat
  package.json | 95 +++++++++++++++++++---------------------------
@@ -24,7 +24,7 @@ After a short investigation, I figured out `pnpm` writes `package.json` with LF
 endings and ignores both `.editorconfig` and `prettier`. And the repo's
 `.gitattributes` is:
 
-```bash
+```console
 $ cat .gitattributes
 * -text          # do no line-ending conversion, store bytes as-is
 *.xlsx diff=zip
@@ -49,7 +49,7 @@ git commit -m "normalize package.json line endings"
 
 Now `pnpm add` diffs to only the line I actually added:
 
-```bash
+```console
 $ pnpm add zod
 $ git diff
 +    "zod": "^3.23.0"
@@ -67,7 +67,7 @@ two copies of the file. LF in its index, CRLF on my disk. It normalizes both to
 LF before diffing, so it stops caring which one `pnpm` wrote.
 `git ls-files --eol` shows both states at once:
 
-```bash
+```console
 $ git ls-files --eol package.json
 i/lf    w/crlf  attr/text eol=crlf   package.json
 # i/lf   = stored in git as LF
