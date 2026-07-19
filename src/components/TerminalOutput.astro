@@ -1,0 +1,90 @@
+---
+interface Props {
+  // line 1 of the prompt, the current path
+  path?: string;
+  // the command shown after the prompt. mdx attribute strings do not
+  // process escapes, so a windows path is written with single
+  // backslashes: command=".\deploy.ps1"
+  command: string;
+  // the command's verbatim output. pass it as a String.raw template
+  // literal from MDX so backslashes and newlines survive untouched.
+  output: string;
+  // errors render red, like powershell paints them
+  isErrorOutput?: boolean;
+}
+
+const { path = "~", command, output, isErrorOutput = false } = Astro.props;
+
+// psreadline-style command coloring: the first whitespace-separated
+// token of the command is green, the arguments stay white
+const spaceIndex = command.search(/\s/);
+const cmd = spaceIndex === -1 ? command : command.slice(0, spaceIndex);
+const args = spaceIndex === -1 ? "" : command.slice(spaceIndex);
+---
+
+<figure>
+  {
+    /* unlike TerminalAutosuggest this is static real text, so it stays
+      readable by screen readers: no role="img", no aria-hidden.
+      only the decorative prompt char is hidden. */
+  }
+  <div class="terminal-screen bg-code-bg leading-[1.6] italic">
+    <div class="path text-yellow">{path}</div>
+    {
+      /* the spans are childless (set:text) array items, so the formatter
+        can never plant whitespace text nodes inside or between them */
+    }
+    <div class="command-line">
+      {
+        [
+          <span
+            class="text-green not-italic"
+            aria-hidden="true"
+            set:text={"❯ "}
+          />,
+          <span class="text-green" set:text={cmd} />,
+          <span class="text-white" set:text={args} />,
+        ]
+      }
+    </div>
+    {
+      /* set:text keeps the element childless in the template, so the
+        formatter can never re-indent the output or pad it with
+        whitespace. white-space: pre-wrap renders it verbatim, wrapping
+        only at the viewport edge. */
+    }
+    <div
+      class:list={["output", isErrorOutput ? "text-red" : "text-white"]}
+      set:text={output}
+    />
+  </div>
+  <figcaption><slot /></figcaption>
+</figure>
+
+<style>
+  /* sits like a pre code fence, but the border is green: terminal
+     output, not copyable code. same look as TerminalAutosuggest.
+     figure > div beats .prose-manuscript figure > * on specificity. */
+  figure > div.terminal-screen {
+    grid-column: margin;
+    border-left: var(--border-w, 4px) solid var(--color-green);
+    padding-block: var(--half-gutter, calc(var(--gutter) / 2));
+    padding-inline: calc(var(--gutter) - var(--border-w, 4px)) var(--gutter);
+  }
+
+  /* every line wraps at the viewport edge like a real terminal: spaces
+     are preserved and wrappable, and overlong tokens break mid-word the
+     way a terminal breaks at its last column */
+  .path,
+  .command-line > span {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  /* verbatim output: newlines and spaces render as authored, long lines
+     wrap at the viewport edge as they would in a terminal */
+  .output {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+</style>

@@ -6,6 +6,8 @@ tags: ["meta", "mdx"]
 ---
 
 import Figure from "../../components/Figure.astro";
+import TerminalAutosuggest from "../../components/TerminalAutosuggest.astro";
+import TerminalOutput from "../../components/TerminalOutput.astro";
 import portrait from "../../assets/portrait.jpg";
 import portraitStanding from "../../assets/portrait-standing.jpg";
 
@@ -101,6 +103,42 @@ function greet(name: string): string {
   return `Hello, ${name}!`;
 }
 ```
+
+### Terminal demo
+
+<TerminalAutosuggest
+  path="~/repos/caillou.ch"
+  typed="pn"
+  suggestion="pm i --frozen-lockfile"
+  label="typing pn into a terminal; the shell completes the line in gray to pnpm i --frozen-lockfile, and pressing the right arrow accepts it"
+>
+  FIG 0.9: an animated terminal playback. types a command, shows the gray
+  autosuggestion, accepts it, loops.
+</TerminalAutosuggest>
+
+### Terminal output
+
+export const catError = String.raw`cat: missing.txt: No such file or directory`;
+
+<TerminalOutput
+  path="~/repos/caillou.ch"
+  command="cat missing.txt"
+  output={catError}
+  isErrorOutput
+>
+  FIG 0.95: static terminal output with isErrorOutput. red response under a
+  green command.
+</TerminalOutput>
+
+export const pnpmVersion = String.raw`10.14.0`;
+
+<TerminalOutput
+  path="~/repos/caillou.ch"
+  command="pnpm --version"
+  output={pnpmVersion}
+>
+  FIG 0.96: static terminal output without isErrorOutput. plain response.
+</TerminalOutput>
 
 ---
 

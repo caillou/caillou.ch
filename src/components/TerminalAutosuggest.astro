@@ -1,0 +1,228 @@
+---
+interface Props {
+  // line 1 of the prompt, the current path
+  path?: string;
+  // what gets "typed", e.g. "win"
+  typed: string;
+  // the gray completion, e.g. "get install --id Microsoft.PowerShell"
+  suggestion: string;
+  // describes the whole animation for screen readers
+  label: string;
+}
+
+const { path = "~", typed, suggestion, label } = Astro.props;
+
+// the block cursor sits ON the first suggested character, terminal-style,
+// so it never adds a phantom cell between typed text and suggestion
+const cursorChar = suggestion.charAt(0);
+const suggestionRest = suggestion.slice(1);
+
+// psreadline-style command coloring: the first token of the full command
+// is red while still a prefix ("win"), green once complete ("winget")
+const full = typed + suggestion;
+const spaceIndex = full.search(/\s/);
+const cmdLen = spaceIndex === -1 ? full.length : spaceIndex;
+const cmd = typed.slice(0, cmdLen);
+const typedRest = typed.slice(cmdLen);
+const cmdColor = cmd.length < cmdLen ? "text-red" : "text-green";
+---
+
+<figure>
+  <div
+    class="terminal-screen overflow-x-auto bg-code-bg leading-[1.6] italic"
+    role="img"
+    aria-label={label}
+    tabindex="0"
+    data-terminal-autosuggest
+    data-typed={typed}
+    data-suggestion={suggestion}
+  >
+    {
+      /* the animation churns through text; keep it away from screen readers.
+        the server-rendered mid-state (typed + gray suggestion) is what
+        no-js and reduced-motion visitors see. */
+    }
+    <div aria-hidden="true">
+      <div class="text-yellow">{path}</div>
+      {
+        /* the spans are childless (set:text) array items, so the formatter
+          can never plant whitespace text nodes inside or between them */
+      }
+      <div class="command-line">
+        {
+          [
+            <span class="text-green not-italic" set:text={"❯ "} />,
+            <span class={cmdColor} data-cmd-out set:text={cmd} />,
+            <span class="text-white" data-typed-out set:text={typedRest} />,
+            <span class="cursor" data-cursor-out set:text={cursorChar} />,
+            <span
+              class="text-gray"
+              data-suggestion-out
+              set:text={suggestionRest}
+            />,
+          ]
+        }
+      </div>
+    </div>
+  </div>
+  <figcaption><slot /></figcaption>
+</figure>
+
+<style>
+  /* sits like a pre code fence, but the border is green: a live demo,
+     not copyable code. figure > div beats .prose-manuscript figure > *
+     on specificity. */
+  figure > div.terminal-screen {
+    grid-column: margin;
+    border-left: var(--border-w, 4px) solid var(--color-green);
+    padding-block: var(--half-gutter, calc(var(--gutter) / 2));
+    padding-inline: calc(var(--gutter) - var(--border-w, 4px)) var(--gutter);
+    /* two prompt lines; fixed so the layout doesn't jump while the loop runs */
+    min-height: calc(2lh + var(--gutter));
+    /* reserve the scrollbar's height even in the empty-prompt state, so a
+       classic scrollbar appearing mid-loop can't bounce the page below */
+    scrollbar-gutter: stable;
+
+    /* Firefox scrollbar, same as pre in global.css */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-dark-gray) var(--color-code-bg);
+
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--color-code-bg);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-dark-gray);
+    }
+  }
+
+  /* the animated line never wraps: the loop would otherwise add and
+     remove wrapped lines and bounce the whole page below the figure.
+     it scrolls horizontally instead, like the code fences. */
+  .command-line {
+    display: flex;
+    width: max-content;
+  }
+
+  .command-line > span {
+    white-space: pre;
+  }
+
+  /* block cursor; a fixed 1ch terminal cell that holds the next suggested
+     character in inverse video instead of pushing it aside */
+  .cursor {
+    flex: none;
+    width: 1ch;
+    background: var(--color-yellow);
+    color: var(--color-black);
+    animation: cursor-blink 1s step-end infinite;
+  }
+
+  /* astro leaves keyframes names global, so keep this one distinctive.
+     the off phase hands the character back to the suggestion's gray. */
+  @keyframes cursor-blink {
+    50% {
+      background: transparent;
+      color: var(--color-gray);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  interface LoopState {
+    active: boolean;
+  }
+
+  async function run(screen: HTMLElement, state: LoopState) {
+    const typed = screen.dataset.typed ?? "";
+    const suggestion = screen.dataset.suggestion ?? "";
+    const typedOut = screen.querySelector("[data-typed-out]");
+    const cmdOut = screen.querySelector("[data-cmd-out]");
+    const cursorOut = screen.querySelector("[data-cursor-out]");
+    const suggestionOut = screen.querySelector("[data-suggestion-out]");
+    if (!typedOut || !cmdOut || !cursorOut || !suggestionOut) return;
+
+    // first token of the full command; red while a prefix, green once complete
+    const full = typed + suggestion;
+    const spaceIndex = full.search(/\s/);
+    const cmdLen = spaceIndex === -1 ? full.length : spaceIndex;
+
+    const show = (typedPortion: string, rest: string) => {
+      const cmd = typedPortion.slice(0, cmdLen);
+      cmdOut.textContent = cmd;
+      cmdOut.classList.toggle("text-red", cmd.length < cmdLen);
+      cmdOut.classList.toggle("text-green", cmd.length >= cmdLen);
+      typedOut.textContent = typedPortion.slice(cmdLen);
+      cursorOut.textContent = rest.charAt(0);
+      suggestionOut.textContent = rest.slice(1);
+    };
+
+    while (state.active) {
+      // honor a mid-session switch to reduced motion: park on the readable
+      // mid-state and stop animating
+      if (reducedMotion.matches) {
+        show(typed, suggestion);
+        return;
+      }
+
+      // empty prompt, blinking cursor
+      show("", "");
+      await sleep(800);
+
+      // type char by char. the gray text is always the untyped rest of the
+      // full command, like psreadline's history suggestion: visible from the
+      // first matching character on. the cursor cell holds the next
+      // character, so accepting later shifts nothing.
+      for (let i = 1; i <= typed.length && state.active; i++) {
+        show(typed.slice(0, i), typed.slice(i) + suggestion);
+        await sleep(140);
+      }
+      await sleep(1200);
+
+      // accept, as if pressing right-arrow: the suggestion joins the typed
+      // text and the cursor lands at the end
+      show(typed + suggestion, "");
+      await sleep(2500);
+    }
+  }
+
+  // the loop only runs while the figure is on screen, so offscreen
+  // instances cost nothing. reduced-motion visitors keep the
+  // server-rendered mid-state and nothing ever animates.
+  if (!reducedMotion.matches) {
+    const states = new WeakMap<HTMLElement, LoopState>();
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        const screen = entry.target as HTMLElement;
+        const state = states.get(screen);
+        if (entry.isIntersecting && !state?.active) {
+          const next = { active: true };
+          states.set(screen, next);
+          run(screen, next);
+        } else if (!entry.isIntersecting && state) {
+          state.active = false;
+        }
+      }
+    });
+    for (const screen of document.querySelectorAll<HTMLElement>(
+      "[data-terminal-autosuggest]",
+    )) {
+      observer.observe(screen);
+    }
+  }
+</script>
