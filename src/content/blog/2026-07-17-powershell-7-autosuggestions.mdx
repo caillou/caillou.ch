@@ -1,0 +1,123 @@
+---
+title: "PowerShell 7 ships with fish-style autosuggestions"
+date: 2026-07-17
+description:
+  "a script refused to run on my shell. the new shell finishes my sentences."
+tags: ["til", "windows", "shell"]
+---
+
+import TerminalAutosuggest from "../../components/TerminalAutosuggest.astro";
+import TerminalOutput from "../../components/TerminalOutput.astro";
+
+export const deployError = String.raw`.\deploy.ps1 : The script 'deploy.ps1' cannot be run because it contained a "#requires" statement for Windows PowerShell 7.0. The version of Windows PowerShell that is required by the script does not match the currently running version of Windows PowerShell 5.1.26100.8655.
+At line:1 char:1
++ .\deploy.ps1
++ ~~~~~~~~~~~~
+  + CategoryInfo: ResourceUnavailable:
+                  (deploy.ps1:String) [], ScriptRequiresException
+  + FullyQualifiedErrorId: ScriptRequiresUnmatchedPSVersion`;
+
+I was pair programming on the Windows box I have to use for work, and a script
+we needed to run died on the spot:
+
+<TerminalOutput command=".\deploy.ps1" output={deployError} isErrorOutput>
+  the error message. perfectly clear, in hindsight.
+</TerminalOutput>
+
+I read it twice and was none the wiser. I am still in my scared phase on
+Windows. Instead of taking a deep breath and reading what the error says, I
+panic and understand nothing. My shell was PowerShell. What more did it want?
+
+[Fernando](https://github.com/fcallejon), who I was pairing with, understood it
+right away: I was running a Windows NT shell, the ancient one Windows still
+ships as its default. PowerShell 7 is a separate program, installed next to the
+old one, not on top of it. The script had said so in its first line:
+
+```powershell
+# deploy.ps1
+#Requires -Version 7
+```
+
+He told me to install the new shell:
+
+```powershell
+winget install --id Microsoft.PowerShell
+```
+
+I will not claim I fully grasp the 5.1 story. The short version:
+[Windows PowerShell 5.1 is frozen, PowerShell 7 is its cross-platform successor](https://learn.microsoft.com/en-us/powershell/scripting/whats-new/differences-from-windows-powershell),
+and both live side by side on the same machine.
+
+The script ran. That was supposed to be the whole story. Then I typed my first
+command into the new shell, and gray text appeared ahead of my cursor. The shell
+was finishing my sentence, fish-style, from history:
+
+<TerminalAutosuggest
+  typed="win"
+  suggestion="get install --id Microsoft.PowerShell"
+  label="typing win into PowerShell 7; the shell completes the line in gray to winget install --id Microsoft.PowerShell, and pressing the right arrow accepts it"
+>
+  the new shell's first suggestion: the command that installed it
+</TerminalAutosuggest>
+
+The feature is
+[Predictive IntelliSense](https://learn.microsoft.com/en-us/powershell/module/psreadline/about/about_psreadline?view=powershell-7.4),
+part of PSReadLine, and it is
+[on by default since PSReadLine 2.2.6](https://devblogs.microsoft.com/powershell/psreadline-2-2-6-enables-predictive-intellisense-by-default/),
+which shipped with PowerShell 7.3. The old shell never showed me this because it
+bundles a PSReadLine that predates the feature entirely:
+
+```
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+$ $PSVersionTable.PSVersion
+
+Major  Minor  Build  Revision
+-----  -----  -----  --------
+5      1      26100  8655
+
+$ (Get-Module PSReadLine).Version
+
+Major  Minor  Build  Revision
+-----  -----  -----  --------
+2      0      0      -1
+```
+
+Predictions arrived in PSReadLine 2.1.0. The new shell is years past that:
+
+```
+PowerShell 7.6.3
+
+$ (Get-Module PSReadLine).Version
+
+Major  Minor  Build  Revision
+-----  -----  -----  --------
+2      4      5      -1
+```
+
+A newer PSReadLine could have been bolted onto 5.1, it turns out. And the old
+shell had been telling me the whole time, right there in its banner. I stopped
+reading that banner years ago.
+
+The suggestions felt instantly familiar for a reason: both shells write to the
+same PSReadLine history file. The brand-new shell already knew every command I
+had ever typed into the old one. Its very first suggestion was the `winget` line
+that had installed it, minutes earlier, from the other side.
+
+One gotcha: installing PowerShell 7 changes nothing visible. Windows Terminal
+kept opening the old shell in every new tab until I pointed
+`Settings > Startup > Default profile` at "PowerShell". The one without
+"Windows" in front is the new one.
+
+I still do not like Windows. But I am starting to feel at home in its terminal,
+and getting there was less work than my last zsh setup.
+
+## P.S. f2. yes, yes, and yes again
+
+I only learned this while writing the post: pressing `f2` flips the inline
+suggestion into a dropdown of matching commands from history,
+[straight from the docs](https://learn.microsoft.com/en-us/powershell/scripting/learn/shell/using-predictors).
+A TIL inside the TIL.
