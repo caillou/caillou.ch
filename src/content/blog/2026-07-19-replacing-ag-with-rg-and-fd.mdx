@@ -1,0 +1,113 @@
+---
+title: "replacing ag with rg and fd"
+date: 2026-07-19
+description:
+  "the last ag release was in 2018. it took two tools and a fish abbr to replace
+  it."
+tags: ["til", "shell", "ripgrep"]
+---
+
+import TerminalAbbr from "../../components/TerminalAbbr.astro";
+
+I really, really liked `ag`. Then I noticed that my installed version of
+[the silver searcher](https://github.com/ggreer/the_silver_searcher), 2.2.0, was
+also the latest one. It shipped in
+[August 2018](https://github.com/ggreer/the_silver_searcher/tags). The last
+commit landed in December 2020. Nothing broke. My favorite code search tool was
+just never going to get better.
+
+Turns out I only ever used three `ag` flags, and they do not map to three `rg`
+flags. One of them was never really a search feature at all:
+
+```console
+$ ag -g package.json       # print filenames matching a regex
+$ ag -G '\.tsx$' useQuery  # search only in matching files
+$ ag -u secret             # search ignored, hidden, binary files too
+```
+
+[ripgrep](https://github.com/BurntSushi/ripgrep) covers the last two. Searching
+file names is a job it refuses to take. There is no flag for it, and
+[the author's answer](https://github.com/BurntSushi/ripgrep/issues/1002) when
+asked is a pipeline:
+
+> No. ripgrep doesn't even expose a way to search file paths with a regex at
+> all. The only way to match on file paths is with globs. If you want regexes,
+> you need to use pipelines, e.g., `rg --files | rg 'foo\w+'`.
+
+I cannot be bothered to type that. Finding files by name is
+[fd](https://github.com/sharkdp/fd)'s whole job, and it kept the syntax `ag -g`
+had:
+
+```console
+$ fd package.json          # was: ag -g package.json
+$ rg -g '*.tsx' useQuery   # was: ag -G '\.tsx$' useQuery
+$ rg -uuu secret           # was: ag -u secret
+```
+
+Two gotchas in there. `rg -g` takes a glob, not a regex, and it filters files
+like `ag -G` did instead of listing them like `ag -g`. Same letter, different
+job. And the third flag, the one I had to look up every single time because `ag`
+split it across `-u` and `-U`: `rg` just counts the `u`s.
+
+- `-u` searches _ignored_ files
+- `-uu` adds _hidden_ files
+- `-uuu` adds _binary_ files
+
+`fd` uses the same idiom. I will never look that one up again.
+
+The switch itself:
+
+```console
+$ brew install ripgrep fd
+$ brew uninstall the_silver_searcher
+```
+
+Installing a better tool does not switch you to it. Muscle memory keeps the old
+one alive.
+
+Now, to fight muscle memory, I added a [fish](https://fishshell.com/)
+abbreviation:
+
+```fish
+# in ~/.config/fish/config.fish
+abbr -a -- ag 'rg -S'
+```
+
+An alias would have hidden the rename forever. An
+[abbreviation](https://fishshell.com/docs/current/cmds/abbr.html) expands in the
+buffer before it runs. I type `ag`, hit space, and watch it become `rg -S`.
+Every invocation is a flashcard. One day I will catch myself typing `rg`
+unprompted and delete the abbr. The `-S` is smart case, which `ag` did by
+default and `rg` does not. Silently finding fewer results is the worst kind of
+different. I added the same abbreviation to
+[my PowerShell profile](/blog/2026-06-05-fish-abbreviations-powershell/) on
+Windows.
+
+<TerminalAbbr
+  typed="ag"
+  expansion="rg -S"
+  label="typing ag into fish and pressing space; the word is replaced inline by rg -S"
+>
+  `ag`, space, and the buffer says `rg -S`
+</TerminalAbbr>
+
+## down the rabbit hole
+
+The project behind `ag` is called the _silver searcher_, and `ag` is the
+chemical symbol for silver. The README also brags that "the command name is 33%
+shorter than `ack`, and all keys are on the home row!" I never used `ack`, nor
+[pt](https://github.com/monochromegane/the_platinum_searcher), the _platinum
+searcher_ that followed. Still, I was sad to see the pun go.
+
+So I went digging through the successors' docs, and found the jokes better
+maintained than the code. `fd`'s README claims a command name "50% shorter than
+`find`", and the asterisk on that claim links to `ag`'s repo.
+
+And the
+[ripgrep FAQ](https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#intentcountsforsomething)
+swears the "rip" meant "to rip through your text". The "grep, rest in peace"
+reading only surfaced after the release, pointed out by someone else, and the
+author admits he might have picked a different name had he seen it coming.
+
+So my mnemonic for the new pair: `rg` rips through file contents, and `fd` is
+`find` with the "in" ripped out. Learning is being alive.

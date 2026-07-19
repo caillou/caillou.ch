@@ -40,6 +40,7 @@ Define the abbreviations in a hashtable:
 
 ```powershell
 $global:abbrs = @{
+    ag   = 'rg -S'
     g    = 'lazygit'
     ggl  = 'git pull'
     ggp  = 'git push'
@@ -91,3 +92,7 @@ Reload the profile and the abbreviations expand as you type:
 ```
 
 Not quite fish, but close enough that my muscle memory works on Windows now.
+
+P.S. I have since
+[retired ag on my Mac](/blog/2026-07-19-replacing-ag-with-rg-and-fd/). That is
+where the `ag = 'rg -S'` entry above comes from. It expands here too.

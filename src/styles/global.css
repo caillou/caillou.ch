@@ -348,6 +348,11 @@
 
   figcaption {
     @apply mt-4 text-center tracking-[0.2em] text-pretty text-gray uppercase italic md:text-sm;
+
+    /* inline code keeps its literal casing and spacing: `rg -S`, not R G - S */
+    & code {
+      @apply tracking-normal normal-case;
+    }
   }
 
   ul,

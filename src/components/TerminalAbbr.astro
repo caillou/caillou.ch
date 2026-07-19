@@ -1,0 +1,214 @@
+---
+interface Props {
+  // line 1 of the prompt, the current path
+  path?: string;
+  // the abbreviation that gets "typed", e.g. "ag"
+  typed: string;
+  // what it expands to on space, e.g. "rg -S"
+  expansion: string;
+  // describes the whole animation for screen readers
+  label: string;
+}
+
+const { path = "~", typed, expansion, label } = Astro.props;
+
+// psreadline/fish-style command coloring on the expanded line: first token
+// green, arguments white. the abbreviation itself is a single word, so while
+// typing it is red as a prefix and green once complete.
+const spaceIndex = expansion.search(/\s/);
+const cmdLen = spaceIndex === -1 ? expansion.length : spaceIndex;
+const cmd = expansion.slice(0, cmdLen);
+// the space that triggered the expansion is part of the buffer
+const rest = expansion.slice(cmdLen) + " ";
+---
+
+<figure>
+  <div
+    class="terminal-screen overflow-x-auto bg-code-bg leading-[1.6] italic"
+    role="img"
+    aria-label={label}
+    tabindex="0"
+    data-terminal-abbr
+    data-typed={typed}
+    data-expansion={expansion}
+  >
+    {
+      /* the animation churns through text; keep it away from screen readers.
+        the server-rendered expanded state is what no-js and reduced-motion
+        visitors see. */
+    }
+    <div aria-hidden="true">
+      <div class="text-yellow">{path}</div>
+      {
+        /* the spans are childless (set:text) array items, so the formatter
+          can never plant whitespace text nodes inside or between them */
+      }
+      <div class="command-line">
+        {
+          [
+            <span class="text-green not-italic" set:text={"❯ "} />,
+            <span class="text-green" data-cmd-out set:text={cmd} />,
+            <span class="text-white" data-rest-out set:text={rest} />,
+            <span class="cursor" data-cursor-out />,
+          ]
+        }
+      </div>
+    </div>
+  </div>
+  <figcaption><slot /></figcaption>
+</figure>
+
+<style>
+  /* sits like a pre code fence, but the border is green: a live demo,
+     not copyable code. figure > div beats .prose-manuscript figure > *
+     on specificity. */
+  figure > div.terminal-screen {
+    grid-column: margin;
+    border-left: var(--border-w, 4px) solid var(--color-green);
+    padding-block: var(--half-gutter, calc(var(--gutter) / 2));
+    padding-inline: calc(var(--gutter) - var(--border-w, 4px)) var(--gutter);
+    /* two prompt lines; fixed so the layout doesn't jump while the loop runs */
+    min-height: calc(2lh + var(--gutter));
+    /* reserve the scrollbar's height even in the empty-prompt state, so a
+       classic scrollbar appearing mid-loop can't bounce the page below */
+    scrollbar-gutter: stable;
+
+    /* Firefox scrollbar, same as pre in global.css */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-dark-gray) var(--color-code-bg);
+
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--color-code-bg);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-dark-gray);
+    }
+  }
+
+  /* the animated line never wraps: the loop would otherwise add and
+     remove wrapped lines and bounce the whole page below the figure.
+     it scrolls horizontally instead, like the code fences. */
+  .command-line {
+    display: flex;
+    width: max-content;
+  }
+
+  .command-line > span {
+    white-space: pre;
+  }
+
+  /* block cursor; a fixed 1ch terminal cell that trails the buffer */
+  .cursor {
+    flex: none;
+    width: 1ch;
+    background: var(--color-yellow);
+    animation: abbr-cursor-blink 1s step-end infinite;
+  }
+
+  /* astro leaves keyframes names global, so keep this one distinctive */
+  @keyframes abbr-cursor-blink {
+    50% {
+      background: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  interface LoopState {
+    active: boolean;
+  }
+
+  async function run(screen: HTMLElement, state: LoopState) {
+    const typed = screen.dataset.typed ?? "";
+    const expansion = screen.dataset.expansion ?? "";
+    const cmdOut = screen.querySelector("[data-cmd-out]");
+    const restOut = screen.querySelector("[data-rest-out]");
+    if (!cmdOut || !restOut) return;
+
+    const spaceIndex = expansion.search(/\s/);
+    const cmdLen = spaceIndex === -1 ? expansion.length : spaceIndex;
+
+    // while typing, the buffer holds the abbreviation: red as a prefix,
+    // green once it is the complete word
+    const showTyped = (portion: string) => {
+      cmdOut.textContent = portion;
+      cmdOut.classList.toggle("text-red", portion.length < typed.length);
+      cmdOut.classList.toggle("text-green", portion.length >= typed.length);
+      restOut.textContent = "";
+    };
+
+    // space pressed: the abbreviation is replaced in the buffer by the
+    // expansion, plus the space itself, cursor at the end
+    const showExpanded = () => {
+      cmdOut.textContent = expansion.slice(0, cmdLen);
+      cmdOut.classList.remove("text-red");
+      cmdOut.classList.add("text-green");
+      restOut.textContent = expansion.slice(cmdLen) + " ";
+    };
+
+    while (state.active) {
+      // honor a mid-session switch to reduced motion: park on the readable
+      // expanded state and stop animating
+      if (reducedMotion.matches) {
+        showExpanded();
+        return;
+      }
+
+      // empty prompt, blinking cursor
+      showTyped("");
+      await sleep(800);
+
+      // type the abbreviation char by char
+      for (let i = 1; i <= typed.length && state.active; i++) {
+        showTyped(typed.slice(0, i));
+        await sleep(140);
+      }
+      await sleep(900);
+
+      // hit space
+      showExpanded();
+      await sleep(2500);
+    }
+  }
+
+  // the loop only runs while the figure is on screen, so offscreen
+  // instances cost nothing. reduced-motion visitors keep the
+  // server-rendered expanded state and nothing ever animates.
+  if (!reducedMotion.matches) {
+    const states = new WeakMap<HTMLElement, LoopState>();
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        const screen = entry.target as HTMLElement;
+        const state = states.get(screen);
+        if (entry.isIntersecting && !state?.active) {
+          const next = { active: true };
+          states.set(screen, next);
+          run(screen, next);
+        } else if (!entry.isIntersecting && state) {
+          state.active = false;
+        }
+      }
+    });
+    for (const screen of document.querySelectorAll<HTMLElement>(
+      "[data-terminal-abbr]",
+    )) {
+      observer.observe(screen);
+    }
+  }
+</script>
