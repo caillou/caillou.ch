@@ -1,0 +1,80 @@
+---
+title: "fish-style autocd for PowerShell"
+date: 2026-08-28
+description:
+  "typing .. in pwsh was not a recognized command. a CommandNotFoundAction hook
+  makes any directory a command."
+tags: ["til", "windows", "shell"]
+---
+
+import TerminalOutput from "../../components/TerminalOutput.astro";
+
+export const notFound = String.raw`..: The term '..' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.`;
+
+In fish, `..` is a command. So is `../..`, `~`, and `./src`.
+[fish tries to change directory when a command looks like one](https://fishshell.com/docs/current/cmds/cd.html),
+without an explicit `cd`. Years of muscle memory. On Windows, in
+[my PowerShell 7 setup](/blog/2026-07-17-powershell-7-autosuggestions/), that
+memory hit a wall:
+
+<TerminalOutput command=".." output={notFound} isErrorOutput>
+  the fish habit, in pwsh
+</TerminalOutput>
+
+I wanted `..` to be a command in pwsh.
+
+Turns out PowerShell has a hook for exactly this moment:
+
+[`CommandNotFoundAction`](https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.commandinvocationintrinsics.commandnotfoundaction)
+runs when command lookup fails, and the handler can hand back a script block to
+run instead. If the unknown command names a directory, `Set-Location` there.
+This goes into the profile:
+
+```powershell
+# fish-style autocd: a directory typed as a command cd's into it.
+$ExecutionContext.InvokeCommand.CommandNotFoundAction = {
+    param($CommandName, $EventArgs)
+    # PowerShell retries a failed lookup as "get-<name>" first. Skip that pass.
+    if ($CommandName -like 'get-*') { return }
+    if (Test-Path -Path $CommandName -PathType Container) {
+        # the script block runs with no arguments, so capture the target in a closure
+        $target = $CommandName
+        $EventArgs.CommandScriptBlock = { Set-Location -Path $target }.GetNewClosure()
+        $EventArgs.StopSearch = $true
+    }
+}
+```
+
+Typed on the left, what it amounts to on the right:
+
+```console
+$ ..     # cd ..
+$ ../..  # cd ../..
+$ ~      # cd ~
+$ src    # cd src
+```
+
+That is more generous than fish, which only reacts to names starting with `.`,
+`/` or `~`. Here any existing directory works.
+
+The `get-*` line is the part that cost me time. When a command is not found,
+PowerShell retries the lookup with `get-` prepended, so that `Process` runs
+`Get-Process`. It is in
+[`CommandDiscovery.cs`](https://github.com/PowerShell/PowerShell/blob/master/src/System.Management.Automation/engine/CommandDiscovery.cs):
+
+```csharp
+if (!commandName.Contains('-') && !commandName.Contains('\\'))
+{
+    discoveryTracer.WriteLine(
+        "The command [{0}] was not found, trying again with get- prepended",
+        commandName);
+```
+
+That inner lookup fails too, and it fires the hook first, with `get-../..`. On
+Windows, `get-../..` is a valid relative path: enter `get-..`, go up one. It
+normalizes to the current directory, `Test-Path` says yes, and `../..` becomes a
+no-op. Returning early on `get-*` lets the lookup fail through to the second
+call, the one with the real name.
+
+The same snippet works unchanged in the Windows PowerShell 5.1 profile.
