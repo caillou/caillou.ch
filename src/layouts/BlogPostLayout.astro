@@ -30,7 +30,8 @@ const formattedDate = date.toISOString().slice(0, 10);
     <article class="col-full subgrid-cols space-y-12">
       <header class="col-main space-y-6">
         <div class="text-sm font-bold text-gray uppercase italic">
-          <span class="tracking-widest">Published on </span>{formattedDate}
+          <span class="tracking-widest">Published on </span>
+          {formattedDate}
         </div>
 
         <PageTitle title={title} />
@@ -40,13 +41,11 @@ const formattedDate = date.toISOString().slice(0, 10);
         <slot />
       </section>
 
-      {
-        tags.length > 0 && (
-          <footer class="col-main pt-12">
-            <TagList tags={tags} />
-          </footer>
-        )
-      }
+      {tags.length > 0 && (
+        <footer class="col-main pt-12">
+          <TagList tags={tags} />
+        </footer>
+      )}
     </article>
   </main>
 

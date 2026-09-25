@@ -37,35 +37,31 @@ const cmdColor = cmd.length < cmdLen ? "text-red" : "text-green";
     data-typed={typed}
     data-suggestion={suggestion}
   >
-    {
-      /* the animation churns through text; keep it away from screen readers.
+    {/* the animation churns through text; keep it away from screen readers.
         the server-rendered mid-state (typed + gray suggestion) is what
-        no-js and reduced-motion visitors see. */
-    }
+        no-js and reduced-motion visitors see. */}
     <div aria-hidden="true">
       <div class="text-yellow">{path}</div>
-      {
-        /* the spans are childless (set:text) array items, so the formatter
-          can never plant whitespace text nodes inside or between them */
-      }
+      {/* the spans are childless (set:text) array items, so the formatter
+          can never plant whitespace text nodes inside or between them */}
       <div class="command-line">
-        {
-          [
-            <span class="text-green not-italic" set:text={"❯ "} />,
-            <span class={cmdColor} data-cmd-out set:text={cmd} />,
-            <span class="text-white" data-typed-out set:text={typedRest} />,
-            <span class="cursor" data-cursor-out set:text={cursorChar} />,
-            <span
-              class="text-gray"
-              data-suggestion-out
-              set:text={suggestionRest}
-            />,
-          ]
-        }
+        {[
+          <span class="text-green not-italic" set:text={"❯ "} />,
+          <span class={cmdColor} data-cmd-out set:text={cmd} />,
+          <span class="text-white" data-typed-out set:text={typedRest} />,
+          <span class="cursor" data-cursor-out set:text={cursorChar} />,
+          <span
+            class="text-gray"
+            data-suggestion-out
+            set:text={suggestionRest}
+          />,
+        ]}
       </div>
     </div>
   </div>
-  <figcaption><slot /></figcaption>
+  <figcaption>
+    <slot />
+  </figcaption>
 </figure>
 
 <style>

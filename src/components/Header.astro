@@ -7,18 +7,16 @@ const { transparent } = Astro.props;
 const pathname = Astro.url.pathname;
 ---
 
-{
-  !transparent && (
-    <div
-      class:list={[
-        "pointer-events-none fixed top-0 right-0 left-0 h-[4.4rem] bg-linear-to-b from-black via-black/60 to-transparent",
-        "z-10", // this ensures the gradient is below the header and figures, but above the page content
-        "min-[1700px]:hidden", // nav moves to the side — keep in sync with global.css
-      ]}
-      aria-hidden="true"
-    />
-  )
-}
+{!transparent && (
+  <div
+    class:list={[
+      "pointer-events-none fixed top-0 right-0 left-0 h-[4.4rem] bg-linear-to-b from-black via-black/60 to-transparent",
+      "z-10", // this ensures the gradient is below the header and figures, but above the page content
+      "min-[1700px]:hidden", // nav moves to the side — keep in sync with global.css
+    ]}
+    aria-hidden="true"
+  />
+)}
 
 <header class="pointer-events-none fixed top-0 right-0 left-0 z-50 py-6">
   <nav class="pointer-events-auto flex space-x-8 italic">

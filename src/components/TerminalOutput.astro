@@ -23,42 +23,36 @@ const args = spaceIndex === -1 ? "" : command.slice(spaceIndex);
 ---
 
 <figure>
-  {
-    /* unlike TerminalAutosuggest this is static real text, so it stays
+  {/* unlike TerminalAutosuggest this is static real text, so it stays
       readable by screen readers: no role="img", no aria-hidden.
-      only the decorative prompt char is hidden. */
-  }
+      only the decorative prompt char is hidden. */}
   <div class="terminal-screen bg-code-bg leading-[1.6] italic">
     <div class="path text-yellow">{path}</div>
-    {
-      /* the spans are childless (set:text) array items, so the formatter
-        can never plant whitespace text nodes inside or between them */
-    }
+    {/* the spans are childless (set:text) array items, so the formatter
+        can never plant whitespace text nodes inside or between them */}
     <div class="command-line">
-      {
-        [
-          <span
-            class="text-green not-italic"
-            aria-hidden="true"
-            set:text={"❯ "}
-          />,
-          <span class="text-green" set:text={cmd} />,
-          <span class="text-white" set:text={args} />,
-        ]
-      }
+      {[
+        <span
+          class="text-green not-italic"
+          aria-hidden="true"
+          set:text={"❯ "}
+        />,
+        <span class="text-green" set:text={cmd} />,
+        <span class="text-white" set:text={args} />,
+      ]}
     </div>
-    {
-      /* set:text keeps the element childless in the template, so the
+    {/* set:text keeps the element childless in the template, so the
         formatter can never re-indent the output or pad it with
         whitespace. white-space: pre-wrap renders it verbatim, wrapping
-        only at the viewport edge. */
-    }
+        only at the viewport edge. */}
     <div
       class:list={["output", isErrorOutput ? "text-red" : "text-white"]}
       set:text={output}
     />
   </div>
-  <figcaption><slot /></figcaption>
+  <figcaption>
+    <slot />
+  </figcaption>
 </figure>
 
 <style>

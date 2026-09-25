@@ -32,30 +32,26 @@ const rest = expansion.slice(cmdLen) + " ";
     data-typed={typed}
     data-expansion={expansion}
   >
-    {
-      /* the animation churns through text; keep it away from screen readers.
+    {/* the animation churns through text; keep it away from screen readers.
         the server-rendered expanded state is what no-js and reduced-motion
-        visitors see. */
-    }
+        visitors see. */}
     <div aria-hidden="true">
       <div class="text-yellow">{path}</div>
-      {
-        /* the spans are childless (set:text) array items, so the formatter
-          can never plant whitespace text nodes inside or between them */
-      }
+      {/* the spans are childless (set:text) array items, so the formatter
+          can never plant whitespace text nodes inside or between them */}
       <div class="command-line">
-        {
-          [
-            <span class="text-green not-italic" set:text={"❯ "} />,
-            <span class="text-green" data-cmd-out set:text={cmd} />,
-            <span class="text-white" data-rest-out set:text={rest} />,
-            <span class="cursor" data-cursor-out />,
-          ]
-        }
+        {[
+          <span class="text-green not-italic" set:text={"❯ "} />,
+          <span class="text-green" data-cmd-out set:text={cmd} />,
+          <span class="text-white" data-rest-out set:text={rest} />,
+          <span class="cursor" data-cursor-out />,
+        ]}
       </div>
     </div>
   </div>
-  <figcaption><slot /></figcaption>
+  <figcaption>
+    <slot />
+  </figcaption>
 </figure>
 
 <style>
