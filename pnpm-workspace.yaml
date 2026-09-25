@@ -3,5 +3,12 @@ allowBuilds:
   lefthook: true
   sharp: true
 # explicit value also enables minimumReleaseAgeStrict, so fresh releases are
-# held back instead of auto-excluded. keep in sync with cooldown in .ncurc.yml.
+# held back instead of auto-excluded. ncu reads this file too, so it is the
+# single source for the cooldown and its exclusions.
 minimumReleaseAge: 1440
+overrides:
+  fflate: ">=0.7.5"
+# 1.1.0 fixes non-idempotent css comment formatting; released 2026-09-24.
+# drop this exclusion once the release is older than the cooldown.
+minimumReleaseAgeExclude:
+  - prettier-plugin-astro
