@@ -1,0 +1,51 @@
+---
+title: "my crying baby iPhone ringtone"
+date: 2026-10-26
+description:
+  "in 2008 i cut a crying baby recording into an iPhone ringtone. after all
+  these years, i finally share it."
+tags: ["audio", "ringtone"]
+---
+
+import Waveform from "../../components/Waveform.astro";
+import babycry from "../../assets/audio/babycry2.peaks.json";
+
+Two sounds make everyone in a room look up: their own name, and a crying baby.
+In 2008 I picked the second one for my ringtone. I found a recording on
+Freesound, trimmed it to 30 seconds in iTunes, and put it on my first iPhone.
+Eighteen years later it still clears a meeting room.
+
+<Waveform
+  sources={[
+    { src: "/files/babycry2.m4a", type: "audio/mp4; codecs=mp4a.40.2" },
+    { src: "/files/babycry2.mp3", type: "audio/mpeg" },
+  ]}
+  peaks={babycry.peaks}
+  duration={babycry.duration}
+  label="the crying baby ringtone"
+>
+  "babycry2" by [n2p5](https://freesound.org/people/n2p5/sounds/28101/) is
+  licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+  Trimmed to 30 seconds and re-encoded.
+</Waveform>
+
+Download [babycry2.m4a](/files/babycry2.m4a) (AAC, 30 seconds, under half a
+megabyte).
+
+The ringtone goes out under the same CC BY 4.0 license. Anyone passing it on has
+to keep that attribution. The
+[original](https://freesound.org/people/n2p5/sounds/28101/) is 41 seconds long,
+and n2p5 recorded it "on a DAT recorder with an AKG C3000".
+
+To install it, download the `.m4a` in Safari, open it in the Files app, tap
+Share, then "Use as Ringtone" (it may hide under "More"). That needs iOS 26 or
+later. The cap is [30 seconds](https://support.apple.com/120692), which is why
+the trim.
+
+P.S. I still find it a shame that installing a ringtone is this fiddly, all to
+protect a business model from 20 years ago.
+
+P.P.S. On older iOS, drop the same file renamed to
+[babycry2.m4r](/files/babycry2.m4r) onto the phone in Finder (iTunes on
+Windows), or import the `.m4a` into GarageBand on the phone and share it as a
+ringtone.
