@@ -1,0 +1,368 @@
+---
+import { formatTime } from "../utils/format-time";
+
+interface Source {
+  src: string;
+  // mime type with codecs where it helps the browser pick without a
+  // fetch, e.g. "audio/mp4; codecs=mp4a.40.2" or "audio/mpeg"
+  type: string;
+}
+
+interface Props {
+  // ordered <source> candidates; the browser plays the first it can decode
+  sources: Source[];
+  // loudness envelope from scripts/generate-peaks.mjs, 0..1 per bar
+  peaks: number[];
+  // seconds, from the same json. shown before any audio is fetched.
+  duration: number;
+  // names the sound for the play button and the seek slider
+  label: string;
+}
+
+const { sources, peaks, duration, label } = Astro.props;
+
+// one path for all bars, mirrored around the middle line. the svg is
+// stretched to its box (preserveAspectRatio none), so the units are free:
+// one unit per bar, 0.6 wide, heights out of 100. a floor keeps silence
+// visible as a hairline instead of a gap.
+const HEIGHT = 100;
+const BAR = 0.6;
+const FLOOR = 3;
+const path = peaks
+  .map((p, i) => {
+    const h = Math.max(FLOOR, p * HEIGHT);
+    const y = (HEIGHT - h) / 2;
+    return `M${i} ${y}h${BAR}v${h}h-${BAR}z`;
+  })
+  .join("");
+const viewBox = `0 0 ${peaks.length} ${HEIGHT}`;
+const total = formatTime(Math.round(duration));
+---
+
+<figure>
+  <div
+    class="waveform bg-code-bg"
+    data-waveform
+    data-duration={duration}
+    data-label={label}
+  >
+    {/* the real player. without js this is all there is: native controls,
+        native keyboard, native source fallback. the script removes the
+        controls and reveals the drawn one. */}
+    <audio preload="none" controls>
+      {sources.map((s) => (
+        <source src={s.src} type={s.type} />
+      ))}
+    </audio>
+    <div class="player">
+      <button type="button" class="play" data-play aria-label={`play ${label}`}>
+        <svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M3 2l11 6-11 6z" />
+        </svg>
+        <svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M3 2h4v12H3zM9 2h4v12H9z" />
+        </svg>
+      </button>
+      <div
+        class="bars"
+        role="slider"
+        tabindex="0"
+        data-seek
+        aria-label={`seek ${label}`}
+        aria-valuemin="0"
+        aria-valuemax={Math.round(duration)}
+        aria-valuenow="0"
+        aria-valuetext={`0:00 of ${total}`}
+      >
+        <svg viewBox={viewBox} preserveAspectRatio="none" aria-hidden="true">
+          <path class="base" d={path} />
+          <path class="played" d={path} />
+        </svg>
+      </div>
+      <div class="time" aria-hidden="true">
+        <span data-current>0:00</span>
+        <span class="text-gray">/</span>
+        <span data-total>{total}</span>
+      </div>
+    </div>
+  </div>
+  <figcaption>
+    <slot />
+  </figcaption>
+</figure>
+
+<style>
+  /* sits like a pre code fence: same bar, same background, the yellow of
+     the fences rather than the green of the terminal demos. figure > div
+     beats .prose-manuscript figure > * on specificity, same trick as the
+     terminal components. */
+  figure > div.waveform {
+    grid-column: margin;
+    border-left: var(--border-w, 4px) solid var(--color-yellow);
+    padding-block: var(--half-gutter, calc(var(--gutter) / 2));
+    padding-inline: calc(var(--gutter) - var(--border-w, 4px)) var(--gutter);
+  }
+
+  /* progressive: the native element shows until the script has mounted,
+     then the drawn player takes its place. the audio element stays in the
+     dom (display none still plays). */
+  audio {
+    display: block;
+    width: 100%;
+  }
+
+  .player {
+    display: none;
+    align-items: center;
+    gap: var(--half-gutter, calc(var(--gutter) / 2));
+    /* a drag across the bars must not start selecting the readout */
+    user-select: none;
+  }
+
+  .waveform[data-ready] audio {
+    display: none;
+  }
+
+  .waveform[data-ready] .player {
+    display: flex;
+  }
+
+  .play {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 2px solid var(--color-yellow);
+    color: var(--color-yellow);
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--color-yellow);
+      color: var(--color-black);
+    }
+
+    & svg {
+      width: 1rem;
+      height: 1rem;
+      fill: currentColor;
+    }
+  }
+
+  /* one icon at a time; the script flips data-state on the box */
+  .icon-pause,
+  .waveform[data-state="playing"] .icon-play {
+    display: none;
+  }
+
+  .waveform[data-state="playing"] .icon-pause {
+    display: block;
+  }
+
+  .bars {
+    flex: 1;
+    min-width: 0;
+    height: 4rem;
+    cursor: pointer;
+    /* drag sideways to seek; a vertical swipe or a pinch still goes to the
+       page, and a cancelled gesture undoes the tap in the script */
+    touch-action: pan-y pinch-zoom;
+
+    & svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .base {
+    fill: var(--color-gray);
+  }
+
+  /* the played copy sits on top and is clipped to the progress width, so
+     the bars change color exactly at the playhead */
+  .played {
+    fill: var(--color-yellow);
+    clip-path: inset(0 calc(100% - var(--progress, 0%)) 0 0);
+  }
+
+  .time {
+    flex: none;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-light-gray);
+    font-size: 0.875rem;
+  }
+
+  /* on a phone the bars would get about 100px between the button and the
+     readout; drop the readout under them instead */
+  @media (width < 48rem) {
+    .player {
+      flex-wrap: wrap;
+    }
+
+    .time {
+      flex-basis: 100%;
+      text-align: right;
+    }
+  }
+
+  .play:focus-visible,
+  .bars:focus-visible {
+    outline: 2px solid var(--color-yellow);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  import { formatTime } from "../utils/format-time";
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  function mount(root: HTMLElement) {
+    const audio = root.querySelector("audio");
+    const play = root.querySelector<HTMLButtonElement>("[data-play]");
+    const seek = root.querySelector<HTMLElement>("[data-seek]");
+    const current = root.querySelector("[data-current]");
+    const totalOut = root.querySelector("[data-total]");
+    if (!audio || !play || !seek || !current || !totalOut) return;
+
+    const label = root.dataset.label ?? "";
+    // from the peaks json until the real metadata arrives on first play
+    let duration = Number(root.dataset.duration) || 0;
+    let total = formatTime(Math.round(duration));
+
+    const render = () => {
+      const t = audio.currentTime;
+      const fraction = duration > 0 ? Math.min(1, t / duration) : 0;
+      seek.style.setProperty("--progress", `${fraction * 100}%`);
+      // at the end the floor would read 0:29 under a rounded 0:30 total
+      const now = fraction >= 1 ? total : formatTime(t);
+      current.textContent = now;
+      // the frame loop calls this 60 times a second; only touch the aria
+      // attributes when the announced text actually changes
+      const text = `${now} of ${total}`;
+      if (seek.getAttribute("aria-valuetext") !== text) {
+        seek.setAttribute("aria-valuenow", String(Math.round(t)));
+        seek.setAttribute("aria-valuetext", text);
+      }
+    };
+
+    // timeupdate fires a few times a second, enough for the readout. a
+    // frame loop while playing keeps the playhead smooth, unless the
+    // visitor asked for less motion.
+    let frame = 0;
+    const tick = () => {
+      render();
+      if (!audio.paused) frame = requestAnimationFrame(tick);
+    };
+    const stopTicking = () => cancelAnimationFrame(frame);
+
+    audio.addEventListener("durationchange", () => {
+      if (!Number.isFinite(audio.duration)) return;
+      duration = audio.duration;
+      total = formatTime(Math.round(duration));
+      totalOut.textContent = total;
+      seek.setAttribute("aria-valuemax", String(Math.round(duration)));
+      render();
+    });
+    // no source could be decoded: the play() promise would hang and the
+    // button would stay on pause, so drop back to the paused state
+    audio.lastElementChild?.addEventListener("error", () => audio.pause());
+    audio.addEventListener("timeupdate", render);
+    audio.addEventListener("play", () => {
+      root.dataset.state = "playing";
+      play.setAttribute("aria-label", `pause ${label}`);
+      if (!reducedMotion.matches) tick();
+    });
+    audio.addEventListener("pause", () => {
+      root.dataset.state = "paused";
+      play.setAttribute("aria-label", `play ${label}`);
+      stopTicking();
+      render();
+    });
+
+    play.addEventListener("click", () => {
+      // every source already failed before the click (a browser with no
+      // decoder for either): play() would hang, so do nothing
+      if (audio.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) return;
+      // play() rejects when the file cannot load or a pause interrupts it;
+      // either way the paused state is the honest one
+      if (audio.paused) audio.play().catch(() => audio.pause());
+      else audio.pause();
+    });
+
+    const seekTo = (seconds: number) => {
+      audio.currentTime = Math.min(duration, Math.max(0, seconds));
+      render();
+    };
+    const seekToPointer = (event: PointerEvent) => {
+      const rect = seek.getBoundingClientRect();
+      const fraction = (event.clientX - rect.left) / rect.width;
+      seekTo(fraction * duration);
+    };
+
+    // press to seek, drag to scrub. pointer capture keeps the drag alive
+    // when the finger or cursor leaves the bars.
+    let dragging = false;
+    let before = 0;
+    seek.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 || !event.isPrimary) return;
+      before = audio.currentTime;
+      dragging = true;
+      seek.setPointerCapture(event.pointerId);
+      seekToPointer(event);
+    });
+    seek.addEventListener("pointermove", (event) => {
+      if (dragging) seekToPointer(event);
+    });
+    seek.addEventListener("pointerup", () => {
+      dragging = false;
+    });
+    // the browser claimed the gesture for scrolling: undo the tap's seek
+    seek.addEventListener("pointercancel", () => {
+      dragging = false;
+      seekTo(before);
+    });
+
+    // slider keys: arrows step five seconds, home and end jump, space and
+    // enter toggle playback like the button does
+    seek.addEventListener("keydown", (event) => {
+      const step = 5;
+      switch (event.key) {
+        case "ArrowRight":
+        case "ArrowUp":
+          seekTo(audio.currentTime + step);
+          break;
+        case "ArrowLeft":
+        case "ArrowDown":
+          seekTo(audio.currentTime - step);
+          break;
+        case "Home":
+          seekTo(0);
+          break;
+        case "End":
+          seekTo(duration);
+          break;
+        case " ":
+        case "Enter":
+          play.click();
+          break;
+        default:
+          return;
+      }
+      event.preventDefault();
+    });
+
+    audio.removeAttribute("controls");
+    root.dataset.state = "paused";
+    root.dataset.ready = "";
+    render();
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>(
+    "[data-waveform]",
+  )) {
+    mount(root);
+  }
+</script>

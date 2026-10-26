@@ -13,6 +13,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "icons": "node scripts/generate-icons.mjs",
+    "peaks": "node scripts/generate-peaks.mjs",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "prettier --write .",

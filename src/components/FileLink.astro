@@ -1,0 +1,18 @@
+---
+// every mdx link renders through this (see the components prop in
+// pages/blog/[slug].astro). markdown links cannot carry attributes, so a
+// link under /files/ gets the download attribute here and a tap saves the
+// file instead of opening the browser's player; the 2026-06-15 post has
+// the why. every other link renders untouched.
+interface Props {
+  href: string;
+  [key: string]: unknown;
+}
+
+const { href, ...rest } = Astro.props;
+const isFile = href.startsWith("/files/");
+---
+
+<a href={href} download={isFile} {...rest}>
+  <slot />
+</a>

@@ -1,5 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
+import FileLink from "../../components/FileLink.astro";
+import Paragraph from "../../components/Paragraph.astro";
 import BlogPostLayout from "../../layouts/BlogPostLayout.astro";
 
 export async function getStaticPaths() {
@@ -23,5 +25,5 @@ const ogImage = new URL(`/og/${post.id}.png`, Astro.site).href;
   tags={post.data.tags}
   ogImage={ogImage}
 >
-  <Content />
+  <Content components={{ p: Paragraph, a: FileLink }} />
 </BlogPostLayout>
