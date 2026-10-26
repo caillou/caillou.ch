@@ -1,0 +1,5 @@
+# ncu ignores pnpm's updateConfig.ignoreDependencies, so the holds are repeated
+# here. see the comment above updateConfig in pnpm-workspace.yaml for why.
+reject:
+  - typescript
+  - "@types/node"

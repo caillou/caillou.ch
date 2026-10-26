@@ -4,7 +4,7 @@ source code for my personal website and blog.
 
 ## stack
 
-astro, mdx, tailwind css, typescript. deployed to cloudflare workers.
+astro, mdx, tailwind css, typescript. deployed to github pages.
 
 ## development
 

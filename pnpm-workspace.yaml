@@ -4,7 +4,15 @@ allowBuilds:
   sharp: true
 # explicit value also enables minimumReleaseAgeStrict, so fresh releases are
 # held back instead of auto-excluded. ncu reads this file too, so it is the
-# single source for the cooldown and its exclusions.
+# single source for the cooldown and its exclusions. the version holds below
+# are pnpm-only; ncu takes them from .ncurc.yml.
 minimumReleaseAge: 1440
 overrides:
   fflate: ">=0.7.5"
+# hold typescript at 6: @astrojs/check (astro check) refuses typescript 7.0.
+# astro's typescript 7 path is @astrojs/ts-content-mapper, which needs 7.1+.
+# hold @types/node at the major of the node runtime pinned in .nvmrc.
+updateConfig:
+  ignoreDependencies:
+    - typescript
+    - "@types/node"
