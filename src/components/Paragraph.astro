@@ -1,0 +1,13 @@
+---
+// every mdx paragraph renders through this (see the components prop in
+// pages/blog/[slug].astro) so a postscript marker can be colored. markdown
+// has no syntax for an aside and css cannot match on text, so the check
+// happens here: a paragraph that opens with P.S., P.P.S. and so on gets
+// that marker wrapped in a span, and only the marker turns pink.
+const MARKER = /^P(?:\.P)*\.S\./;
+
+const html = await Astro.slots.render("default");
+const marked = html.replace(MARKER, '<span class="postscript">$&</span>');
+---
+
+<p set:html={marked} />

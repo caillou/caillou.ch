@@ -184,6 +184,14 @@
     @apply text-green italic;
   }
 
+  /* the P.S. / P.P.S. marker that opens a postscript. Paragraph.astro
+     wraps it (every mdx paragraph renders through it, see the components
+     prop in pages/blog/[slug].astro); pink marks the aside, the text
+     after it stays white */
+  .postscript {
+    @apply text-pink;
+  }
+
   a {
     @apply relative mx-[1ch] text-yellow underline decoration-dashed underline-offset-[3px] transition-colors duration-200;
     @apply hover:text-pink;
