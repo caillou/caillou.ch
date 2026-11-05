@@ -73,6 +73,12 @@ tags: ["til", "<domain>", "<specific>"]
 
 - Link a person to their Mastodon (e.g. John Siracusa, Brady Eidson).
 - Posts live in `src/content/blog/YYYY-MM-DD-slug.mdx`.
+- The kitchen sink (`src/content/blog/2026-02-22-mdx-kitchen-sink.mdx`) demos
+  every component and styled markdown feature. When I add one (a component in
+  `src/components`, an entry in the `components` map, a shiki transformer, a
+  styled element), add a demo there in the same change. Component demos go
+  before the pictures, which stay last; renumber the `FIG` captions so they read
+  in order down the page.
 - Verify version numbers, release dates, and API claims against real sources
   before stating them. Do not guess.
 
