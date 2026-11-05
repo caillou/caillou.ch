@@ -179,16 +179,34 @@ export const pnpmVersion = String.raw`10.14.0`;
 
 ---
 
+### Audio player
+
+<Waveform
+  sources={[
+    { src: "/files/babycry2.m4a", type: "audio/mp4; codecs=mp4a.40.2" },
+    { src: "/files/babycry2.mp3", type: "audio/mpeg" },
+  ]}
+  peaks={babycry.peaks}
+  duration={babycry.duration}
+  label="the crying baby ringtone"
+>
+  FIG 1.0: an audio player with a waveform seek bar. "babycry2" by
+  [n2p5](https://freesound.org/people/n2p5/sounds/28101/) is licensed under [CC
+  BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+</Waveform>
+
+---
+
 ### Picture
 
 <Figure src={portrait} alt="Example image">
-  FIG 1.0: A regular picture, full-bleed on mobile only.
+  FIG 2.0: A regular picture, full-bleed on mobile only.
 </Figure>
 
 ### Full-bleed picture
 
 <Figure src={portraitStanding} alt="Example full-bleed image" fullBleed>
-  FIG 1.1: A full-bleed picture, spanning the entire viewport width.
+  FIG 2.1: A full-bleed picture, spanning the entire viewport width.
 
 This demonstrates how images can extend beyond the typical content boundaries to
 create a more dramatic visual impact, which is particularly effective when
@@ -201,23 +219,5 @@ mobile screens.
 ### Animated picture
 
 <Figure src={fishDemo} alt="Example animated GIF" animated>
-  FIG 1.2: An animated GIF, rendered as a plain img so the animation survives.
+  FIG 2.2: An animated GIF, rendered as a plain img so the animation survives.
 </Figure>
-
----
-
-### Audio player
-
-<Waveform
-  sources={[
-    { src: "/files/babycry2.m4a", type: "audio/mp4; codecs=mp4a.40.2" },
-    { src: "/files/babycry2.mp3", type: "audio/mpeg" },
-  ]}
-  peaks={babycry.peaks}
-  duration={babycry.duration}
-  label="the crying baby ringtone"
->
-  FIG 2.0: an audio player with a waveform seek bar. "babycry2" by
-  [n2p5](https://freesound.org/people/n2p5/sounds/28101/) is licensed under [CC
-  BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-</Waveform>
